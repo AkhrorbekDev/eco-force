@@ -8,7 +8,7 @@ const createApiInstance = (config = {}) => {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Content-Security-Policy': 'upgrade-insecure-requests';
+            'Content-Security-Policy': 'upgrade-insecure-requests'
         },
         ...config,
     });

@@ -6,6 +6,7 @@ const api = ofetch.create({
     baseURL: import.meta.env.VITE_API_URL || '/api',
     headers: {
         'Content-Type': 'application/json',
+        'Content-Security-Policy': 'upgrade-insecure-requests'
     },
     credentials: 'include', // Sends cookies with cross-origin requests
     mode: 'cors', // Enables CORS requests
