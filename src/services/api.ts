@@ -8,9 +8,8 @@ const createApiInstance = (config = {}) => {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Content-Security-Policy': 'upgrade-insecure-requests';
         },
-        credentials: 'include', // Sends cookies with cross-origin requests
-        mode: 'cors', // Enables CORS requests
         ...config,
     });
 };
