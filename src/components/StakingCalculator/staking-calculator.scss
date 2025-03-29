@@ -1,0 +1,41 @@
+@import '../../assets/styles/vars';
+
+.staking-calculator {
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0px 2px 12px 0px #0000001A;
+  background: var(--color4);
+  border-radius: 16px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 34px 30px;
+    border-bottom: 1px solid #DEDEE2;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  &__body {
+    padding: 40px 40px 50px;
+  }
+
+  @media (max-width: $mobile) {
+    &__header {
+      padding: 16px;
+    }
+    &__title {
+      font-size: 16px;
+      line-height: 22px;
+    }
+    &__body {
+      padding: 16px;
+    }
+  }
+
+}

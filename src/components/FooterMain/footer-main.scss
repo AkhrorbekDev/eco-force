@@ -1,0 +1,66 @@
+@import '../../assets/styles/vars';
+
+
+.footer {
+  color: var(--color4);
+  background: var(--color9);
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 38px 0 22px; 
+    border-bottom: 1px solid #FFFFFF26;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 0 42px;
+  }
+
+  &__support {
+    opacity: .8;
+  }
+
+  &__year {
+    margin-left: auto;
+  }
+  &__year,
+  &__politics {
+    opacity: .6;
+  }
+
+  @media (max-width: $mobile) {
+    &__row {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 0 16px;
+    }
+    &__info {
+      flex-direction: column;
+      gap: 0;
+      padding: 16px 0;
+    }
+    &__support {
+      margin-bottom: 16px;
+    }
+    &__year {
+      margin-left: 0;
+      margin-bottom: 4px;
+    }
+  }
+
+}

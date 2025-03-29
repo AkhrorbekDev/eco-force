@@ -1,0 +1,87 @@
+@import '../../assets/styles/vars';
+
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 380px;
+  width: 100%;
+  padding: 10px 10px 20px;
+  border-radius: 6px;
+  background: var(--color4);
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #F86A6A24;
+  }
+
+  &__info {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 32px;
+    font-weight: 600;
+  }
+
+  &__amount {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 600;
+  }
+
+  &__buttons {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: $mobile) {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    &__buttons {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      grid-template-columns: 1fr;
+      gap: 4px;
+      display: none;
+      &._active {
+        display: grid;
+      }
+    }
+    &__head {
+      align-items: center;
+      width: 100%;
+    }
+    &__dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20px;
+    }
+
+  }
+
+}

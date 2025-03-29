@@ -1,0 +1,14 @@
+.copy-price {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #DEDEE2;
+
+  &__button {
+    color: var(--color2);
+    cursor: pointer;
+  }
+}

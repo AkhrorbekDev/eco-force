@@ -1,0 +1,39 @@
+.my-staking {
+  max-width: 660px;
+  width: 100%;
+  box-shadow: 0px 2px 12px 0px #0000001A;
+  background: var(--color4);
+  border-radius: 16px;
+
+  &__header {
+    padding: 10px 0;
+    border-bottom: 1px solid #DEDEE2;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+    text-align: center;
+  }
+
+  &__body {
+    display: grid;
+    gap: 24px;
+    padding: 50px 20px 50px 30px;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__value {
+    span {
+      font-size: 22px;
+      line-height: 20px;
+      font-weight: 500;
+    }
+  }
+
+}

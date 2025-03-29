@@ -1,0 +1,52 @@
+.language-dropdown {
+  position: relative;
+
+  &__button {
+    padding: 4px 8px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color5);
+    text-transform: uppercase;
+  }
+
+  &__list {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin: 0;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: var(--border-radius-popup);
+    list-style: none;
+    box-shadow: 0px 0px 16px 0px #000A0014;
+    overflow: hidden;
+  }
+
+  &__item {
+    padding: 12px 32px 12px 14px;
+    cursor: pointer;
+    border-radius: calc( var(--border-radius-popup) / 2 );
+    transition: .1s;
+
+    &._active {
+      position: relative;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        width: 10px;
+        height: 7px;
+        background-image: url('@/assets/images/check.svg');
+      }
+      
+    }
+
+    &:hover {
+      background-color: var(--color3);
+    }
+  }
+}

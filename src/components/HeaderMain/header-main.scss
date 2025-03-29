@@ -1,0 +1,28 @@
+.header {
+
+  box-shadow: 0px 0px 8px 0px #00000014;
+  background: var(--color4);
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0; 
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+}
