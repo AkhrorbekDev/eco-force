@@ -8,10 +8,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(row, index) in rows" :key="index">
-        <td>{{ row.period }}</td>
-        <td>{{ row.energy }}</td>
-        <td>{{ row.trx }}</td>
+      <tr >
+        <td>Еженедельно</td>
+        <td>{{ data.energy.weekly }}</td>
+        <td>{{ data.trx.weekly }}</td>
+      </tr><tr >
+        <td>За месяц</td>
+        <td>{{ data.energy.monthly }}</td>
+        <td>{{ data.trx.monthly }}</td>
+      </tr>
+      <tr >
+        <td>За год</td>
+        <td>{{ data.energy.yearly }}</td>
+        <td>{{ data.trx.yearly }}</td>
       </tr>
     </tbody>
   </table>
@@ -19,8 +28,35 @@
 
 <script>
 export default {
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {
+          energy: {
+            daily: 0,
+            weekly: 0,
+            yearly: 0,
+            hourly: 0
+          },
+          trx: {
+            daily: 0,
+            weekly: 0,
+            yearly: 0,
+            hourly: 0
+
+          }
+        }
+      }
+    }
+  },
   data() {
     return {
+      labels: {
+        daily: 'Ежедневно',
+        weekly: 'Еженедельно',
+        yearly: 'Ежегодно',
+      },
       rows: [
         { period: 'Ежедневно', energy: '22 400', trx: '1,2 ~ 0,28$' },
         { period: 'За месяц', energy: '672 000', trx: '34 ~ 8,4 $' },
@@ -43,14 +79,14 @@ table tr:first-child th:first-child {
 }
 table tr:first-child th:last-child {
     border-top-right-radius: var(--border-radius-table);
-}   
+}
 table tr:last-child td:last-child {
     border-bottom-right-radius: var(--border-radius-table);
 }
 table tr:last-child td:first-child {
     border-bottom-left-radius: var(--border-radius-table);
 }
-    
+
 table tr:last-child td:last-child {
     border-bottom-right-radius: var(--border-radius-table);
 }

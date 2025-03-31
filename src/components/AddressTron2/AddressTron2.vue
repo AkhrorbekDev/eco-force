@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 
 export default {
   props: {
@@ -28,9 +28,22 @@ export default {
       type: Boolean,
       default: true,
     },
+    modelValue: {
+      type: String,
+      default: '',
+    },
+    readOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
-  setup() { // Передаем props в setup
-    const tronAddress = ref('TUE965pMfj5EX44j6jwb7vSCrcj9XjSzTa');
+  setup(props, {emit}) { // Передаем props в setup
+    const tronAddress = computed({
+      get: () => props.modelValue,
+      set: (value) => {
+        emit('update:modelValue', value);
+      }
+    });
     const showPopup = ref(false);
     const popupMessage = ref('');
 

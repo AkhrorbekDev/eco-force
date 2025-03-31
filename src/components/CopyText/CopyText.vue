@@ -1,7 +1,7 @@
 <template>
   <div  :class="['copy-text', 'd-grid', 'gap-8', customClass]">
     <div class="copy-text__value">
-      <input v-model="text" placeholder="Введите адрес">
+      <input :value="link" readonly placeholder="Введите адрес">
       <span class="copy-text__copy" @click="copyToClipboard">
         <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" alt="Icon Copy">
       </span>
@@ -20,6 +20,10 @@ import { ref } from 'vue';
 
 export default {
   props: {
+    link: {
+      type: String,
+      default: ''
+    },
     customClass: {
       type: String,
       default: ''

@@ -11,7 +11,7 @@
         </span>
       </div>
 
-      <CopyText />
+      <CopyText :link="link" />
 
     </div>
 
@@ -25,6 +25,13 @@ import CopyText from '../CopyText/CopyText.vue';
 export default {
   components: {
     CopyText
+  },
+  props: {
+    link: {
+      type: String,
+      required: true,
+      default: 'https://example.com'
+    }
   }
 };
 </script>

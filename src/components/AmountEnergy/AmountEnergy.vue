@@ -75,17 +75,25 @@ export default {
     SendUsdt,
     PreloaderCopy,
   },
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0,
+    },
+  },
   data() {
     return {
       isModalVisible: false,
     };
   },
-  setup() {
-    const amountEnergy = ref("65 000");
+  setup(_, {emit}) {
+    const amountEnergy = ref(_.modelValue); // Переменная для хранения значения ввода
     const preloaders = ref([]); // Массив для хранения компонентов PreloaderCopy
 
     const clearInput = () => {
-      amountEnergy.value = "";
+      amountEnergy.value = 0;
+      emit('update:modelValue', amountEnergy.value);
+
     };
 
     const filterInput = (event) => {
@@ -93,6 +101,7 @@ export default {
       const filteredValue = event.target.value.replace(/[^\d]/g, "");
       // Обновляем значение amountEnergy с отфильтрованным значением
       amountEnergy.value = filteredValue;
+      emit('update:modelValue', amountEnergy.value);
     };
 
     // Функция для добавления PreloaderCopy

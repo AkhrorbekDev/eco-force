@@ -21,11 +21,23 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 
 export default {
-  setup() {
-    const tronAddress = ref('TUE965pMfj5EX44j6jwb7vSCrcj9XjSzTa');
+  props: {
+    modelValue: {
+      type: String,
+      default: '',
+    },
+  },
+  setup(props, {emit}) {
+    const tronAddress = computed({
+      get: () => props.modelValue,
+      set: (value) => {
+        console.log(value)
+        emit('update:modelValue', value);
+      }
+    });
     const showPopup = ref(false);
     const popupMessage = ref('');
 

@@ -11,10 +11,10 @@
       </div>
       <div class="panel__info">
         <span class="c-gray-light">APR</span>
-        <span class="c-green">22%</span>
+        <span class="c-green">{{ userStore.user.staking_apr }}%</span>
       </div>
       <span class="panel__amount">
-        {{ amount }}
+        {{ userStore.user.total_staked_trx || 0 }}
       </span>
     </div>
 
@@ -37,16 +37,18 @@
         Вывод средств
       </div>
 
-      <div  class="address-tron d-grid gap-8 mb-16">
-        <span>Адрес <b>TRON</b></span>
-        <div class="address-tron__value">
-          <input type="text" value="THQy83uGShH7S8x8e9VzEZHT2HJSmZQMjh">
+      <div class="address-tron d-grid gap-8 mb-16">
+        <span>Адрес <b>TRON</b> {{ !address && sendStart }}</span>
+        <div :class="{
+          invalid: !address && sendStart,
+        }" class="address-tron__value">
+          <input v-model="address" type="text">
         </div>
       </div>
 
-      <AmountTrx />
+      <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
 
-      <button @click="openModal3" class="button button_green py-14 w-100 br-8 mt-24">
+      <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
         Вывести
       </button>
 
@@ -62,23 +64,23 @@
         Подтверждение вывода
       </div>
 
-      <div  class="d-grid gap-8 mb-16">
+      <div class="d-grid gap-8 mb-16">
         <span class="c-gray2">
           Адрес вывода
         </span>
         <p>
-          THQy83uGShH7S8x8e9VzEZHT2HJSmZQMjh
+          {{ address }}
         </p>
       </div>
 
       <p class="mb-32">
         Количество
         <b>
-          TRX: 150
+          TRX: {{ exitAmount }}
         </b>
       </p>
 
-      <div  class="d-grid gap-8 mb-24">
+      <div class="d-grid gap-8 mb-24">
         <p class="mb-32">
           Код подтверждения из
           <b>
@@ -86,14 +88,16 @@
           </b>
         </p>
         <div class="popup-confirm__actions">
-          <input value="123456" type="text" class="input">
+          <input :class="{
+            invalid: !confirmationCode && sendStart,
+          }" v-model="confirmationCode" type="text" class="input">
           <button class="button button_green br-8">
             Выслать код
           </button>
         </div>
       </div>
 
-      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
+      <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
         Вывести
       </button>
 
@@ -110,11 +114,12 @@
         Ваш адрес для пополнения баланса в TRX
       </div>
 
-      <img class="popup-order__img" src="/images/QR-balance.svg" width="162" height="160" loading="lazy" alt="QR Code Balance">
+      <img class="popup-order__img" src="/images/QR-balance.svg" width="162" height="160" loading="lazy"
+           alt="QR Code Balance">
 
-      <AddressTron2 :hasTitle="false" customClass="_big mb-12"/>
+      <AddressTron2 v-model="address" :hasTitle="false" customClass="_big mb-12"/>
 
-      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
+      <button class="button button_green py-14 w-100 br-8" @click="addToBalance">
         Закрыть
       </button>
 
@@ -128,6 +133,8 @@
 import AddressTron2 from '../AddressTron2/AddressTron2.vue';
 import AmountTrx from '../AmountTrx/AmountTrx.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
+import {createStakingService, createWalletService} from "@/services/index.js";
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 export default {
   components: {
@@ -136,16 +143,103 @@ export default {
     AmountTrx,
   },
   name: 'PanelStaking',
+  props: {
+    balance: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          "totalTrxStaked": 0,
+          tron_address: "",
+          "tron": 0,
+          "usd": 0
+        }
+      }
+    },
+    pricing: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          "cost_per_hour": 0,
+          "cost_per_day": 0,
+          "cost_per_week": 0,
+          "buyback_cost": 0,
+          "tron_cost_per_hour": 0,
+          "tron_cost_per_day": 0,
+          "tron_cost_per_week": 0
+        }
+      }
+    },
+  },
   data() {
     return {
       amount: '3 500',
+      address: '',
+      exitAmount: 0,
+      confirmationCode: '',
+      request_id: '',
       isModalVisible: false,
+      sendStart: false,
       isModalVisible2: false,
       isModalVisible3: false,
       isButtonsActive: false, // Добавляем новое состояние для управления классом
     };
   },
+  setup() {
+    const userStore = useUserGlobal()
+
+    return {
+      userStore,
+    }
+  },
+  watch: {
+    loggedIn: {
+      immediate: true,
+      handler(value) {
+        if (value) {
+
+        }
+      }
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.userStore.loggedIn;
+    },
+  },
+  mounted() {
+    this.address = this.$props.balance.tron_address;
+  },
   methods: {
+    sendWithDrawal() {
+      this.sendStart = true
+      if (!this.address) {
+        return;
+      }
+      this.sendStart = false
+
+      createWalletService().requestAddress({amount: this.exitAmount, wallet_address: this.address}).then((response) => {
+        this.request_id = response.request_id;
+        this.closeModal()
+      });
+      this.openModal3();
+
+    },
+    confirmWithdrawal() {
+      createWalletService().confirmWithdrawal({
+        request_id: this.request_id,
+        code: this.confirmationCode
+      }).then((response) => {
+        this.closeModal3();
+      });
+    },
+
+    resendCode() {
+      createWalletService().resendWithdrawalCode({request_id: this.request_id}).then((response) => {
+        this.request_id = response.request_id;
+      });
+    },
     openModal() {
       this.isModalVisible = true;
     },
@@ -154,6 +248,9 @@ export default {
     },
     openModal2() {
       this.isModalVisible2 = true;
+    },
+    addToBalance() {
+
     },
     closeModal2() {
       this.isModalVisible2 = false;
@@ -230,19 +327,18 @@ export default {
   position: relative;
 
   &__value
-
-    input {
-      width: 100%;
-      height: 42px;
-      padding: 10px 16px;
-      font-size: 16px;
-      line-height: 22px;
-      font-family: var(--font1);
-      color: var(--color1);
-      outline: 0;
-      border: 1px solid var(--color8);
-      border-radius: var(--border-radius-input);
-    }
+  input {
+    width: 100%;
+    height: 42px;
+    padding: 10px 16px;
+    font-size: 16px;
+    line-height: 22px;
+    font-family: var(--font1);
+    color: var(--color1);
+    outline: 0;
+    border: 1px solid var(--color8);
+    border-radius: var(--border-radius-input);
+  }
 
 }
 

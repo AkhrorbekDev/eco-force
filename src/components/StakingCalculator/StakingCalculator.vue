@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     :class="customClass"
     class="staking-calculator">
 
@@ -11,11 +11,11 @@
 
     <div class="staking-calculator__body">
 
-      <CalculatorProfit />
+      <CurrencyInput v-model="amountCurrency"/>
 
       <CustomSlider />
 
-      <TableStaking />
+      <TableStaking :data="energyPerPeriod" />
 
       <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal" >
         Начать стейкинг
@@ -36,7 +36,7 @@
             <input class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
-              С 
+              С
               <span class="c-green" @click="openModal3">правилами</span>
               стейкинга ознакомлен
             </span>
@@ -49,7 +49,7 @@
         </div>
 
       </ModalWindow>
-    
+
       <ModalWindow :isVisible="isModalVisible2" @close="closeModal2" >
 
         <div class="popup">
@@ -65,7 +65,7 @@
             <input class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
-              После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится. 
+              После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится.
             </span>
           </label>
 
@@ -133,10 +133,15 @@ import CustomSlider from '../CustomSlider/CustomSlider.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import TableStaking from '../TableStaking/TableStaking.vue';
 import TrxCounter from '../TrxCounter/TrxCounter.vue';
+import {createStakingService} from "@/services/index.js";
+import {useEnergyGlobal} from "@/store/energyGlobal.js";
+import {useTrxGlobal} from "@/store/trxGlobal.js";
+import CurrencyInput from "@/components/CurrencyInput/CurrencyInput.vue";
 
 export default {
   name: 'BuyEnergy',
   components: {
+    CurrencyInput,
     CalculatorProfit,
     ModalWindow,
     CustomSlider,
@@ -149,9 +154,18 @@ export default {
       default: ''
     }
   },
+  setup() {
+    const useEnergyStore = useEnergyGlobal();
+    const useTrxStore = useTrxGlobal();
+    return {
+      useEnergyStore,
+      useTrxStore
+    }
+  },
   data() {
     return {
       normalCost: 18,
+      amountCurrency: 0,
       discountCost: 8,
       savingsPercentage: 52,
       savingsAmount: 312,
@@ -160,9 +174,57 @@ export default {
       isModalVisible3: false,
       energy: '130 000',
       status: 'Ожидание оплаты',
+      staking: {
+        user_staked_trx: 0,
+        daily_energy_earned: 0,
+        total_accrued_energy: 0,
+      }
     };
   },
+  computed: {
+    energyPerPeriod () {
+
+      const dailyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_day;
+      const weeklyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_week;
+      const yearlyEnergy = ((this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_week) * 52;
+      const hourlyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_hour;
+      const monthlyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_day * 4;
+
+      const dailtTrx = dailyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_day;
+      const weeklyTrx = weeklyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_week;
+      const yearlyTrx = yearlyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_week * 52;
+      const hourlyTrx = hourlyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_hour;
+      const monthlyTrx = monthlyEnergy / this.useEnergyStore.energyGlobal.cost_per_day * 4;
+
+
+      return {
+        energy: {
+          daily: dailyEnergy,
+          weekly: weeklyEnergy,
+          yearly: yearlyEnergy,
+          hourly: hourlyEnergy,
+          monthly: monthlyEnergy
+        },
+        trx: {
+          daily: dailtTrx,
+          weekly: weeklyTrx,
+          yearly: yearlyTrx,
+          hourly: hourlyTrx,
+          monthly: monthlyTrx
+        }
+      }
+    }
+  },
   methods: {
+    getStaking() {
+      createStakingService().getStakingSummary()
+        .then((response) => {
+          this.staking = response;
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    },
     openModal() {
       this.isModalVisible = true;
     },

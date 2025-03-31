@@ -5,9 +5,15 @@
 
       <div class="container">
         <div class="section-panels__row">
-          <PanelBalance />
-          <PanelStaking />
-          <PanelEnergy />
+          <PanelBalance :pricing="energyPricing" :balance="{amount: userStats.balance_trx}"/>
+          <PanelStaking :pricing="energyPricing" :balance="{
+            totalTrxStaked: staking.user_staked_trx,
+            amount: userStats.balance_trx
+          }"/>
+          <PanelEnergy :pricing="energyPricing" :balance="{
+            amount: userStats.balance_energy,
+            perDayEarned: staking.daily_energy_earned,
+            }" @on:success="successEnergy"/>
         </div>
       </div>
 
@@ -20,11 +26,11 @@
         </h1>
 
         <div class="section-intro__row">
-          <ProfitBlock />
+          <ProfitBlock/>
           <div class="section-intro__col">
-            <ReferralQuantity />
-            <ReferralLink />
-            <PromoCode />
+            <ReferralQuantity :quantity="referralsStats.total"/>
+            <ReferralLink :link="referralsStats.url"/>
+            <PromoCode :code="userStats.referral_code"/>
           </div>
         </div>
       </div>
@@ -36,7 +42,7 @@
           Мои партнеры
         </h2>
 
-        <TableOperation2 />
+        <TableOperation2/>
 
       </div>
     </section>
@@ -53,57 +59,126 @@ import ProfitBlock from '@/components/ProfitBlock/ProfitBlock.vue';
 import ReferralQuantity from '@/components/ReferralQuantity/ReferralQuantity.vue';
 import ReferralLink from '@/components/ReferralLink/ReferralLink.vue';
 import PromoCode from '@/components/PromoCode/PromoCode.vue';
+import {createEnergyService, createUserService} from "@/services/index.js";
 
 export default {
   name: 'ReferralProgramPage',
   components: {
-      PanelBalance,
-      PanelStaking,
-      PanelEnergy,
-      TableOperation2,
-      ProfitBlock,
-      ReferralQuantity,
-      ReferralLink,
-      PromoCode
+    PanelBalance,
+    PanelStaking,
+    PanelEnergy,
+    TableOperation2,
+    ProfitBlock,
+    ReferralQuantity,
+    ReferralLink,
+    PromoCode
+  },
+  data() {
+    return {
+      referralsStats: {
+        total: 0,
+        totalEnergy: 0,
+        totalTrx: 0,
+        totalEnergyEarned: 0,
+        url: 'https://example.com'
+      },
+      userStats: {
+        tron_address: "",
+        balance_trx: 0,
+        balance_energy: 0,
+        referral_code: '0',
+        registration_date: '',
+      },
+      energyPricing: {
+        "cost_per_hour": 0,
+        "cost_per_day": 0,
+        "cost_per_week": 0,
+        "buyback_cost": 0,
+        "tron_cost_per_hour": 0,
+        "tron_cost_per_day": 0,
+        "tron_cost_per_week": 0
+      },
+      staking: {
+        user_staked_trx: 0,
+        daily_energy_earned: 0,
+        total_accrued_energy: 0,
+      }
     }
+  },
+  mounted() {
+    this.getReferralStats()
+    this.getUserDetails()
+    this.getEnergyPricing()
+  },
+  methods: {
+    getReferralStats() {
+      createUserService().getReferralStats().then((response) => {
+        this.referralsStats = response
+      });
+    },
+    getEnergyPricing() {
+      createEnergyService().getEnergyPricing().then((response) => {
+        this.energyPricing = response
+      });
+    },
+    getUserDetails() {
+      createUserService().getUserDetails().then((response) => {
+        this.userStats = response
+      });
+    },
+    successEnergy(response) {
+      this.getUserDetails()
+    },
+    successStaking(response) {
+      this.getUserDetails()
+    },
+    successTRX(response) {
+      this.getUserDetails()
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
 @import '../assets/styles/vars';
 
-  .main {
-    padding-top: 22px;
+.main {
+  padding-top: 22px;
+}
+
+.section-intro {
+  padding-top: 22px;
+
+  &__title {
+    margin-bottom: 22px;
   }
 
-  .section-intro {
-    padding-top: 22px;
-    &__title {
-      margin-bottom: 22px;
-    }
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 26px;
+    align-items: flex-start;
+  }
+
+  &__col {
+    display: grid;
+    gap: 12px;
+  }
+
+  @media (max-width: $tablet) {
     &__row {
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 26px;
-      align-items: flex-start;
-    }
-    &__col {
-      display: grid;
-      gap: 12px;
-    }
-    @media (max-width: $tablet) {
-      &__row {
-        display: flex;
-        flex-direction: column-reverse;
-      }
+      display: flex;
+      flex-direction: column-reverse;
     }
   }
+}
 
-  .section-history {
-    padding: 58px 0;
-    &__title {
-      margin-bottom: 32px;
-    }
+.section-history {
+  padding: 58px 0;
+
+  &__title {
+    margin-bottom: 32px;
   }
+}
 
 </style>

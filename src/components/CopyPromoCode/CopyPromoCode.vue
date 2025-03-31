@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 
 export default {
   props: {
@@ -39,8 +39,13 @@ export default {
       default: true,
     },
   },
-  setup() {
-    const text = ref('H14D5');
+  setup(props, {emit}) {
+    const text = computed({
+      get: () => props.code,
+      set: (value) => {
+        emit('update:modelValue', value);
+      }
+    });
     const showPopup = ref(false);
     const popupMessage = ref('');
     const inputRef = ref(null); // Создаем ссылку на input

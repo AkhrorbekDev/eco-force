@@ -15,7 +15,7 @@
         </span>
         <p class="my-staking__value">
           <span>
-            2000
+            {{ staking.user_staked_trx }}
           </span>
           <b>
             TRX
@@ -28,7 +28,7 @@
         </span>
         <p class="my-staking__value">
           <span>
-            ~ 11 203
+            ~ {{ staking.daily_energy_earned }}
           </span>
           <img src="/images/lightning.svg" alt="Icon Lightning">
         </p>
@@ -39,7 +39,8 @@
         </span>
         <p class="my-staking__value">
           <span>
-            150 000
+
+            {{ staking.total_accrued_energy }}
           </span>
           <img src="/images/lightning.svg" alt="Icon Lightning">
         </p>
@@ -54,14 +55,34 @@
 <script>
 
 
+import {createStakingService} from "@/services/index.js";
+
 export default {
   name: 'MyStaking',
   components: {
   },
   data() {
     return {
-   
+      staking: {
+        user_staked_trx: 0,
+        daily_energy_earned: 0,
+        total_accrued_energy: 0,
+      }
     };
+  },
+  mounted() {
+    this.getStaking();
+  },
+  methods: {
+    getStaking() {
+      createStakingService().getStakingSummary()
+          .then((response) => {
+            this.staking = response;
+          })
+          .catch((error) => {
+            console.log(error)
+          });
+    },
   },
 };
 </script>
@@ -69,6 +90,6 @@ export default {
 <style scoped lang="scss">
   @import './MyStaking.scss';
 
- 
+
 
 </style>

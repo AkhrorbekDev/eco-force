@@ -2,7 +2,7 @@
   <div class="currency-input">
     <input
       type="text"
-      :value="amount"
+      :value="modelValue"
       @input="validateAmount"
       placeholder="Введите сумму"
       class="amount-input"
@@ -18,9 +18,15 @@
 <script>
 export default {
   name: 'CurrencyInput',
+  props: {
+    modelValue: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      amount: '2000',
+      amount: '0',
       selectedCurrency: 'TRX',
       currencies: ['TRX', 'BTC', 'ETH', 'USDT'],  // Добавьте дополнительные валюты по мере необходимости
     };
@@ -35,6 +41,7 @@ export default {
         // Если ввели что-то неверное, просто игнорируем ввод
         event.target.value = this.amount; // Возвращаем значение поля к предыдущему значению
       }
+      this.$emit('update:model-value', this.amount);
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    
+
     <div class="panel__head">
       <div class="panel__name">
         <span class="panel__icon">
@@ -9,7 +9,7 @@
         Баланс TRX:
       </div>
       <span class="panel__amount">
-        {{ amount }}
+        {{ balance?.amount || 0 }}
       </span>
     </div>
 
@@ -50,7 +50,7 @@
           Стоимость <b>13.03 TRX</b>
         </p>
         <b class="text-error">
-          Не хватает:  13.03 TRX
+          Не хватает: 13.03 TRX
         </b>
       </div>
       <a class="button button_green py-14 w-100 br-8" href="#"> Списать с баланса </a>
@@ -62,12 +62,15 @@
       <div class="popup-order__title">
         Ваш адрес для пополнения баланса в TRX
       </div>
-      <img class="popup-order__img" src="/images/QR-balance.svg" width="162" height="160" loading="lazy" alt="QR Code Balance">
-      <AddressTron2 :hasTitle="false" customClass="_big mb-12"/>
+      <div v-if="paymentEndpoint.qr_code" class="popup-order__img" v-html="paymentEndpoint.qr_code"
+           style="width: 162px; height: 160px" width="162"
+           height="160" loading="lazy"
+           alt="QR Code Balance"/>
+      <AddressTron2 v-model="address" :hasTitle="false" customClass="_big mb-12"/>
       <b class="mb-24 d-block">
         Переведите любую сумму.
       </b>
-      <button class="button button_green py-14 w-100 br-8" @click="closeModal2"> 
+      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
         Закрыть
       </button>
     </div>
@@ -77,6 +80,8 @@
 <script>
 import AddressTron2 from '../AddressTron2/AddressTron2.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
+import {useUserGlobal} from "@/store/userGlobal.js";
+import {createEnergyService, createWalletService} from "@/services/index.js";
 
 export default {
   components: {
@@ -84,23 +89,98 @@ export default {
     AddressTron2
   },
   name: 'PanelBalance',
+  props: {
+    balance: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          "amount": 0,
+          "tron_amount": 0
+        }
+      }
+    },
+    pricing: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          "cost_per_hour": 0,
+          "cost_per_day": 0,
+          "cost_per_week": 0,
+          "buyback_cost": 0,
+          "tron_cost_per_hour": 0,
+          "tron_cost_per_day": 0,
+          "tron_cost_per_week": 0
+        }
+      }
+    },
+
+  },
+
   data() {
     return {
       amount: '12 345.12',
+      address: '',
+      paymentEndpoint: {
+        qr_code: '',
+        address: ''
+      },
+
       isModalVisible: false,
       isModalVisible2: false,
-      isButtonsActive: false, // Добавляем новое состояние для управления классом
+      isButtonsActive: false,
+      // Добавляем новое состояние для управления классом
     };
   },
+  setup() {
+    const userStore = useUserGlobal()
+
+    return {
+      userStore,
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.userStore.loggedIn;
+    },
+
+  },
+  watch: {
+    loggedIn: {
+      immediate: true,
+      handler(value) {
+        if (value) {
+
+        }
+      }
+    },
+    isModalVisible2: {
+      immediate: true,
+      handler(value) {
+        if (value) {
+          this.address = this.userStore.user.tron_address
+          this.getPaymentEndpoint()
+        }
+      }
+    },
+  },
+
   methods: {
+    getPaymentEndpoint() {
+      createWalletService().requestAddress().then((response) => {
+        this.paymentEndpoint = response
+        this.address = response.address
+      });
+    },
     openModal() {
       this.isModalVisible = true;
     },
-    closeModal() {
-      this.isModalVisible = false;
-    },
     openModal2() {
       this.isModalVisible2 = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
     },
     closeModal2() {
       this.isModalVisible2 = false;
@@ -108,8 +188,9 @@ export default {
     toggleButtonsClass() {
       this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
     },
-  },
-};
+  }
+}
+;
 </script>
 
 <style scoped lang="scss">

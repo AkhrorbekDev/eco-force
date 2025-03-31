@@ -11,10 +11,11 @@
       </div>
       <div class="panel__info">
         <span class="c-gray-light">24h</span>
-        <span class="c-green">+668</span>
+        <span class="c-green">+{{ balance?.perDayEarned || 0 }}</span>
       </div>
       <span class="panel__amount">
-        {{ amount }}
+                {{ balance?.amount || 0 }}
+
       </span>
     </div>
 
@@ -29,7 +30,7 @@
 
   </div>
 
-  <ModalWindow :isVisible="isModalVisible" @close="closeModal" >
+  <ModalWindow :isVisible="isModalVisible" @close="closeModal">
 
     <div class="popup-sale">
 
@@ -37,22 +38,22 @@
         Продажа энергии
       </div>
 
-      <EnergyCounter />
+      <EnergyCounter :total="balance?.amount || 0" v-model="sellEnergyAmount"/>
 
       <p class="my-12">
-        Курс: 50 SUN за 1 единицу энергии
+        Курс: {{ pricing.buyback_cost }} SUN за 1 единицу энергии
       </p>
 
       <p class="mb-12">
         К зачислению на баланс:
         <b>
-          3 TRX
+          {{ trx_received }} TRX
         </b>
       </p>
 
-      <a class="button button_green py-12 w-100 br-8" href="#">
-        Продать
-      </a>
+      <button class="button button_green py-14 w-100 br-8" @click="sellEnergy">
+        Отправить
+      </button>
 
     </div>
 
@@ -70,14 +71,14 @@
         Введи промокод и получил <b>65000</b> энергии бесплатно!
       </b>
 
-      <input class="input mb-8" placeholder="" type="text">
+      <input v-model="promocode" class="input mb-8" placeholder="" type="text">
 
-      <p class="font-14 c-red mb-16">
-        Вы уже использовали лимит промокодов
+      <p v-if="error" class="font-14 c-red mb-16">
+        {{ error }}
       </p>
 
-      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
-        Закрыть
+      <button class="button button_green py-14 w-100 br-8" @click="buyEnergy">
+        Отправить
       </button>
 
     </div>
@@ -89,7 +90,7 @@
 <script>
 import EnergyCounter from '../EnergyCounter/EnergyCounter.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
-import {energyService} from "@/services/publicServices.js";
+import {createUserService, createEnergyService} from "@/services";
 
 export default {
   components: {
@@ -97,20 +98,72 @@ export default {
     EnergyCounter,
   },
   name: 'PanelEnergy',
+  props: {
+    balance: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          amount: 0,
+          perDayEarned: 0
+        }
+      }
+    },
+    pricing: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          "cost_per_hour": 0,
+          "cost_per_day": 0,
+          "cost_per_week": 0,
+          "buyback_cost": 0,
+          "tron_cost_per_hour": 0,
+          "tron_cost_per_day": 0,
+          "tron_cost_per_week": 0
+        }
+      }
+    },
+  },
   data() {
     return {
       amount: '13 832',
+      promocode: '',
+      error: '',
+      sellEnergyAmount: 0,
       isModalVisible: false,
       isModalVisible2: false,
       isButtonsActive: false, // Добавляем новое состояние для управления классом
     };
   },
+  computed: {
+    trx_received() {
+      return (this.$props.pricing.buyback_cost * this.sellEnergyAmount) / 1_000_000
+    }
+  },
   mounted() {
-    energyService.getEnergyPricing().then((response) => {
-      console.log(response)
-    });
+
   },
   methods: {
+
+    buyEnergy() {
+      if (!this.promocode) {
+        this.error = 'Введите промокод'
+      } else {
+        createUserService().usePromoCode({code: this.promocode}).then((response) => {
+          this.$emit('on:success', response)
+        }).catch((error) => {
+          this.error = error.data.detail || error.message
+        });
+      }
+    },
+    sellEnergy() {
+      createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
+        this.$emit('on:success', response)
+      }).catch((error) => {
+        this.error = error.data.detail || error.message
+      });
+    },
     openModal() {
       this.isModalVisible = true;
     },

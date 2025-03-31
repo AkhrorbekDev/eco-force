@@ -1,52 +1,12 @@
 // services/api.js
 import {ofetch} from 'ofetch'
-
-// Create a base API instance with common configuration
-const api = ofetch.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api',
-    headers: {
-        'Content-Type': 'application/json',
-        'Content-Security-Policy': 'default-src https: http:'
-    },
-    credentials: 'include', // Sends cookies with cross-origin requests
-    mode: 'cors', // Enables CORS requests
-    async onRequest({request, options}) {
-        // Get auth token from local storage if available
-        const token = localStorage.getItem('auth_token')
-        if (token) {
-            options.headers = options.headers || {}
-            options.headers.Authorization = `Bearer ${token}`
-        }
-    },
-    async onResponseError({request, response, options}) {
-        // Handle error responses
-        console.error('API Error:', response.status, response._data)
-    }
-})
+import {api} from './api'
 
 /**
  * Energy service - handles energy pricing and calculations
  */
 export const energyService = {
-    /**
-     * Get information about energy pricing
-     * @returns {Promise<Object>} Energy pricing information
-     */
-    getEnergyPricing() {
-        return api('/energy-pricing')
-    },
 
-    /**
-     * Calculate energy cost for specific address
-     * @param {string} delegationAddress - The TRON delegation address
-     * @returns {Promise<Object>} Energy cost calculation
-     */
-    getEnergyCostPerAddress(delegationAddress) {
-        return api('/energy-cost-per-address/', {
-            method: 'POST',
-            body: {delegation_address: delegationAddress}
-        })
-    }
 }
 
 /**

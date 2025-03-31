@@ -21,6 +21,9 @@ export default defineConfig({
     build: {
         target: 'esnext' // This enables top-level await
     },
+    // server: {
+    //     allowedHosts: ['e950-84-54-90-7.ngrok-free.app']
+    // }
     server: {
         // https: {
         //     key: fs.readFileSync(path.resolve(import.meta.dirname, 'cert/privateKey.key')),

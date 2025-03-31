@@ -5,7 +5,7 @@
     </span>
     <div class="trx-counter__row">
       <div class="trx-counter__wrapper">
-        <input class="trx-counter__value" v-model="count" type="text" @input="filterInput">
+        <input class="trx-counter__value" :value="amount" type="text" @input="filterInput">
         <span class="trx-counter__max" @click="setMaxValue">
           max
         </span>
@@ -16,25 +16,39 @@
 
 <script>
 export default {
+  props: {
+    totalAmount: {
+      type: Number,
+      default: 0
+    },
+    amount: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      count: 156,
+      count: 0,
       step: 100,
       maxValue: 10000, // Максимальное значение
     };
   },
-  computed: {
-    isMultipleOf() {
-      return this.count % this.step === 0;
-    }
+  mounted() {
+    this.count = this.$props.amount;
   },
   methods: {
     filterInput(event) {
       const value = event.target.value.replace(/\D/g, '');
       this.count = value ? parseInt(value, 10) : 0;
+      this.updateModel()
+
     },
     setMaxValue() {
-      this.count = this.maxValue;
+      this.count = this.$props.totalAmount;
+      this.updateModel()
+    },
+    updateModel() {
+      this.$emit('update:amount', this.count);
     }
   }
 };

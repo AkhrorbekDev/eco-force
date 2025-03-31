@@ -1,9 +1,8 @@
 // src/services/userService.js
-import {createAuthenticatedApi} from './api';
+import {api} from './api';
 
-export const createUserService = (token) => {
-    const authApi = createAuthenticatedApi(token);
-
+export const createUserService = () => {
+    const authApi = api;
     return {
         // Get user details
         getUserDetails: () => authApi('/get-user-details/'),

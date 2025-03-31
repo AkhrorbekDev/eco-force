@@ -1,19 +1,18 @@
 <template>
 
-    <div class="block">
+  <div class="block">
 
-      <div class="block__head">
-        <div class="block__title">
-          Промокод  для бесплатной энергии
-        </div>
+    <div class="block__head">
+      <div class="block__title">
+        Промокод для бесплатной энергии
       </div>
-
-      <CopyPromoCode />
-
     </div>
 
-</template>
+    <CopyPromoCode v-model:code="promocode"/>
 
+  </div>
+
+</template>
 
 
 <script>
@@ -22,13 +21,31 @@ import CopyPromoCode from '../CopyPromoCode/CopyPromoCode.vue';
 export default {
   components: {
     CopyPromoCode
+  },
+  props: {
+    code: {
+      type: String,
+      default: ''
+    }
+  },
+  computed () {
+    return {
+      promocode: {
+        get () {
+          return this.$props.code;
+        },
+        set (value) {
+          this.$emit('update:code', value);
+        }
+      }
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
 
-.block  {
+.block {
   gap: 32px;
   padding: 24px 24px 12px;
   background: var(--color4);

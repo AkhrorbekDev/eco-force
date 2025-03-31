@@ -7,7 +7,7 @@
           Рефералов
         </div>
         <span class="block__number">
-          112
+          {{ quantity || 0 }}
         </span>
       </div>
 
@@ -21,10 +21,14 @@
 
 
 
-<script>
-export default {
-
-};
+<script setup>
+defineProps({
+  quantity: {
+    type: Number,
+    required: true,
+    default: 0
+  }
+})
 </script>
 
 <style scoped lang="scss">

@@ -1,28 +1,49 @@
 // src/services/energyService.js
-import {createAuthenticatedApi} from './api';
+import {api, createAuthenticatedApi} from './api';
 
-export const createEnergyService = (token) => {
-    const authApi = createAuthenticatedApi(token);
+export const createEnergyService = () => {
+    const authApi = api;
 
     return {
         // Sell energy
-        sellEnergy: (energyAmount) => authApi('/sell-energy', {
+        sellEnergy: (energyAmount) => authApi('/sell-energy/', {
             method: 'POST',
             body: {energy_amount: energyAmount},
         }),
 
         // Create order (registered user)
-        createOrder: (delegationAddress, energyAmount) => authApi('/create-order', {
+        createOrder: (options = {delegation_address: '', energy_amount: 0, need_activate_address: false}) => authApi('/create-order/', {
             method: 'POST',
-            body: {delegation_address: delegationAddress, energy_amount: energyAmount},
+            body: options,
         }),
 
         // Confirm order execution
-        confirmOrder: () => authApi('/confirm-order', {
+        confirmOrder: () => authApi('/confirm-order/', {
             method: 'POST',
         }),
+        /**
+         * Get information about energy pricing
+         * @returns {Promise<Object>} Energy pricing information
+         */
+        getEnergyPricing() {
+            return authApi('/energy-pricing/', {
+                method: 'get',
+            })
+        },
+
+        /**
+         * Calculate energy cost for specific address
+         * @param {string} delegationAddress - The TRON delegation address
+         * @returns {Promise<Object>} Energy cost calculation
+         */
+        getEnergyCostPerAddress(delegationAddress) {
+            return authApi('/energy-cost-per-address/', {
+                method: 'POST',
+                body: {delegation_address: delegationAddress}
+            })
+        },
 
         // Get user orders
-        getUserOrders: () => authApi('/user-orders'),
+        getUserOrders: () => authApi('/user-orders/'),
     };
 };

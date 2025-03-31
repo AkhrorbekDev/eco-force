@@ -5,9 +5,9 @@
     </span>
     <div class="rental-period__row">
       <div
-        v-for="(period, index) in periods" 
-        :key="index" 
-        @click="setActivePeriod(index)" 
+        v-for="(period, index) in periods"
+        :key="index"
+        @click="setActivePeriod(index)"
         :class="['rental-period__button', { _active: activePeriod === index }]"
       >
         {{ period }}
@@ -19,6 +19,12 @@
 <script>
 export default {
   name: "RentalPeriod",
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
       periods: ['Час', 'День', 'Неделя'],
@@ -28,6 +34,7 @@ export default {
   methods: {
     setActivePeriod(index) {
       this.activePeriod = index;
+      this.$emit('update:modelValue', index);
     }
   }
 };

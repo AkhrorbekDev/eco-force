@@ -5,7 +5,7 @@
         Транзакций
       </span>
       <span class="question d-desk-none">
-        <i> 
+        <i>
           ?
          </i>
       </span>
@@ -25,20 +25,26 @@
 export default {
   data() {
     return {
-      count: 2
+      count: 1
     };
   },
   methods: {
     increment() {
       this.count++;
+      this.updateModelValue()
     },
     decrement() {
       if (this.count > 0) {
         this.count--;
+        this.updateModelValue()
       }
     },
     filterInput(event) {
       this.count = event.target.value.replace(/\D/g, '');
+      this.updateModelValue(this.count);
+    },
+    updateModelValue(value) {
+      this.$emit('update:modelValue', value);
     }
   }
 };

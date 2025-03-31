@@ -1,9 +1,10 @@
 <template>
   <div class="trx-counter d-grid gap-8">
     <span>
-      Доступно: 
+      Доступно:
       <b>
-        237 000
+
+        {{total}}
       </b>
     </span>
     <div class="trx-counter__row">
@@ -30,9 +31,19 @@
 
 <script>
 export default {
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0
+    },
+    total: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      count: 2056,
+      count: 0,
       step: 100,
       maxValue: 10000, // Максимальное значение
     };
@@ -44,19 +55,37 @@ export default {
   },
   methods: {
     increment() {
-      this.count += this.step;
+      const lastCount = this.count += this.step;
+      if (lastCount >= this.$props.total) {
+        this.count = this.$props.total;
+      } else {
+        this.count = lastCount;
+      }
+      this.updateModel();
+
     },
     decrement() {
       if (this.count >= this.step) {
         this.count -= this.step;
+        this.updateModel();
       }
     },
     filterInput(event) {
       const value = event.target.value.replace(/\D/g, '');
-      this.count = value ? parseInt(value, 10) : 0;
+      if (value > this.$props.total) {
+        this.count = this.$props.total;
+      } else {
+        this.count = value ? parseInt(value, 10) : 0;
+      }
+      this.updateModel();
+
     },
     setMaxValue() {
-      this.count = this.maxValue;
+      this.count = this.$props.total;
+      this.updateModel();
+    },
+    updateModel() {
+      this.$emit('update:modelValue', this.count);
     }
   }
 };

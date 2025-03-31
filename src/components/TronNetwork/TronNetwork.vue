@@ -19,12 +19,12 @@
             Курс TRX:
           </span>
           <p class="tron-network__value d-desk-none">
-            0,2439 USDT
+            {{ stats.trx_price }} USDT
           </p>
         </div>
 
         <p class="tron-network__value d-none d-desk-block">
-          0,2439 USDT
+          {{ stats.trx_price }} USDT
         </p>
 
         <div class="tron-network__info">
@@ -48,12 +48,12 @@
             Энергии за 1 TRX:
           </span>
           <p class="tron-network__value d-desk-none">
-            11,156179707
+            {{ stats.energy_per_trx }}
           </p>
         </div>
 
         <p class="tron-network__value d-none d-desk-block">
-          11,156179707
+          {{ stats.energy_per_trx }}
         </p>
 
         <div class="tron-network__info">
@@ -75,12 +75,13 @@
           </i>
           В стейкинге TRX:
           <p class="tron-network__value d-desk-none">
-            16 134 555 442
+            {{ stats.total_staked_trx }}
           </p>
         </div>
 
         <p class="tron-network__value d-none d-desk-block">
-          16 134 555 442
+          {{ stats.total_staked_trx }}
+
         </p>
 
         <div class="tron-network__info">
@@ -102,21 +103,32 @@
 <script>
 
 
+import {networkService} from "@/services/index.js";
+
 export default {
   name: 'TronNetwork',
   components: {
   },
   data() {
     return {
-   
+      stats: {
+        "trx_price": 0,
+        "energy_per_trx": 0,
+        "total_staked_trx": 0
+      }
     };
   },
+  mounted() {
+    networkService.getTronNetworkStats().then((response) => {
+      this.stats = response;
+    });
+  }
 };
 </script>
 
 <style scoped lang="scss">
   @import './TronNetwork.scss';
 
- 
+
 
 </style>

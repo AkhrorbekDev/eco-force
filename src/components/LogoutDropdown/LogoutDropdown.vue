@@ -6,7 +6,7 @@
         <img src="/images/user-white.svg" loading="lazy" width="18" height="20" alt="User Icon">
     </button>
 
-    <div class="logout-dropdown__list" v-if="isOpen">
+    <div class="logout-dropdown__list" v-if="isOpen" @click="logout">
       <img src="/images/logout.svg" width="24" height="24" loading="lazy" alt="Icon Logout">
       Выход
     </div>
@@ -18,10 +18,18 @@
 
 <script>
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
+import {logout} from "@/services/authService.js";
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 export default {
   components: {
     ModalWindow
+  },
+  setup () {
+    const userStore = useUserGlobal();
+    return {
+      userStore
+    }
   },
   data() {
     return {
@@ -36,6 +44,11 @@ export default {
     };
   },
   methods: {
+    logout () {
+      logout();
+      this.userStore.setLoggedIn(false)
+      this.userStore.setUser({})
+    },
     toggleDropdown() {
       this.isOpen = !this.isOpen;
       if (this.isOpen) {

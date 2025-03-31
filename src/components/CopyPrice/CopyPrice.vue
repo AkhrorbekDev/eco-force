@@ -17,15 +17,20 @@
 import { ref } from 'vue';
 
 export default {
-  setup() {
-    const cost = ref('13.03 TRX');
+  props: {
+    cost: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const showPopup = ref(false);
     const popupMessage = ref('');
 
     const copyToClipboard = async () => {
-      if (cost.value) {
+      if (props.cost) {
         try {
-          await navigator.clipboard.writeText(cost.value);
+          await navigator.clipboard.writeText(props.cost);
           showPopupMessage('Скопировано!');
         } catch (err) {
           console.error('Ошибка при копировании:', err);
@@ -45,7 +50,6 @@ export default {
     };
 
     return {
-      cost,
       showPopup,
       popupMessage,
       copyToClipboard,

@@ -5,9 +5,9 @@
 
       <div class="container">
         <div class="section-panels__row">
-          <PanelBalance />
-          <PanelStaking />
-          <PanelEnergy />
+          <PanelBalance :pricing="energyPricing" :balance="{amount: userStats.balance_trx}"/>
+          <PanelStaking :pricing="energyPricing" :balance="{amount: userStats.balance_trx}" />
+          <PanelEnergy :pricing="energyPricing" :balance="{amount: userStats.balance_energy}" @on:success="successEnergy" />
         </div>
       </div>
 
@@ -21,7 +21,7 @@
           </h1>
 
           <div class="section-calc__row">
-            <BuyEnergy2 />
+            <BuyEnergy2 :user="userStats" :pricing="energyPricing" />
             <StakingCalculator customClass="d-none d-desk-block" />
           </div>
 
@@ -62,6 +62,7 @@
   import StakingCalculator from '@/components/StakingCalculator/StakingCalculator.vue';
   import TableOperation from '@/components/TableOperation/TableOperation.vue';
   import VideoEco from '@/components/VideoEco/VideoEco.vue';
+  import {createEnergyService, createUserService} from "@/services/index.js";
 
   export default {
     name: 'HomeAuthPage',
@@ -75,6 +76,51 @@
       PanelStaking,
       PanelEnergy,
       TableOperation
+    },
+    data () {
+      return {
+        userStats: {
+          tron_address: "",
+          balance_trx: 0,
+          balance_energy: 0,
+          referral_code: '0',
+          registration_date: '',
+        },
+        energyPricing: {
+          "cost_per_hour": 0,
+          "cost_per_day": 0,
+          "cost_per_week": 0,
+          "buyback_cost": 0,
+          "tron_cost_per_hour": 0,
+          "tron_cost_per_day": 0,
+          "tron_cost_per_week": 0
+        }
+      }
+    },
+    mounted() {
+      this.getUserDetails()
+      this.getEnergyPricing()
+    },
+    methods: {
+      getEnergyPricing() {
+        createEnergyService().getEnergyPricing().then((response) => {
+          this.energyPricing = response
+        });
+      },
+      getUserDetails() {
+        createUserService().getUserDetails().then((response) => {
+          this.userStats = response
+        });
+      },
+      successEnergy(response) {
+        this.getUserDetails()
+      },
+      successStaking(response) {
+        this.getUserDetails()
+      },
+      successTRX(response) {
+        this.getUserDetails()
+      }
     }
   }
 </script>
