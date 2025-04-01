@@ -4,10 +4,10 @@
     <div class="row">
       <div class="amount-energy__value">
         <input
-          :value="modelValue"
-          placeholder="0"
-          @input="filterInput"
-          type="text"
+            :value="modelValue"
+            placeholder="0"
+            @input="filterInput"
+            type="text"
         />
         <span class="amount-energy__cross cross" @click="clearInput">
           <i class="cross__line"></i>
@@ -15,11 +15,11 @@
       </div>
       <div class="amount-energy__button" @click="openModal">
         <img
-          src="/images/calculator-one.svg"
-          loading="lazy"
-          width="24"
-          height="24"
-          alt="calculator"
+            src="/images/calculator-one.svg"
+            loading="lazy"
+            width="24"
+            height="24"
+            alt="calculator"
         />
       </div>
     </div>
@@ -28,19 +28,25 @@
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
     <div class="popup">
       <div class="popup__header">Калькулятор транзакций</div>
-
+      <div v-show="loading" class="loader-bar-container">
+        <div class="loader-bar" :style="{ width: progress + '%' }"></div>
+      </div>
       <div class="popup__body">
-        <SendUsdt />
+        <template v-for="(delegationAddress, index) in delegationAddresses" :key="index">
+          <SendUsdt v-model="delegationAddress.address" @update:model-value="sendAddress(index)"
+                    @on:delete="deleteAddress(index)"/>
 
-        <p class="font-14 c-green mb-20">Необходимо энергии: 64285</p>
+          <p class="font-14 c-green mb-20">Необходимо энергии: {{ delegationAddress.energy_cost }}</p>
 
-        <PreloaderCopy />
+        </template>
+
+        <!--        <PreloaderCopy />-->
 
         <!-- Отображаем все PreloaderCopy -->
-        <PreloaderCopy v-for="(preloader, index) in preloaders" :key="index" />
+        <!--        <PreloaderCopy v-for="(preloader, index) in preloaders" :key="index" />-->
 
         <!-- Кнопка "добавить еще" -->
-        <div class="popup__add font-14" @click="addPreloader">
+        <div v-if="delegationAddresses.length < 3" class="popup__add font-14" @click="addAddress">
           + добавить еще
         </div>
 
@@ -50,13 +56,15 @@
           </span>
           <div class="row gap-10 ai-c">
             <span class="popup__amount">
-              200 000
+              {{ totalEnergyCost }}
             </span>
             <img src="/images/lightning.svg" width="9" height="16" loading="lazy" alt="lightning">
           </div>
         </div>
 
-        <a class="button button_green py-12 w-100" href="#"> Заполнить </a>
+        <button :disabled="disableSaveButton" class="button button_green py-12 w-100" @click="saveEnergyCosts">
+          Заполнить
+        </button>
       </div>
     </div>
   </ModalWindow>
@@ -64,10 +72,11 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 import ModalWindow from "../ModalWindow/ModalWindow.vue";
 import SendUsdt from "../SendUsdt/SendUsdt.vue";
 import PreloaderCopy from "../PreloaderCopy/PreloaderCopy.vue";
+import {createEnergyService} from "@/services/index.js";
 
 export default {
   components: {
@@ -84,6 +93,17 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      delegationAddresses: [
+        {
+          address: '',
+          energy_cost: 0,
+        }
+      ],
+      timeout: null,
+      intervalLoader: null,
+      progress: 0,
+      loading: false,
+      disableSaveButton: false,
     };
   },
   setup(_, {emit}) {
@@ -117,12 +137,85 @@ export default {
       addPreloader,
     };
   },
+  computed: {
+    totalEnergyCost() {
+      return this.delegationAddresses.reduce((acc, item) => acc + item.energy_cost, 0);
+    }
+  },
   methods: {
+    addAddress() {
+      this.delegationAddresses.push({
+        address: '',
+        energy_cost: 0,
+      });
+    },
+    saveEnergyCosts() {
+      if (this.disableSaveButton) {
+        return
+      }
+      if (this.totalEnergyCost) {
+        this.$emit('update:modelValue', Math.ceil(this.totalEnergyCost / 1000) * 1000);
+      }
+      this.closeModal();
+    },
+    sendAddress(index) {
+      if (this.timeout) {
+        clearTimeout(this.timeout);
+      }
+      if (this.delegationAddresses[index].address === '') {
+        return;
+      }
+      this.disableSaveButton = true
+      this.startLoading()
+      this.timeout = setTimeout(() => {
+        createEnergyService().getEnergyCostPerAddress(this.delegationAddresses[index].address)
+            .then((response) => {
+              if (this.isModalVisible) {
+                this.delegationAddresses[index].energy_cost = response.energy_cost;
+              }
+            }).finally(() => {
+          this.disableSaveButton = false
+          this.finishLoading()
+        });
+      }, 500);
+    },
+    deleteAddress(index) {
+      if (index === 0 && this.delegationAddresses.length === 1) {
+        this.delegationAddresses[0].address = '';
+        this.delegationAddresses[0].energy_cost = 0;
+        return;
+
+      }
+      this.delegationAddresses.splice(index, 1);
+    },
     openModal() {
       this.isModalVisible = true;
     },
     closeModal() {
       this.isModalVisible = false;
+      this.delegationAddresses = [
+        {
+          address: '',
+          energy_cost: 0,
+        }
+      ];
+    },
+    startLoading() {
+      this.loading = true;
+      this.progress = 0;
+      this.intervalLoader = setInterval(() => {
+        if (this.progress < 95) {
+          this.progress += 5;
+        }
+      }, 100);
+    },
+    finishLoading() {
+      clearInterval(this.intervalLoader);
+      this.progress = 100;
+      setTimeout(() => {
+        this.loading = false;
+        this.progress = 0;
+      }, 500);
     },
   },
 };
@@ -130,7 +223,16 @@ export default {
 
 <style scoped lang="scss">
 @import "./amount-energy.scss";
-
+.loader-bar-container {
+  height: 2px;
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  .loader-bar {
+    background-color: var(--color2);
+    height: 100%;
+  }
+}
 .popup {
   gap: 20px;
   width: 418px;

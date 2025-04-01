@@ -376,6 +376,7 @@ export default {
   methods: {
     saveInputValue () {
       this.inputedAmount = this.amount
+      this.changeAmount(this.transactionCount)
     },
     changeAmount (e) {
       this.transactionCount = e
