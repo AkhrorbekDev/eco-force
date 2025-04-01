@@ -28,9 +28,9 @@
         <div class="section-intro__row">
           <ProfitBlock/>
           <div class="section-intro__col">
-            <ReferralQuantity :quantity="referralsStats.total"/>
-            <ReferralLink :link="referralsStats.url"/>
-            <PromoCode :code="userStats.referral_code"/>
+            <ReferralQuantity :quantity="referralsStats.used_count"/>
+            <ReferralLink :link="referralsStats.referral_url"/>
+            <PromoCode :code="referralsStats.promo_code" />
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
           Мои партнеры
         </h2>
 
-        <TableOperation2/>
+        <TableOperation2 />
 
       </div>
     </section>
@@ -76,11 +76,17 @@ export default {
   data() {
     return {
       referralsStats: {
-        total: 0,
-        totalEnergy: 0,
-        totalTrx: 0,
-        totalEnergyEarned: 0,
-        url: 'https://example.com'
+
+        promo_code:
+            "",
+        referral_count:
+            0,
+        referral_url:
+            "https://ecoforce.com/",
+        usage_limit:
+            0,
+        used_count:
+            0
       },
       userStats: {
         tron_address: "",

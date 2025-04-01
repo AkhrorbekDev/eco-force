@@ -7,12 +7,12 @@
         :max="max"
         @input="onInput"
         :style="sliderStyle"
-        :value="localValue"
+        :value="modelValue"
         class="custom-slider__input"
       />
     </div>
     <span class="custom-slider__price">
-      ~ {{ localValue }} $
+      ~ {{ usd }} $
     </span>
   </div>
 </template>
@@ -24,6 +24,10 @@ export default {
     modelValue: {
       type: Number,
       required: true,
+    },
+    usd: {
+      type: Number,
+      default: 0,
     },
     min: {
       type: Number,

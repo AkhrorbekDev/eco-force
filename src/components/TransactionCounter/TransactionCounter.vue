@@ -32,11 +32,13 @@ export default {
     increment() {
       this.count++;
       this.updateModelValue()
+      this.$emit('increment', this.count)
     },
     decrement() {
-      if (this.count > 0) {
+      if (this.count > 1) {
         this.count--;
         this.updateModelValue()
+        this.$emit('decrement', this.count)
       }
     },
     filterInput(event) {
@@ -44,7 +46,7 @@ export default {
       this.updateModelValue(this.count);
     },
     updateModelValue(value) {
-      this.$emit('update:modelValue', value);
+      this.$emit('update:modelValue', this.count);
     }
   }
 };

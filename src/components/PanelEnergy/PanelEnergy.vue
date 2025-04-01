@@ -11,10 +11,10 @@
       </div>
       <div class="panel__info">
         <span class="c-gray-light">24h</span>
-        <span class="c-green">+{{ balance?.perDayEarned || 0 }}</span>
+        <span class="c-green">+{{ userStore.user.energy_24 || 0 }}</span>
       </div>
       <span class="panel__amount">
-                {{ balance?.amount || 0 }}
+                {{ userStore.user.energy || 0 }}
 
       </span>
     </div>
@@ -38,10 +38,10 @@
         Продажа энергии
       </div>
 
-      <EnergyCounter :total="balance?.amount || 0" v-model="sellEnergyAmount"/>
+      <EnergyCounter :total="userStore.user.energy || 0" v-model="sellEnergyAmount"/>
 
       <p class="my-12">
-        Курс: {{ pricing.buyback_cost }} SUN за 1 единицу энергии
+        Курс: {{ useEnergyStore.energyGlobal.buyback_cost }} SUN за 1 единицу энергии
       </p>
 
       <p class="mb-12">
@@ -91,6 +91,9 @@
 import EnergyCounter from '../EnergyCounter/EnergyCounter.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import {createUserService, createEnergyService} from "@/services";
+import {useUserGlobal} from "@/store/userGlobal.js";
+import {useEnergyGlobal} from "@/store/energyGlobal.js";
+import {useTrxGlobal} from "@/store/trxGlobal.js";
 
 export default {
   components: {
@@ -98,32 +101,16 @@ export default {
     EnergyCounter,
   },
   name: 'PanelEnergy',
-  props: {
-    balance: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {
-          amount: 0,
-          perDayEarned: 0
-        }
-      }
-    },
-    pricing: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {
-          "cost_per_hour": 0,
-          "cost_per_day": 0,
-          "cost_per_week": 0,
-          "buyback_cost": 0,
-          "tron_cost_per_hour": 0,
-          "tron_cost_per_day": 0,
-          "tron_cost_per_week": 0
-        }
-      }
-    },
+  setup() {
+    const userStore = useUserGlobal()
+    const useEnergyStore = useEnergyGlobal()
+    const useTrxStore = useTrxGlobal()
+
+    return {
+      userStore,
+      useEnergyStore,
+      useTrxStore
+    }
   },
   data() {
     return {
@@ -138,7 +125,7 @@ export default {
   },
   computed: {
     trx_received() {
-      return (this.$props.pricing.buyback_cost * this.sellEnergyAmount) / 1_000_000
+      return (this.sellEnergyAmount * this.useEnergyStore.energyGlobal.buyback_cost) / 1_000_000
     }
   },
   mounted() {
@@ -158,6 +145,11 @@ export default {
       }
     },
     sellEnergy() {
+      if (this.sellEnergyAmount <= 0) {
+        this.error = 'Введите количество энергии'
+        return
+      }
+
       createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
         this.$emit('on:success', response)
       }).catch((error) => {

@@ -6,7 +6,7 @@
     <div class="trx-counter__row">
 
       <div class="trx-counter__wrapper">
-        <input class="trx-counter__value" v-model="count" type="text" @input="filterInput">
+        <input class="trx-counter__value" :value="modelValue" type="text" @input="filterInput">
         <span class="trx-counter__max" @click="setMaxValue">
           max
         </span>
@@ -26,34 +26,69 @@
 </template>
 
 <script>
+import {useEnergyGlobal} from "@/store/energyGlobal.js";
+import {useUserGlobal} from "@/store/userGlobal.js";
+import {useTrxGlobal} from "@/store/trxGlobal.js";
+
 export default {
+  props: {
+    modelValue: {
+      type: Number,
+      default: 0,
+    },
+    max: {
+      type: Number,
+      default: 0,
+    }
+  },
   data() {
     return {
-      count: 2056,
+      count: 0,
       step: 100,
-      maxValue: 10000, // Максимальное значение
     };
+  },
+  setup() {
+    const useUserStore = useUserGlobal();
+    const useTrxStore = useTrxGlobal();
+    return {
+      useUserStore,
+    }
   },
   computed: {
     isMultipleOf() {
-      return this.count % this.step === 0;
+      return this.modelValue % this.step === 0;
+    },
+    maxValue () {
+      return this.$props.max
     }
   },
   methods: {
     increment() {
-      this.count += this.step;
+      let count = this.modelValue
+      count += this.step;
+      this.$emit('update:modelValue', count);
     },
     decrement() {
-      if (this.count >= this.step) {
-        this.count -= this.step;
+      let count = this.modelValue
+      if (count >= this.step) {
+        count -= this.step;
+        this.$emit('update:modelValue', count);
       }
     },
     filterInput(event) {
+
       const value = event.target.value.replace(/\D/g, '');
-      this.count = value ? parseInt(value, 10) : 0;
+      let count = value ? parseInt(value, 10) : 0;
+      if (count > this.maxValue) {
+        count = this.maxValue;
+        event.target.value = count;
+      }
+      this.$emit('update:modelValue', count);
+
     },
     setMaxValue() {
-      this.count = this.maxValue;
+      let count = this.maxValue;
+      this.$emit('update:modelValue', count);
     }
   }
 };

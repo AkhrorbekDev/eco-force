@@ -28,15 +28,13 @@ export default {
       default: ''
     }
   },
-  computed () {
-    return {
-      promocode: {
-        get () {
-          return this.$props.code;
-        },
-        set (value) {
-          this.$emit('update:code', value);
-        }
+  computed: {
+    promocode: {
+      get () {
+        return this.$props.code;
+      },
+      set (value) {
+        this.$emit('update:code', value);
       }
     }
   }

@@ -37,10 +37,11 @@ import {useRoute} from 'vue-router';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import {computed} from 'vue';
 import LogoutDropdown from '../LogoutDropdown/LogoutDropdown.vue';
-import {getSessionId, SESSION_ID_KEY} from "@/services/sessionService";
+import {generateSessionId, getSessionId, SESSION_ID_KEY} from "@/services/sessionService";
 import QRCode from 'qrcode'
 import {useUserGlobal} from "@/store/userGlobal.js";
 import publicServices from "@/services/publicServices.js";
+import {obtainToken} from "@/services/tokenService.js";
 
 export default {
   components: {
@@ -62,6 +63,7 @@ export default {
     return {
       isModalVisible: false,
       qrCode: null,
+      timeout: null
     };
   },
   watch: {
@@ -86,8 +88,9 @@ export default {
 
       }, 500);
     },
-    isModalVisible(value) {
+    async isModalVisible(value) {
       if (value) {
+        await generateSessionId();
         const session_id = getSessionId();
         if (session_id) {
           this.URL = 'tg://resolve?domain=EcoForceBot'
@@ -103,6 +106,25 @@ export default {
               .catch(err => {
                 console.error(err)
               })
+
+          if (this.timeout) {
+            clearTimeout(this.timeout)
+          }
+
+          this.timeout = setInterval(() => {
+            obtainToken().then((res) => {
+              if (res) {
+
+                this.userStore.setLoggedIn(true)
+                this.userStore.initUserGlobal()
+                this.closeModal()
+              }
+            })
+          }, 3000)
+        }
+      } else {
+        if (this.timeout) {
+          clearInterval(this.timeout)
         }
       }
     },

@@ -4,7 +4,7 @@
     <div class="row">
       <div class="amount-energy__value">
         <input
-          v-model="amountEnergy"
+          :value="modelValue"
           placeholder="0"
           @input="filterInput"
           type="text"

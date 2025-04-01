@@ -9,9 +9,9 @@ export const createWalletService = (token) => {
         requestAddress: () => authApi('/request-address/'),
 
         // Withdraw TRX from balance
-        withdrawFunds: (amount, walletAddress) => authApi('/withdraw/', {
+        withdrawFunds: (options = {amount: 0, walletAddress: ''}) => authApi('/withdraw/', {
             method: 'POST',
-            body: { amount, wallet_address: walletAddress },
+            body: { ...options},
         }),
 
         // Confirm withdrawal

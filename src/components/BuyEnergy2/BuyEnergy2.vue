@@ -4,9 +4,7 @@
     <div class="buy-energy__header">
       <div class="buy-energy__title">Купить энергию TRON</div>
       <span class="buy-energy__question">
-        <i>
           ?
-        </i>
       </span>
     </div>
 
@@ -23,7 +21,7 @@
           </span>
         </label>
 
-        <TransactionCounter v-model="transactionCount"/>
+        <TransactionCounter :model-value="transactionCount" @update:model-value="changeAmount"/>
 
       </div>
 
@@ -39,7 +37,7 @@
 
         <RentalPeriod v-model="rentPeriod" />
 
-        <AmountEnergy v-model="amount" />
+        <AmountEnergy v-model="amount" @update:model-value="saveInputValue" />
 
       </div>
 
@@ -51,7 +49,7 @@
       <div class="buy-energy__discount">
 
         <label v-if="loggedIn" class="check py-0">
-          <input class="check__input" type="checkbox" checked>
+          <input v-model="useUserEnergy" class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
             Использовать свою энергию
@@ -158,7 +156,7 @@
               Не хватает: {{ balanceTrxDiff }} TRX
             </b>
           </div>
-          <buttom @click="confimOrder" :disabled="balanceTrxDiff > 0" class="button button_green py-14 w-100 br-8" href="#"> Списать с баланса </buttom>
+          <button @click="confimOrder" :disabled="balanceTrxDiff > 0" class="button button_green py-14 w-100 br-8" href="#"> Списать с баланса </button>
         </div>
       </ModalWindow>
 
@@ -244,6 +242,7 @@ export default {
       discountCost: 8,
       rentPeriod: 0,
       amount: 0,
+      inputedAmount: 0,
       transactionCount: 1,
       savingsPercentage: 52,
       savingsAmount: 312,
@@ -251,6 +250,7 @@ export default {
       isModalVisible2: false,
       addressNotActive: false,
       activateAddress: false,
+      useUserEnergy: false,
       timeout: false,
       energy: '130 000',
       status: 'Ожидание оплаты',
@@ -272,7 +272,7 @@ export default {
     },
 
     lostEnergy () {
-      return 0
+      return this.userStore.user.energy || 0
     },
     totalTrx () {
       if (this.amount === 0) {
@@ -286,7 +286,12 @@ export default {
       } else if (this.rentPeriod === 2) {
         cost = this.useEnergyStore.energyGlobal.cost_per_week;
       }
-      return ((this.amount * cost ) / 1_000_000).toFixed(4);
+
+      let total = (((this.amount * cost ) / 1_000_000) * this.transactionCount ).toFixed(4);
+      if (this.activateAddress) {
+        total = 1 + parseFloat(total);
+      }
+      return total;
     },
     defaultTrx () {
       if (this.amount === 0) {
@@ -300,22 +305,31 @@ export default {
       } else if (this.rentPeriod === 2) {
         cost = this.useEnergyStore.energyGlobal.tron_cost_per_week;
       }
-      return ((this.amount * cost ) / 1_000_000).toFixed(4);
+      return (((this.amount * cost ) / 1_000_000)* this.transactionCount).toFixed(4) ;
     },
     ecoTrx () {
       if (this.amount === 0) {
         return 0;
       }
-      return (Math.abs((this.totalTrx - this.defaultTrx) / this.defaultTrx * 100)).toFixed(4);
+      let total = this.totalTrx;
+      if (this.activateAddress){
+        total = total - 1
+      }
+
+      return (Math.abs((total - this.defaultTrx) / this.defaultTrx * 100)).toFixed(4);
     },
     userEnergy () {
-      return 0
+      return this.userStore.user.energy || 0
     },
     trxPrice () {
       if (this.totalTrx === 0) {
         return 0;
       }
-      return (this.totalTrx * this.useTrxStore.trxGlobal.trx_price).toFixed(4);
+      let total = this.totalTrx;
+      if (this.activateAddress){
+        total = total - 1
+      }
+      return (total * this.useTrxStore.trxGlobal.trx_price).toFixed(4);
     },
     balanceTrxDiff () {
       if (this.orderInfo.required_trx_amount === 0) {
@@ -354,7 +368,19 @@ export default {
   mounted() {
     this.address = this.$props.user.tron_address;
   },
+  unmounted() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  },
   methods: {
+    saveInputValue () {
+      this.inputedAmount = this.amount
+    },
+    changeAmount (e) {
+      this.transactionCount = e
+      this.amount = this.inputedAmount ? parseInt(this.inputedAmount) * this.transactionCount : 0
+    },
     createOrderToAuthorizedUser () {
       createEnergyService().createOrder({
         delegation_address: this.address,
@@ -363,6 +389,23 @@ export default {
       }).then(res => {
         this.orderInfo = res;
         this.isModalVisible2 = true;
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+        console.log(res.order_id)
+
+        this.interval = setInterval(() => {
+          publicServices.order.getOrderInfo(res.order_id).then(res => {
+            this.orderInfo.status = res.status;
+            if (res.status === 'Оплачено') {
+              clearInterval(this.interval);
+              this.isModalVisible = false;
+              this.getUserDetails();
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }, 3000);
       }).catch(err => {
 
       })
@@ -375,6 +418,22 @@ export default {
       }).then(res => {
         this.orderInfo = res;
         this.isModalVisible = true;
+        if (this.interval) {
+          clearInterval(this.interval);
+        }
+
+        this.interval = setInterval(() => {
+          console.log(res.order_id)
+          publicServices.order.getOrderInfo(res.order_id).then(res => {
+            this.orderInfo.status = res.status;
+            if (res.status === 'Оплачено') {
+              clearInterval(this.interval);
+              this.isModalVisible = false;
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }, 3000);
       }).catch(err => {
         console.log(err)
       })
@@ -407,9 +466,15 @@ export default {
     },
     closeModal2() {
       this.isModalVisible2 = false;
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
     },
     closeModal() {
       this.isModalVisible = false;
+      if (this.interval) {
+        clearInterval(this.interval);
+      }
     },
   }
 };

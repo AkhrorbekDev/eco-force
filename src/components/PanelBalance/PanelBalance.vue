@@ -9,7 +9,7 @@
         Баланс TRX:
       </div>
       <span class="panel__amount">
-        {{ balance?.amount || 0 }}
+        {{ userStore.user.trx_balance || 0 }}
       </span>
     </div>
 
@@ -24,40 +24,84 @@
 
   </div>
 
+  <!-- Вывести -->
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
-    <div class="popup">
-      <div class="popup__header">
-        Заказ № HFSWX56
+    <div class="popup-take">
+
+      <div class="popup-take__header">
+        Вывод средств
       </div>
-      <div class="row jc-sb">
-        <p>
-          Покупка энергии:
-        </p>
-        <b class="font-20">
-          130 000
-        </b>
+
+      <div class="address-tron d-grid gap-8 mb-16">
+        <span>Адрес <b>TRON</b></span>
+        <div :class="{
+          invalid: !address && sendStart,
+        }" class="address-tron__value">
+          <input v-model="address" type="text">
+        </div>
       </div>
-      <div class="row jc-sb">
-        <p>
-          Будет использовано своей энергии
-        </p>
-        <b class="font-20">
-          70 000
-        </b>
-      </div>
-      <div class="row jc-sb">
-        <p>
-          Стоимость <b>13.03 TRX</b>
-        </p>
-        <b class="text-error">
-          Не хватает: 13.03 TRX
-        </b>
-      </div>
-      <a class="button button_green py-14 w-100 br-8" href="#"> Списать с баланса </a>
+
+      <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
+
+      <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
+        Вывести
+      </button>
+
     </div>
   </ModalWindow>
 
-  <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
+  <!-- Подтверждение -->
+  <ModalWindow :isVisible="isModalVisible3" @close="closeModal3">
+
+    <div class="popup-confirm">
+
+      <div class="popup-confirm__header">
+        Подтверждение вывода
+      </div>
+
+      <div class="d-grid gap-8 mb-16">
+        <span class="c-gray2">
+          Адрес вывода
+        </span>
+        <p>
+          {{ address }}
+        </p>
+      </div>
+
+      <p class="mb-32">
+        Количество
+        <b>
+          TRX: {{ exitAmount }}
+        </b>
+      </p>
+
+      <div class="d-grid gap-8 mb-24">
+        <p class="mb-32">
+          Код подтверждения из
+          <b>
+            Telegram
+          </b>
+        </p>
+        <div class="popup-confirm__actions">
+          <input :class="{
+            invalid: !confirmationCode && sendStart,
+          }" v-model="confirmationCode" type="text" class="input">
+          <button class="button button_green br-8">
+            Выслать код
+          </button>
+        </div>
+      </div>
+
+      <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
+        Вывести
+      </button>
+
+    </div>
+
+  </ModalWindow>
+
+  <!-- Пополнение -->
+   <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
     <div class="popup-order">
       <div class="popup-order__title">
         Ваш адрес для пополнения баланса в TRX
@@ -66,7 +110,7 @@
            style="width: 162px; height: 160px" width="162"
            height="160" loading="lazy"
            alt="QR Code Balance"/>
-      <AddressTron2 v-model="address" :hasTitle="false" customClass="_big mb-12"/>
+      <AddressTron2 v-model="paymentEndpoint.address" read-only :hasTitle="false" customClass="_big mb-12"/>
       <b class="mb-24 d-block">
         Переведите любую сумму.
       </b>
@@ -82,42 +126,15 @@ import AddressTron2 from '../AddressTron2/AddressTron2.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import {useUserGlobal} from "@/store/userGlobal.js";
 import {createEnergyService, createWalletService} from "@/services/index.js";
+import AmountTrx from "@/components/AmountTrx/AmountTrx.vue";
 
 export default {
   components: {
+    AmountTrx,
     ModalWindow,
     AddressTron2
   },
   name: 'PanelBalance',
-  props: {
-    balance: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {
-          "amount": 0,
-          "tron_amount": 0
-        }
-      }
-    },
-    pricing: {
-      type: Object,
-      required: true,
-      default: () => {
-        return {
-          "cost_per_hour": 0,
-          "cost_per_day": 0,
-          "cost_per_week": 0,
-          "buyback_cost": 0,
-          "tron_cost_per_hour": 0,
-          "tron_cost_per_day": 0,
-          "tron_cost_per_week": 0
-        }
-      }
-    },
-
-  },
-
   data() {
     return {
       amount: '12 345.12',
@@ -126,7 +143,10 @@ export default {
         qr_code: '',
         address: ''
       },
-
+      sendStart: false,
+      exitAmount: 0,
+      confirmationCode: '',
+      request_id: '',
       isModalVisible: false,
       isModalVisible2: false,
       isButtonsActive: false,
@@ -173,6 +193,34 @@ export default {
         this.address = response.address
       });
     },
+    sendWithDrawal() {
+      this.sendStart = true
+      if (!this.address) {
+        return;
+      }
+      this.sendStart = false
+
+      createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address}).then((response) => {
+        this.request_id = response.request_id;
+        this.closeModal()
+      });
+      this.openModal3();
+
+    },
+    confirmWithdrawal() {
+      createWalletService().confirmWithdrawal({
+        request_id: this.request_id,
+        code: this.confirmationCode
+      }).then((response) => {
+        this.closeModal3();
+      });
+    },
+
+    resendCode() {
+      createWalletService().resendWithdrawalCode({request_id: this.request_id}).then((response) => {
+        this.request_id = response.request_id;
+      });
+    },
     openModal() {
       this.isModalVisible = true;
     },
@@ -210,6 +258,96 @@ export default {
   }
 }
 
+.popup-take {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  padding: 40px;
+
+  &__header {
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+}
+
+.popup-order {
+  width: 480px;
+  padding: 40px;
+
+  &__header {
+    margin-bottom: 12px;
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+
+  &__info {
+    margin-bottom: 12px;
+  }
+
+  &__img {
+    display: block;
+    margin: 0 auto 24px;
+  }
+
+  &__status {
+    margin-bottom: 16px;
+    color: var(--color5);
+  }
+
+  &__block {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px;
+    border: 1px solid var(--color1);
+    border-radius: 12px;
+  }
+
+}
+
+.address-tron {
+  position: relative;
+
+  &__value
+  input {
+    width: 100%;
+    height: 42px;
+    padding: 10px 16px;
+    font-size: 16px;
+    line-height: 22px;
+    font-family: var(--font1);
+    color: var(--color1);
+    outline: 0;
+    border: 1px solid var(--color8);
+    border-radius: var(--border-radius-input);
+  }
+
+}
+
+.popup-confirm {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  padding: 40px;
+
+  &__header {
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 26px;
+  }
+
+}
 .popup-order {
   width: 480px;
   padding: 40px;

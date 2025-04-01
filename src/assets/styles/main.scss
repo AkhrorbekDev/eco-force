@@ -138,6 +138,7 @@ h3 {
 }
 
 .section-panels {
+  padding-bottom: 22px;
   &__row {
     display: flex;
     flex-wrap: wrap;
@@ -299,7 +300,7 @@ b {
 }
 .d-desk-block {
   @media (min-width: $mobile) {
-    display: block !important;
+    display: flex !important;
   }
 }
 .d-desk-none {

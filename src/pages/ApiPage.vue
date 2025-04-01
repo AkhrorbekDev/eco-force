@@ -5,9 +5,9 @@
 
       <div class="container">
         <div class="section-panels__row">
-          <PanelBalance />
-          <PanelStaking />
-          <PanelEnergy />
+          <PanelBalance/>
+          <PanelStaking/>
+          <PanelEnergy/>
         </div>
       </div>
 
@@ -29,9 +29,9 @@
                 </b>
                 ключ
               </span>
-              <input class="input" type="text">
+              <input :value="apiKey" readonly class="input" type="text">
             </label>
-            <button class="button button_green br-8 py-14">
+            <button @click="generateApiKey" class="button button_green br-8 py-14">
               Сгенерировать
             </button>
           </div>
@@ -64,81 +64,97 @@
 import PanelBalance from '@/components/PanelBalance/PanelBalance.vue';
 import PanelEnergy from '@/components/PanelEnergy/PanelEnergy.vue';
 import PanelStaking from '@/components/PanelStaking/PanelStaking.vue';
+import {createUserService} from "@/services/index.js";
 
 export default {
   name: 'ApiPage',
   components: {
-      PanelBalance,
-      PanelStaking,
-      PanelEnergy,
+    PanelBalance,
+    PanelStaking,
+    PanelEnergy,
+  },
+  data() {
+    return {
+      apiKey: ''
     }
+  },
+  methods: {
+    generateApiKey() {
+      createUserService().generateApiKey().then(res => {
+        this.apiKey = res.api_key
+      });
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
 @import '../assets/styles/vars';
 
-  .main {
-    padding-top: 22px;
-    padding-bottom: 160px;
-    @media (max-width: $mobile) {
-      padding-top: 0;
-      padding-bottom: 32px;
-    }
+.main {
+  padding-top: 22px;
+  padding-bottom: 160px;
+  @media (max-width: $mobile) {
+    padding-top: 0;
+    padding-bottom: 32px;
+  }
+}
+
+.section-api {
+  padding-top: 22px;
+
+  &__title {
+    margin-bottom: 22px;
   }
 
-  .section-api {
-    padding-top: 22px;
-    &__title {
-      margin-bottom: 22px;
-    }
-    &__content {
-      max-width: 590px;
-    }
-    @media (max-width: $mobile) {
-      padding-top: 0;
-    }
-  }
-
-  .block {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  &__content {
     max-width: 590px;
-    width: 100%;
-    margin-bottom: 30px;
-    padding: 40px;
-    border-radius: 16px;
-    background: var(--color4);
-
-    &__label {
-      display: grid;
-      gap: 8px;
-    }
-    @media (max-width: $mobile) {
-      padding: 16px;
-    }
   }
 
-  .button-goto {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 40px;
-    padding: 25px 32px;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 30px;
-    background: var(--color4);
-    box-shadow: 0px 2px 12px 0px #000A0014;
-    border-radius: 16px;
-    @media (max-width: $mobile) {
-      padding: 16px;
-    }
+  @media (max-width: $mobile) {
+    padding-top: 0;
+  }
+}
 
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 590px;
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 40px;
+  border-radius: 16px;
+  background: var(--color4);
+
+  &__label {
+    display: grid;
+    gap: 8px;
   }
 
+  @media (max-width: $mobile) {
+    padding: 16px;
+  }
+}
+
+.button-goto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px;
+  padding: 25px 32px;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 30px;
+  background: var(--color4);
+  box-shadow: 0px 2px 12px 0px #000A0014;
+  border-radius: 16px;
+  @media (max-width: $mobile) {
+    padding: 16px;
+  }
+
+}
 
 
 </style>

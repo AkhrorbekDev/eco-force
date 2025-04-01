@@ -11,22 +11,24 @@
       <tr >
         <td>Еженедельно</td>
         <td>{{ data.energy.weekly }}</td>
-        <td>{{ data.trx.weekly }}</td>
+        <td>{{ data.trx.weekly}} ~ {{ ( data.trx.weekly ? (data.trx.weekly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr><tr >
         <td>За месяц</td>
-        <td>{{ data.energy.monthly }}</td>
-        <td>{{ data.trx.monthly }}</td>
+        <td>{{ data.energy.monthly  }}</td>
+        <td>{{ data.trx.monthly}} ~ {{ ( data.trx.monthly ? (data.trx.monthly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr>
       <tr >
         <td>За год</td>
         <td>{{ data.energy.yearly }}</td>
-        <td>{{ data.trx.yearly }}</td>
+        <td>{{ data.trx.yearly}} ~ {{ ( data.trx.yearly ? (data.trx.yearly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
+import {useTrxGlobal} from "@/store/trxGlobal.js";
+
 export default {
   props: {
     data: {
@@ -48,6 +50,12 @@ export default {
           }
         }
       }
+    }
+  },
+  setup() {
+    const useTrxStore = useTrxGlobal();
+    return {
+      useTrxStore
     }
   },
   data() {

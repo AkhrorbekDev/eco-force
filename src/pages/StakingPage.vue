@@ -39,13 +39,13 @@
       </div>
     </section>
 
-    <section class="section-history">
+    <section v-if="loggedIn" class="section-history">
       <div class="container">
         <h2 class="section-history__title">
           История операций
         </h2>
 
-        <TableOperation/>
+        <TableStakingActions/>
 
       </div>
     </section>
@@ -61,8 +61,10 @@ import PanelStaking from '@/components/PanelStaking/PanelStaking.vue';
 import StakingCalculator from '@/components/StakingCalculator/StakingCalculator.vue';
 import TableOperation from '@/components/TableOperation/TableOperation.vue';
 import TronNetwork from '@/components/TronNetwork/TronNetwork.vue';
-import PercentStaking from '@/components/PercentStaking/PercentStaking,.vue'
+import PercentStaking from '@/components/PercentStaking/PercentStaking.vue'
+import TableStakingActions from "@/components/TableStakingActions/TableStakingActions.vue";
 import {createEnergyService, createStakingService, createUserService} from "@/services/index.js";
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 export default {
   name: 'StakingPage',
@@ -70,11 +72,23 @@ export default {
     PanelBalance,
     PanelStaking,
     PanelEnergy,
+    TableStakingActions,
     TableOperation,
     StakingCalculator,
     MyStaking,
     TronNetwork,
     PercentStaking,
+  },
+  setup() {
+    const userStore = useUserGlobal()
+    return {
+      userStore
+    }
+  },
+  computed: {
+    loggedIn() {
+      return this.userStore.loggedIn;
+    },
   },
   data() {
     return {

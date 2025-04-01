@@ -4,7 +4,7 @@
       <span>Адрес <b>TRON</b></span>
     </div>
     <div class="address-tron__value">
-      <input v-model="tronAddress" placeholder="Введите адрес">
+      <input v-model="tronAddress" :readonly="readOnly" placeholder="Введите адрес">
       <span class="address-tron__copy" @click="copyToClipboard">
         <img src="/images/document-copy.svg" width="20" height="20" loading="lazy" alt="Icon DOCS">
       </span>

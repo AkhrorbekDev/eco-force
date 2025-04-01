@@ -1,0 +1,116 @@
+@import '../../assets/styles/vars';
+
+
+.table-wrapper {
+  display: grid;
+  gap: 40px;
+  padding: 40px 40px 26px;
+  background: var(--color4);
+  border-radius: 16px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tr:first-child th:first-child {
+    padding-left: 24px;
+    border-top-left-radius: var(--border-radius-table);
+  }
+
+  tr:first-child th:last-child {
+    padding-right: 24px;
+    border-top-right-radius: var(--border-radius-table);
+  }
+
+  tr:first-child th:first-child {
+    border-bottom-left-radius: var(--border-radius-table);
+  }
+
+  tr:first-child th:last-child {
+    border-bottom-right-radius: var(--border-radius-table);
+  }
+
+  th, td {
+    padding: 21px 8px;
+    text-align: left;
+  }
+
+  td {
+    border-top: 1px solid #DEDEE2;
+  }
+
+  th {
+    font-weight: 500;
+    background-color: var(--color3);
+  }
+
+  tr:first-child td {
+    border: 0;
+  }
+
+  tr td:first-child {
+    padding-left: 24px;
+  }
+
+  tr td:last-child {
+    padding-right: 24px;
+  }
+  
+  &__more {
+    display: none;
+  }
+
+  @media (max-width: $tabletMin) {
+    padding: 16px;
+    th {
+      display: none;
+    }
+    tr {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #DEDEE2;
+      &:nth-child(3),
+      &:last-child {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+      &:nth-child(3) ~ tr {
+        display: none;
+      }
+    }
+    td {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 0 !important;
+      font-size: 14px;
+      line-height: 20px;
+      border: 0;
+      &:before {
+        content: attr(data-label);
+        color: #76767A;
+      }
+    }
+    &__more {
+      display: flex;
+      color: var(--color1);
+      border-color: var(--color2);
+    }
+    &._active {
+      tr:nth-child(3) ~ tr {
+        display: block;
+      }
+      tr:nth-child(3) {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #DEDEE2;
+      }
+    }
+  }
+
+}

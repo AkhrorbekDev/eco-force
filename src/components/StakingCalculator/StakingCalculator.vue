@@ -1,7 +1,7 @@
 <template>
   <div
-    :class="customClass"
-    class="staking-calculator">
+      :class="customClass"
+      class="staking-calculator">
 
     <div class="staking-calculator__header">
       <div class="staking-calculator__title">
@@ -13,15 +13,15 @@
 
       <CurrencyInput v-model="amountCurrency"/>
 
-      <CustomSlider />
+      <CustomSlider v-model="amountCurrency" :usd="energyPerPeriod.usd" min="1000" max="50000"/>
 
-      <TableStaking :data="energyPerPeriod" />
+      <TableStaking :data="energyPerPeriod"/>
 
-      <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal" >
+      <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal">
         Начать стейкинг
       </button>
 
-      <ModalWindow :isVisible="isModalVisible" @close="closeModal" >
+      <ModalWindow :isVisible="isModalVisible" @close="closeModal">
 
         <div class="popup">
 
@@ -29,11 +29,11 @@
             Стейкинг TRX
           </div>
 
-          <TrxCounter />
+          <TrxCounter v-model="amountCurrency" :max="useUserStore.user.trx_balance"/>
 
           <!-- class for error check_error -->
           <label class="check">
-            <input class="check__input" type="checkbox">
+            <input v-model="agree" class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
               С
@@ -42,7 +42,7 @@
             </span>
           </label>
 
-          <button class="button button_green py-12 w-100" @click="openModal2">
+          <button class="button button_green py-12 w-100" @click="stake">
             Начать стейкинг
           </button>
 
@@ -50,34 +50,8 @@
 
       </ModalWindow>
 
-      <ModalWindow :isVisible="isModalVisible2" @close="closeModal2" >
 
-        <div class="popup">
-
-          <div class="popup__header">
-            Вывод из стейкинга TRX
-          </div>
-
-          <TrxCounter />
-
-          <!-- class for error check_error -->
-          <label class="check">
-            <input class="check__input" type="checkbox">
-            <i class="check__square"></i>
-            <span class="check__text font-14">
-              После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится.
-            </span>
-          </label>
-
-          <a class="button button_green py-12 w-100" href="#">
-            Вывести
-          </a>
-
-        </div>
-
-      </ModalWindow>
-
-      <ModalWindow overlayClass="overflow" :isVisible="isModalVisible3" @close="closeModal3" >
+      <ModalWindow overlayClass="overflow" :isVisible="isModalVisible3" @close="closeModal3">
 
         <div class="popup-rule">
 
@@ -91,13 +65,16 @@
                 1. Общие положения
               </b>
               <p>
-                1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.
+                1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для
+                получения энергии и дохода.
               </p>
               <p>
-                1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.
+                1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание
+                связанных рисков.
               </p>
               <p>
-                1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.
+                1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при
+                добавлении токенов в стейкинг.
               </p>
             </div>
             <div>
@@ -111,11 +88,11 @@
                 2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.
               </p>
               <p>
-                2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.
+                2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге
+                сети Tron.
               </p>
             </div>
           </div>
-
 
 
         </div>
@@ -137,6 +114,7 @@ import {createStakingService} from "@/services/index.js";
 import {useEnergyGlobal} from "@/store/energyGlobal.js";
 import {useTrxGlobal} from "@/store/trxGlobal.js";
 import CurrencyInput from "@/components/CurrencyInput/CurrencyInput.vue";
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 export default {
   name: 'BuyEnergy',
@@ -156,9 +134,11 @@ export default {
   },
   setup() {
     const useEnergyStore = useEnergyGlobal();
+    const useUserStore = useUserGlobal();
     const useTrxStore = useTrxGlobal();
     return {
       useEnergyStore,
+      useUserStore,
       useTrxStore
     }
   },
@@ -169,6 +149,7 @@ export default {
       discountCost: 8,
       savingsPercentage: 52,
       savingsAmount: 312,
+      agree: false,
       isModalVisible: false,
       isModalVisible2: false,
       isModalVisible3: false,
@@ -182,48 +163,52 @@ export default {
     };
   },
   computed: {
-    energyPerPeriod () {
+    energyPerPeriod() {
 
-      const dailyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_day;
-      const weeklyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_week;
-      const yearlyEnergy = ((this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_week) * 52;
-      const hourlyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_hour;
-      const monthlyEnergy = (this.amountCurrency * 1_000_000) / 100 * this.useEnergyStore.energyGlobal.cost_per_day * 4;
+      let trxPrice = 0;
+      let energyPerTrx = 0;
+      let buybackCost = 0;
 
-      const dailtTrx = dailyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_day;
-      const weeklyTrx = weeklyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_week;
-      const yearlyTrx = yearlyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_week * 52;
-      const hourlyTrx = hourlyEnergy / this.useEnergyStore.energyGlobal.tron_cost_per_hour;
-      const monthlyTrx = monthlyEnergy / this.useEnergyStore.energyGlobal.cost_per_day * 4;
+      trxPrice = parseFloat(this.useTrxStore.trxGlobal.trx_price);
+      energyPerTrx = parseFloat(this.useTrxStore.trxGlobal.energy_per_trx);
+      buybackCost = this.useEnergyStore.energyGlobal.buyback_cost;
+
+      const usd = (this.amountCurrency * trxPrice).toFixed(2);
+      const dailyEnergy = (this.amountCurrency * energyPerTrx).toFixed(2);
+
+      const weeklyEnergy = dailyEnergy * 7;
+      const monthlyEnergy = dailyEnergy * 30;
+      const yearlyEnergy = dailyEnergy * 365;
+
+      const weeklyTrx = (weeklyEnergy * buybackCost / 1_000_000).toFixed(2);
+      const monthlyTrx = (monthlyEnergy * buybackCost / 1_000_000).toFixed(2);
+      const yearlyTrx = (yearlyEnergy * buybackCost / 1_000_000).toFixed(2);
 
 
       return {
         energy: {
-          daily: dailyEnergy,
-          weekly: weeklyEnergy,
-          yearly: yearlyEnergy,
-          hourly: hourlyEnergy,
-          monthly: monthlyEnergy
+          weekly: Math.floor(weeklyEnergy),
+          yearly: Math.floor(yearlyEnergy),
+          monthly: Math.floor(monthlyEnergy)
         },
         trx: {
-          daily: dailtTrx,
           weekly: weeklyTrx,
           yearly: yearlyTrx,
-          hourly: hourlyTrx,
           monthly: monthlyTrx
-        }
+        },
+        usd
       }
     }
   },
   methods: {
     getStaking() {
       createStakingService().getStakingSummary()
-        .then((response) => {
-          this.staking = response;
-        })
-        .catch((error) => {
-          console.log(error)
-        });
+          .then((response) => {
+            this.staking = response;
+          })
+          .catch((error) => {
+            console.log(error)
+          });
     },
     openModal() {
       this.isModalVisible = true;
@@ -231,16 +216,25 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    openModal2() {
-      this.isModalVisible2 = true;
-      this.isModalVisible = false;
+    stake() {
+      if (!this.agree) {
+        return;
+      }
+      createStakingService().stakeAmount(this.amountCurrency)
+          .then((response) => {
+            this.useUserStore.getUserDetails();
+            this.isModalVisible = false;
+          })
+          .catch((error) => {
+            console.log(error)
+          });
+
     },
     closeModal2() {
       this.isModalVisible2 = false;
     },
     openModal3() {
       this.isModalVisible3 = true;
-      this.isModalVisible = false;
     },
     closeModal3() {
       this.isModalVisible3 = false;
@@ -250,44 +244,49 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import './staking-calculator.scss';
+@import './staking-calculator.scss';
 
-  .popup {
-    width: 480px;
-    padding: 40px;
+.popup {
+  width: 480px;
+  padding: 40px;
 
-    &__header {
-      margin-bottom: 24px;
-      font-size: 22px;
-      line-height: 30px;
-      font-weight: 600;
-    }
-
+  &__header {
+    margin-bottom: 24px;
+    font-size: 22px;
+    line-height: 30px;
+    font-weight: 600;
   }
 
-  .popup-rule {
-    max-width: 800px;
-    padding: 40px;
-    &__header {
-      margin-bottom: 24px;
-      font-weight: 600;
-      font-size: 30px;
-      line-height: 40px;
+}
+
+.popup-rule {
+  max-width: 800px;
+  padding: 40px;
+
+  &__header {
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  &__body {
+    display: grid;
+    gap: 20px;
+
+    b {
+      display: block;
+      margin-bottom: 16px;
     }
-    &__body {
-      display: grid;
-      gap: 20px;
-      b {
-        display: block;
-        margin-bottom: 16px;
-      }
-      p {
-        margin-bottom: 12px;
-        &:last-child {
-          margin-bottom: 0;
-        }
+
+    p {
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
       }
     }
   }
+}
 
 </style>

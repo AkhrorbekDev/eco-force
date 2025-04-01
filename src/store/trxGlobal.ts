@@ -5,8 +5,8 @@ import {networkService} from "../services";
 export const useTrxGlobal = defineStore('trxGlobal', {
     state: () => ({
         trxGlobal: {
-            "trx_price": "0",
-            "energy_per_trx": "0",
+            "trx_price": 0,
+            "energy_per_trx": 0,
             "total_staked_trx": 0
         },
     }),
