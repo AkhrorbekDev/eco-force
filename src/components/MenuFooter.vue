@@ -3,22 +3,22 @@
   <div class="menu-footer">
     <ul class="menu-footer__list">
       <li class="menu-footer__item">
-        <router-link to="/">Главная</router-link>
+        <router-link to="/">{{ $t('Главная') }}</router-link>
       </li>
       <li class="menu-footer__item">
-        <router-link to="/staking">Стейкинг</router-link>
+        <router-link to="/staking">{{ $t('Стейкинг') }}</router-link>
       </li>
       <li class="menu-footer__item">
-        <router-link to="/referralProgram">Реферальная программа</router-link>
+        <router-link to="/referralProgram">{{ $t('Реферальная программа') }}</router-link>
       </li>
       <li class="menu-footer__item">
-        <router-link to="/api">API</router-link>
+        <router-link to="/api">{{ $t('API') }}</router-link>
       </li>
       <li class="menu-footer__item">
-        <router-link to="/faq">FAQ</router-link>
+        <router-link to="/faq">{{ $t('FAQ') }}</router-link>
       </li>
       <li class="menu-footer__item">
-        <router-link to="/about">О нас</router-link>
+        <router-link to="/about">{{ $t('О нас') }}</router-link>
       </li>
     </ul>
   </div>

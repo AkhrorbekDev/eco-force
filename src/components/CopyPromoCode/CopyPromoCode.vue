@@ -4,7 +4,7 @@
     <div class="copy-text__value">
       <input ref="inputRef" v-model="text">
       <span class="copy-text__copy" @click="copyToClipboard">
-        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" alt="Icon Copy">
+        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" :alt="$t('Иконка копирования')">
       </span>
       <div v-if="showPopup" class="popup">
         {{ popupMessage }}
@@ -12,12 +12,12 @@
     </div>
 
     <span class="copy-text__change" @click="focusInput">
-      изменить
+      {{ $t('изменить') }}
     </span>
 
     <div class="copy-text__limit">
       <span class="c-green">
-        лимит
+        {{ $t('лимит') }}
       </span>
       0/100
     </div>
@@ -27,6 +27,7 @@
 
 <script>
 import {computed, ref} from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -40,6 +41,7 @@ export default {
     },
   },
   setup(props, {emit}) {
+    const t = useI18n();
     const text = computed({
       get: () => props.code,
       set: (value) => {
@@ -48,19 +50,19 @@ export default {
     });
     const showPopup = ref(false);
     const popupMessage = ref('');
-    const inputRef = ref(null); // Создаем ссылку на input
+    const inputRef = ref(null);
 
     const copyToClipboard = async () => {
       if (text.value) {
         try {
           await navigator.clipboard.writeText(text.value);
-          showPopupMessage('Скопировано!');
+          showPopupMessage(t('Скопировано'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать.');
+          console.error(t('Ошибка при копировании'), err);
+          showPopupMessage(t('Не удалось скопировать'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('Поле ввода пустое'));
       }
     };
 
@@ -74,7 +76,7 @@ export default {
 
     const focusInput = () => {
       if (inputRef.value) {
-        inputRef.value.focus(); // Устанавливаем фокус на input
+        inputRef.value.focus();
       }
     };
 

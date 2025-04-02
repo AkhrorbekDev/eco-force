@@ -1,6 +1,6 @@
 // src/services/apiFetch.js
 import {ofetch} from 'ofetch'
-import {getAuthToken} from './tokenService'
+import {getAuthToken, isTokenExpiringSoon} from './tokenService'
 import {refreshTokens} from './tokenService'
 import {logout} from './authService'
 
@@ -27,6 +27,11 @@ const createApiInstance = (config = {}) => {
                     ...options.headers,
                     Authorization: `Bearer ${token}`
                 }
+
+                if (isTokenExpiringSoon(token)) {
+                    refreshTokens();
+                }
+
             } else {
                 // If no token, remove the Authorization header
                 console.log('No token found', options)

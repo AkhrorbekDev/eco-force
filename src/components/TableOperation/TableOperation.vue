@@ -38,7 +38,7 @@
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
       Показать еще
     </button>
-    <Pagination v-if="false" :total-pages="10" v-model:current-page="currentPage" />
+    <Pagination v-if="false" :total-pages="totalPages" v-model:current-page="currentPage" />
 
   </div>
 </template>
@@ -78,7 +78,8 @@ export default {
         if (value) {
           createEnergyService().getUserOrders().then((response) => {
             this.orders = response;
-            this.totalPages = Math.ceil(this.orders.length / this.itemsPerPage);
+            console.log(response)
+            this.totalPages =  Math.ceil(response.count / 10);
           });
         }
       }
@@ -97,6 +98,12 @@ export default {
     },
     toggleTableWrapper() {
       this.isTableWrapperVisible = !this.isTableWrapperVisible; // Переключаем состояние
+    },
+    getUserOrders() {
+      createEnergyService().getUserOrders({page: this.currentPage + 1}).then((response) => {
+        this.orders = response;
+        this.totalPages = Math.ceil(response.count / 10);
+      });
     }
   }
 };

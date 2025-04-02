@@ -10,7 +10,7 @@
         @click="handleLanguageClick(language)"
         :class="{ 'language-dropdown__item': true, '_active': language === selectedLanguage }"
       >
-        {{ language }}
+        {{ $t(language) }}
       </li>
     </ul>
   </div>

@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  emits: ['close'], // Объявляем событие close
+  emits: ['close'],
   props: {
     isVisible: {
       type: Boolean,
@@ -21,20 +21,20 @@ export default {
     },
     disableContent: {
       type: Boolean,
-      default: false // По умолчанию контент включен
+      default: false
     },
     overlayClass: {
-      type: [String, Array, Object], // Позволяет передавать строку, массив или объект
-      default: '' // По умолчанию пустой
+      type: [String, Array, Object],
+      default: ''
     },
     contentClass: {
-      type: [String, Array, Object], // Позволяет передавать строку, массив или объект
-      default: '' // По умолчанию пустой
+      type: [String, Array, Object],
+      default: ''
     }
   },
   methods: {
     close() {
-      this.$emit('close'); // Генерируем событие close
+      this.$emit('close');
     }
   }
 };

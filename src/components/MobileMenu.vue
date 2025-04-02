@@ -1,26 +1,18 @@
 <template>
-  
+
   <nav class="mobile-menu">
     <div class="mobile-menu__btns">
-      <div 
+      <div
         @click="openModal2"
         class="mobile-menu__btn">
-        <img src="/images/m-icon1.svg" width="17" height="22" loading="lazy" alt="Icon Energy">
-        Купить энергию
+        <img src="/images/m-icon1.svg" width="17" height="22" loading="lazy" :alt="$t('Icon Energy')">
+        {{ $t('Купить энергию') }}
       </div>
-      <div 
-        v-if="isHomeAuthRoute"
-        @click="openModal3"
-
-        class="mobile-menu__btn">
-        <img src="/images/m-icon2.svg" width="25" height="24" alt="Icon Staking">
-        Стейкинг
-      </div>
-      <div 
+            <div
         @click="openModal3"
         class="mobile-menu__btn">
-        <img src="/images/m-icon3.svg" width="25" height="24" alt="Icon Staking">
-        Финансы
+        <img src="/images/m-icon3.svg" width="25" height="24" :alt="$t('Icon Staking')">
+        {{ $t('Стейкинг') }}
       </div>
       <div
         class="mobile-menu__btn"
@@ -30,7 +22,7 @@
         <div class="burger">
           <span class="burger__line"></span>
         </div>
-        Меню
+        {{ $t('Меню') }}
       </div>
     </div>
   </nav>
@@ -38,22 +30,22 @@
   <ModalWindow overlayClass="modal-custom" :isVisible="isModalVisible" @close="closeModal">
       <ul class="mobile-menu__list">
         <li class="mobile-menu__item">
-          <router-link to="/">Главная</router-link>
+          <router-link to="/">{{ $t('Главная') }}</router-link>
+        </li>
+        <li v-if="loggedIn" class="mobile-menu__item">
+          <router-link to="/staking">{{ $t('Стейкинг') }}</router-link>
+        </li>
+        <li v-if="loggedIn" class="mobile-menu__item">
+          <router-link to="/referralProgram">{{ $t('Реферальная программа') }}</router-link>
+        </li>
+        <li v-if="loggedIn" class="mobile-menu__item">
+          <router-link to="/api">{{ $t('API') }}</router-link>
         </li>
         <li class="mobile-menu__item">
-          <router-link to="/staking">Стейкинг</router-link>
+          <router-link to="/faq">{{ $t('FAQ') }}</router-link>
         </li>
         <li class="mobile-menu__item">
-          <router-link to="/referralProgram">Реферальная программа</router-link>
-        </li>
-        <li class="mobile-menu__item">
-          <router-link to="/api">API</router-link>
-        </li>
-        <li class="mobile-menu__item">
-          <router-link to="/faq">FAQ</router-link>
-        </li>
-        <li class="mobile-menu__item">
-          <router-link to="/about">О нас</router-link>
+          <router-link to="/about">{{ $t('О нас') }}</router-link>
         </li>
       </ul>
   </ModalWindow>
@@ -62,32 +54,32 @@
     <div class="popup-order4">
 
       <div class="popup-order4__title">
-        Заказ № HFSWX56
+        {{ $t('Заказ № HFSWX56') }}
       </div>
 
       <div class="popup-order4__info">
-        Покупка энергии: {{ energy }}
+        {{ $t('Покупка энергии') }}: {{ energy }}
       </div>
 
-      <img class="popup-order4__img" src="/images/order.svg" width="162" height="160" loading="lazy" alt="QR Code Order">
+      <img class="popup-order4__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
 
       <AddressTron2 customClass="_big" />
 
       <CopyPrice />
 
       <div class="popup-order4__status">
-        Статус: {{ status }}
+        {{ $t('Статус') }}: {{ status }}
       </div>
 
       <div class="popup-order4__block">
-        <img class="popup-order4__img" src="/images/warning.png" width="24" height="24" loading="lazy" alt="Warning">
+        <img class="popup-order4__img" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
         <p>
-          Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.
+          {{ $t('Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.') }}
         </p>
       </div>
 
       <a href="/order" target="_blank" class="button button_order button_biege py-16 gap-12">
-          Открыть в отдельной вкладке
+          {{ $t('Открыть в отдельной вкладке') }}
           <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14.5 1L1.5 14" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M14.5 11.27V1H4.23" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -102,7 +94,7 @@
     <div class="popup-staking">
 
       <div class="popup-staking__header">
-        Стейкинг TRX
+        {{ $t('Стейкинг TRX') }}
       </div>
 
       <TrxCounter />
@@ -112,15 +104,13 @@
         <input class="check__input" type="checkbox">
         <i class="check__square"></i>
         <span class="check__text font-14">
-          С 
-          <span class="c-green" @click="openModal3">правилами</span>
-          стейкинга ознакомлен
+          {{ $t('С правилами стейкинга ознакомлен') }}
+          <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
         </span>
       </label>
 
-      <button class="button button_green py-12 w-100"
-      >
-        Начать стейкинг
+      <button class="button button_green py-12 w-100">
+        {{ $t('Начать стейкинг') }}
       </button>
 
     </div>
@@ -135,6 +125,7 @@ import ModalWindow from './ModalWindow/ModalWindow.vue';
 import TrxCounter from './TrxCounter/TrxCounter.vue';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 
 export default {
@@ -172,8 +163,10 @@ export default {
       toggleClass();
       openModal();
     };
+    const userStore = useUserGlobal();
 
     return {
+      userStore,
       isActive,
       isModalVisible,
       handleClick,
@@ -181,15 +174,20 @@ export default {
       isHomeAuthRoute,
     };
   },
+  computed: {
+    loggedIn() {
+      return this.userStore.loggedIn;
+    },
+  },
   methods: {
     openModal2() {
-      this.isModalVisible2 = true;
+      this.$router.push('/');
     },
     closeModal2() {
       this.isModalVisible2 = false;
     },
     openModal3() {
-      this.isModalVisible3 = true;
+      this.$router.push('/staking');
     },
     closeModal3() {
       this.isModalVisible3 = false;
@@ -271,8 +269,8 @@ export default {
       box-shadow: 0px 0px 10px 0px #0000001F;
 
       &__btns {
-        display: flex;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 4px;
       }
 

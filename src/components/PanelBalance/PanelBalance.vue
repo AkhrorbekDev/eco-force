@@ -4,9 +4,9 @@
     <div class="panel__head">
       <div class="panel__name">
         <span class="panel__icon">
-          <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" alt="User Icon">
+          <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка пользователя')">
         </span>
-        Баланс TRX:
+        {{ $t('Баланс') }} {{ $t('TRX') }}:
       </div>
       <span class="panel__amount">
         {{ userStore.user.trx_balance || 0 }}
@@ -14,12 +14,12 @@
     </div>
 
     <div class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">Вывести</button>
-      <button @click="openModal2" class="button button_green">Пополнить</button>
+      <button @click="openModal" class="button button_bordered">{{ $t('Вывести') }}</button>
+      <button @click="openModal2" class="button button_green">{{ $t('Пополнить') }}</button>
     </div>
 
     <div class="panel__dots d-desk-none" @click="toggleButtonsClass">
-      <img src="/images/dots.svg" loading="lazy" width="4" height="14" alt="Icon Dots">
+      <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
     </div>
 
   </div>
@@ -29,11 +29,11 @@
     <div class="popup-take">
 
       <div class="popup-take__header">
-        Вывод средств
+        {{ $t('Вывод средств') }}
       </div>
 
       <div class="address-tron d-grid gap-8 mb-16">
-        <span>Адрес <b>TRON</b></span>
+        <span>{{ $t('Адрес') }} <b>{{ $t('TRX') }}</b></span>
         <div :class="{
           invalid: !address && sendStart,
         }" class="address-tron__value">
@@ -44,7 +44,7 @@
       <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
 
       <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
-        Вывести
+        {{ $t('Вывести') }}
       </button>
 
     </div>
@@ -56,12 +56,12 @@
     <div class="popup-confirm">
 
       <div class="popup-confirm__header">
-        Подтверждение вывода
+        {{ $t('Подтверждение вывода') }}
       </div>
 
       <div class="d-grid gap-8 mb-16">
         <span class="c-gray2">
-          Адрес вывода
+          {{ $t('Адрес вывода') }}
         </span>
         <p>
           {{ address }}
@@ -69,17 +69,17 @@
       </div>
 
       <p class="mb-32">
-        Количество
+        {{ $t('Количество') }}
         <b>
-          TRX: {{ exitAmount }}
+          {{ $t('TRX') }}: {{ exitAmount }}
         </b>
       </p>
 
       <div class="d-grid gap-8 mb-24">
         <p class="mb-32">
-          Код подтверждения из
+          {{ $t('Код подтверждения из') }}
           <b>
-            Telegram
+            {{ $t('Telegram') }}
           </b>
         </p>
         <div class="popup-confirm__actions">
@@ -87,13 +87,13 @@
             invalid: !confirmationCode && sendStart,
           }" v-model="confirmationCode" type="text" class="input">
           <button class="button button_green br-8">
-            Выслать код
+            {{ $t('Выслать код') }}
           </button>
         </div>
       </div>
 
       <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
-        Вывести
+        {{ $t('Вывести') }}
       </button>
 
     </div>
@@ -104,18 +104,18 @@
    <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
     <div class="popup-order">
       <div class="popup-order__title">
-        Ваш адрес для пополнения баланса в TRX
+        {{ $t('Ваш адрес для пополнения баланса в TRX') }}
       </div>
       <div v-if="paymentEndpoint.qr_code" class="popup-order__img" v-html="paymentEndpoint.qr_code"
            style="width: 162px; height: 160px" width="162"
            height="160" loading="lazy"
-           alt="QR Code Balance"/>
+           :alt="$t('QR код баланса')"/>
       <AddressTron2 v-model="paymentEndpoint.address" read-only :hasTitle="false" customClass="_big mb-12"/>
       <b class="mb-24 d-block">
-        Переведите любую сумму.
+        {{ $t('Переведите любую сумму') }}
       </b>
       <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
-        Закрыть
+        {{ $t('Закрыть') }}
       </button>
     </div>
   </ModalWindow>

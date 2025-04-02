@@ -1,14 +1,14 @@
 <template>
   <div class="accordion">
 
-    <div 
+    <div
         class="accordion-item"
         :class="{ '_active': isOpen(index) }"
-        v-for="(item, index) in items" 
+        v-for="(item, index) in items"
         :key="index">
       <div class="accordion-header" @click="toggleAccordion(index)">
         <h3>{{ item.title }}</h3>
-        <img class="accordion-check" src="/images/check.svg" alt="Icon Check">
+        <img class="accordion-check" src="/images/check.svg" :alt="$t('Icon Check')">
       </div>
       <div v-if="isOpen(index)" class="accordion-content">
         <p>{{ item.content }}</p>
@@ -20,27 +20,28 @@
 
 <script>
 import { ref } from 'vue';
+import {useI18n} from "vue-i18n";
 
 export default {
   setup() {
     const openIndex = ref(null);
-
+    const { t } = useI18n();
     const items = ref([
       {
-        title: 'Что такое стейкинг',
-        content: 'Стейкинг — это процесс хранения и валидации криптовалюты в блокчейне для поддержания работы сети и получения вознаграждений.'
+        title: t('faq.questions.1.title'),
+        content: t('faq.questions.1.content')
       },
       {
-        title: 'Как это работает?',
-        content: 'Продвижение продаж неестественно оправдывает тактический потребительский рынок. Стратегическое планирование развивает имидж, позиционирование на рынке искажает эмпирический имидж, реализуя социальную ответственность бизнеса.'
+        title: t('faq.questions.2.title'),
+        content: t('faq.questions.2.content')
       },
       {
-        title: 'Что такое API',
-        content: 'API (Application Programming Interface) — это набор протоколов и инструментов для создания программного обеспечения, который позволяет различным приложениям взаимодействовать друг с другом.'
+        title: t('faq.questions.3.title'),
+        content: t('faq.questions.3.content')
       },
       {
-        title: 'Как рассчитывается энергия',
-        content: 'Энергия рассчитывается на основе различных физических формул, в зависимости от контекста. Например, в физике энергия может быть рассчитана как произведение массы на квадрат скорости света (E=mc²).'
+        title: t('faq.questions.4.title'),
+        content: t('faq.questions.4.content')
       }
     ]);
 
@@ -118,6 +119,6 @@ export default {
       padding: 16px 24px;
     }
   }
-  
+
 }
 </style>

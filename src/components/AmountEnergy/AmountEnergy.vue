@@ -1,6 +1,6 @@
 <template>
   <div class="amount-energy d-grid gap-8">
-    <span> Количество энергии </span>
+    <span> {{$t('Количество энергии')}} </span>
     <div class="row">
       <div class="amount-energy__value">
         <input
@@ -19,7 +19,7 @@
             loading="lazy"
             width="24"
             height="24"
-            alt="calculator"
+            :alt="$t('Иконка калькулятора')"
         />
       </div>
     </div>
@@ -27,7 +27,7 @@
 
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
     <div class="popup">
-      <div class="popup__header">Калькулятор транзакций</div>
+      <div class="popup__header">{{ $t('Калькулятор транзакций') }}</div>
       <div v-show="loading" class="loader-bar-container">
         <div class="loader-bar" :style="{ width: progress + '%' }"></div>
       </div>
@@ -36,7 +36,7 @@
           <SendUsdt v-model="delegationAddress.address" @update:model-value="sendAddress(index)"
                     @on:delete="deleteAddress(index)"/>
 
-          <p class="font-14 c-green mb-20">Необходимо энергии: {{ delegationAddress.energy_cost }}</p>
+          <p class="font-14 c-green mb-20">{{ $t('Необходимо энергии') }}: {{ delegationAddress.energy_cost }}</p>
 
         </template>
 
@@ -47,23 +47,23 @@
 
         <!-- Кнопка "добавить еще" -->
         <div v-if="delegationAddresses.length < 3" class="popup__add font-14" @click="addAddress">
-          + добавить еще
+          + {{ $t('добавить еще') }}
         </div>
 
         <div class="popup__total">
           <span class="font-14">
-            Итого:
+            {{ $t('Итого') }}:
           </span>
           <div class="row gap-10 ai-c">
             <span class="popup__amount">
               {{ totalEnergyCost }}
             </span>
-            <img src="/images/lightning.svg" width="9" height="16" loading="lazy" alt="lightning">
+            <img src="/images/lightning.svg" width="9" height="16" loading="lazy" :alt="$t('Иконка молнии')">
           </div>
         </div>
 
         <button :disabled="disableSaveButton" class="button button_green py-12 w-100" @click="saveEnergyCosts">
-          Заполнить
+          {{ $t('Заполнить') }}
         </button>
       </div>
     </div>

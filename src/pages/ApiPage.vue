@@ -1,7 +1,7 @@
 <template>
   <main class="main">
 
-    <section class="section-panels">
+    <section v-if="loggedIn" class="section-panels">
 
       <div class="container">
         <div class="section-panels__row">
@@ -65,6 +65,8 @@ import PanelBalance from '@/components/PanelBalance/PanelBalance.vue';
 import PanelEnergy from '@/components/PanelEnergy/PanelEnergy.vue';
 import PanelStaking from '@/components/PanelStaking/PanelStaking.vue';
 import {createUserService} from "@/services/index.js";
+import {useUserGlobal} from "@/store/userGlobal.js";
+import {computed} from "vue";
 
 export default {
   name: 'ApiPage',
@@ -72,6 +74,13 @@ export default {
     PanelBalance,
     PanelStaking,
     PanelEnergy,
+  },
+  setup() {
+    const userStore = useUserGlobal();
+    const loggedIn = computed(() => userStore.loggedIn);
+    return {
+      loggedIn
+    }
   },
   data() {
     return {

@@ -1,16 +1,37 @@
 // src/services/tokenService.js
 import { ofetch } from 'ofetch'
 import Cookies from 'js-cookie'
+import {jwtDecode} from "jwt-decode";
+
 import { getSessionId } from './sessionService'
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
-
 // Cookie names
 const AUTH_TOKEN_COOKIE = 'auth_token'
 const REFRESH_TOKEN_COOKIE = 'refresh_token'
 // Token expiration time in days
 const TOKEN_EXPIRY = 7
 
+export const getTokenExpiration = (token) => {
+    try {
+        const { exp } = jwtDecode(token);
+        return exp ? exp * 1000 : null; // Convert to milliseconds
+    } catch (error) {
+        console.error("Invalid JWT:", error);
+        return null;
+    }
+}
+
+export const isTokenExpiringSoon = (token) => {
+    try {
+        const { exp } = jwtDecode(token);
+        console.log(exp, exp * 1000 - Date.now() <= 5 * 60 * 1000)
+        return exp * 1000 - Date.now() <= 5 * 60 * 1000; // Check if ≤ 5 minutes left
+    } catch (error) {
+        console.error("Invalid JWT:", error);
+        return true; // Assume expired if decoding fails
+    }
+}
 /**
  * Obtain JWT tokens using session ID from SessionStorage
  * @returns {Promise<boolean>} - Success status

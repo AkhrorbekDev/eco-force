@@ -2,7 +2,7 @@
   <div class="buy-energy">
 
     <div class="buy-energy__header">
-      <div class="buy-energy__title">Купить энергию TRON</div>
+      <div class="buy-energy__title">{{ $t('Купить энергию TRON') }}</div>
       <span class="buy-energy__question">
         <i>
           ?
@@ -20,7 +20,7 @@
           <input class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            Добавить активацию за 1 TRX
+            {{ $t('Добавить активацию за 1 TRX') }}
           </span>
         </label>
 
@@ -37,26 +37,26 @@
       </div>
 
       <div class="buy-energy__cost">
-        <span class="font-14 c-gray">Обычная стоимость:</span>
-        <span class="font-14 line-through">{{ normalCost }} ТRХ</span>
+        <span class="font-14 c-gray">{{ $t('Обычная стоимость') }}:</span>
+        <span class="font-14 line-through">{{ normalCost }} {{ $t('TRX') }}</span>
       </div>
 
       <div class="buy-energy__discount">
 
         <div class="row gap-10">
-          <span>Стоимость с EcoForce</span>
-          <span class="weight-700">{{ discountCost }} ТRХ</span>
+          <span>{{ $t('Стоимость с EcoForce') }}</span>
+          <span class="weight-700">{{ discountCost }} {{ $t('TRX') }}</span>
         </div>
 
-        <span class="font-14">Экономия: {{ savingsPercentage }}% ~ {{ savingsAmount }}$</span>
+        <span class="font-14">{{ $t('Экономия') }}: {{ savingsPercentage }}% ~ {{ savingsAmount }}$</span>
       </div>
 
       <button class="button button_green w-100 py-8 py-mob-12" @click="openModal" >
-        Купить энергию
+        {{ $t('Купить энергию') }}
       </button>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none" >
-        Инструкция
+        {{ $t('Инструкция') }}
       </button>
 
       <ModalWindow :isVisible="isModalVisible" @close="closeModal">
@@ -64,32 +64,32 @@
         <div class="popup-order">
 
           <div class="popup-order__title">
-            Заказ № HFSWX56
+            {{ $t('Заказ №') }} HFSWX56
           </div>
 
           <div class="popup-order__info">
-            Покупка энергии: {{ energy }}
+            {{ $t('Покупка энергии') }}: {{ energy }}
           </div>
 
-          <img class="popup-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" alt="QR Code Order">
+          <img class="popup-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
 
           <AddressTron2 customClass="_big" />
 
           <CopyPrice />
 
           <div class="popup-order__status">
-            Статус: {{ status }}
+            {{ $t('Статус') }}: {{ status }}
           </div>
 
           <div class="popup-order__block">
-            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy" alt="Warning">
+            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
             <p>
-              Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.
+              {{ $t('Переводите именно эту сумму') }}. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.
             </p>
           </div>
 
           <a href="/order" target="_blank" class="button button_order button_biege py-16 gap-12">
-              Открыть в отдельной вкладке
+              {{ $t('Открыть в отдельной вкладке') }}
               <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M14.5 1L1.5 14" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M14.5 11.27V1H4.23" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -134,7 +134,7 @@ export default {
       savingsAmount: 312,
       isModalVisible: false,
       energy: '130 000',
-      status: 'Ожидание оплаты',
+      status: this.$t('Ожидание оплаты'),
     };
   },
   methods: {

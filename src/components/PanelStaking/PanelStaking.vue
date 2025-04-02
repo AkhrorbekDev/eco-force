@@ -5,9 +5,9 @@
     <div class="panel__head">
       <div class="panel__name">
         <span class="panel__icon">
-          <img src="/images/p-icon2.svg" width="13" height="13" loading="lazy" alt="Wallet Icon">
+          <img src="/images/p-icon2.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка стейкинга')">
         </span>
-        Стейкинг TRX:
+        {{ $t('Стейкинг') }} {{ $t('TRX') }}:
       </div>
       <div class="panel__info">
         <span class="c-gray-light">APR</span>
@@ -19,114 +19,139 @@
     </div>
 
     <div class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">Вывести</button>
-      <button @click="openModal2" class="button button_green">Внести</button>
+      <button @click="openModal" class="button button_bordered">{{ $t('Вывести') }}</button>
+      <button @click="openModal2" class="button button_green">{{ $t('Стейкать') }}</button>
     </div>
 
     <div class="panel__dots d-desk-none" @click="toggleButtonsClass">
-      <img src="/images/dots.svg" loading="lazy" width="4" height="14" alt="Icon Dots">
+      <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
     </div>
 
   </div>
 
 
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
-
-    <div class="popup">
-
-      <div class="popup__header">
-        Вывод из стейкинга TRX
+    <div class="popup-take">
+      <div class="popup-take__header">
+        {{ $t('Вывод из стейкинга') }}
       </div>
 
-      <TrxCounter v-model="exitAmount" :max="userStore.user.total_staked_trx" />
+      <div class="address-tron d-grid gap-8 mb-16">
+        <span>{{ $t('Адрес') }} <b>{{ $t('TRX') }}</b></span>
+        <div :class="{
+          invalid: !address && sendStart,
+        }" class="address-tron__value">
+          <input v-model="address" type="text">
+        </div>
+      </div>
 
-      <!-- class for error check_error -->
-      <label class="check">
-        <input v-model="unstakeAgree" class="check__input" type="checkbox">
-        <i class="check__square"></i>
-        <span class="check__text font-14">
-              После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится.
-            </span>
-      </label>
+      <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
 
-      <button class="button button_green py-12 w-100" @click="unstake">
-        Вывести
+      <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
+        {{ $t('Вывести') }}
       </button>
-
     </div>
-
   </ModalWindow>
 
-  <!-- Пополнение -->
+  <ModalWindow :isVisible="isModalVisible3" @close="closeModal3">
+    <div class="popup-confirm">
+      <div class="popup-confirm__header">
+        {{ $t('Подтверждение вывода') }}
+      </div>
 
-  <!-- Пополнение -->
+      <div class="d-grid gap-8 mb-16">
+        <span class="c-gray2">
+          {{ $t('Адрес вывода') }}
+        </span>
+        <p>
+          {{ address }}
+        </p>
+      </div>
+
+      <p class="mb-32">
+        {{ $t('Количество') }}
+        <b>
+          {{ $t('TRX') }}: {{ exitAmount }}
+        </b>
+      </p>
+
+      <div class="d-grid gap-8 mb-24">
+        <p class="mb-32">
+          {{ $t('Код подтверждения из') }}
+          <b>
+            {{ $t('Telegram') }}
+          </b>
+        </p>
+        <div class="popup-confirm__actions">
+          <input :class="{
+            invalid: !confirmationCode && sendStart,
+          }" v-model="confirmationCode" type="text" class="input">
+          <button class="button button_green br-8">
+            {{ $t('Выслать код') }}
+          </button>
+        </div>
+      </div>
+
+      <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
+        {{ $t('Вывести') }}
+      </button>
+    </div>
+  </ModalWindow>
+
   <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
-
-    <div class="popup">
-
-      <div class="popup__header">
-        Стейкинг TRX
+    <div class="popup-order">
+      <div class="popup-order__title">
+        {{ $t('Стейкинг TRX') }}
       </div>
-
-      <TrxCounter v-model="amountCurrency" :max="userStore.user.trx_balance"/>
-
-      <!-- class for error check_error -->
-      <label class="check">
-        <input v-model="agree" class="check__input" type="checkbox">
-        <i class="check__square"></i>
-        <span class="check__text font-14">
-              С
-              <span class="c-green" @click="openModal3">правилами</span>
-              стейкинга ознакомлен
-            </span>
-      </label>
-
-      <button class="button button_green py-12 w-100" @click="stake">
-        Начать стейкинг
+      <div v-if="paymentEndpoint.qr_code" class="popup-order__img" v-html="paymentEndpoint.qr_code"
+           style="width: 162px; height: 160px" width="162"
+           height="160" loading="lazy"
+           :alt="$t('QR код стейкинга')"/>
+      <AddressTron2 v-model="paymentEndpoint.address" read-only :hasTitle="false" customClass="_big mb-12"/>
+      <b class="mb-24 d-block">
+        {{ $t('Переведите любую сумму') }}
+      </b>
+      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
+        {{ $t('Закрыть') }}
       </button>
-
     </div>
-
   </ModalWindow>
+
   <ModalWindow overlayClass="overflow" :isVisible="isModalVisible3" @close="closeModal3">
 
     <div class="popup-rule">
 
       <div class="popup-rule__header">
-        Условия и правила стейкинга
+        {{ $t('Условия и правила стейкинга') }}
       </div>
 
       <div class="popup-rule__body">
         <div>
           <b>
-            1. Общие положения
+            {{ $t('1. Общие положения') }}
           </b>
           <p>
-            1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для
-            получения энергии и дохода.
+            {{ $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.') }}
           </p>
           <p>
-            1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание
-            связанных рисков.
+            {{ $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.') }}
           </p>
           <p>
-            1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при
-            добавлении токенов в стейкинг.
+            {{ $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.') }}
           </p>
         </div>
         <div>
           <b>
-            2. Порядок стейкинга
+            {{ $t('2. Порядок стейкинга') }}
           </b>
           <p>
-            2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..
+            {{ $t('2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..') }}
           </p>
           <p>
-            2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.
+            {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
           </p>
           <p>
-            2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге
-            сети Tron.
+            {{ $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.') }}
           </p>
         </div>
       </div>
@@ -285,7 +310,7 @@ export default {
       this.isModalVisible3 = false;
     },
     toggleButtonsClass() {
-      this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
+      this.isButtonsActive = !this.isButtonsActive; // {{ $t('Переключаем состояние') }}
     },
   },
 };

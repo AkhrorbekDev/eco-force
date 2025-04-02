@@ -1,7 +1,7 @@
 <template>
   <main class="main">
 
-    <section class="section-panels">
+    <section v-if="loggedIn" class="section-panels">
 
       <div class="container">
         <div class="section-panels__row">
@@ -60,6 +60,8 @@ import ReferralQuantity from '@/components/ReferralQuantity/ReferralQuantity.vue
 import ReferralLink from '@/components/ReferralLink/ReferralLink.vue';
 import PromoCode from '@/components/PromoCode/PromoCode.vue';
 import {createEnergyService, createUserService} from "@/services/index.js";
+import {computed} from "vue";
+import {useUserGlobal} from "@/store/userGlobal.js";
 
 export default {
   name: 'ReferralProgramPage',
@@ -72,6 +74,13 @@ export default {
     ReferralQuantity,
     ReferralLink,
     PromoCode
+  },
+  setup() {
+    const userStore = useUserGlobal();
+    const loggedIn = computed(() => userStore.loggedIn);
+    return {
+      loggedIn
+    }
   },
   data() {
     return {

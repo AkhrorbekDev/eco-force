@@ -2,7 +2,7 @@
   <div class="buy-energy">
 
     <div class="buy-energy__header">
-      <div class="buy-energy__title">Купить энергию TRON</div>
+      <div class="buy-energy__title">{{ $t('Купить энергию TRON') }}</div>
       <span class="buy-energy__question">
           ?
       </span>
@@ -17,7 +17,7 @@
           <input v-model="activateAddress" class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            Добавить активацию за 1 TRX
+            {{ $t('Добавить активацию за 1 TRX') }}
           </span>
         </label>
 
@@ -29,21 +29,21 @@
         <input v-model="activateAddress" class="check__input" type="checkbox" checked>
         <i class="check__square"></i>
         <span class="check__text font-14">
-          Добавить активацию за 1 TRX
+          {{ $t('Добавить активацию за 1 TRX') }}
         </span>
       </label>
 
       <div class="buy-energy__wrapper row jc-sb mb-10">
 
-        <RentalPeriod v-model="rentPeriod" />
+        <RentalPeriod v-model="rentPeriod"/>
 
-        <AmountEnergy v-model="amount" @update:model-value="saveInputValue" />
+        <AmountEnergy v-model="amount" @update:model-value="saveInputValue"/>
 
       </div>
 
       <div class="buy-energy__cost">
-        <span class="font-14 c-gray">Обычная стоимость:</span>
-        <span class="font-14 line-through">{{ defaultTrx }} ТRХ</span>
+        <span class="font-14 c-gray">{{ $t('Обычная стоимость') }}:</span>
+        <span class="font-14 line-through">{{ defaultTrx }} {{ $t('TRX') }}</span>
       </div>
 
       <div class="buy-energy__discount">
@@ -52,9 +52,9 @@
           <input v-model="useUserEnergy" class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            Использовать свою энергию
+            {{ $t('Использовать свою энергию') }}
             <span class="check__text-gray d-mob-block">
-              (будет использовано {{ lostEnergy }})
+              ({{ $t('будет использовано') }} {{ lostEnergy }})
             </span>
           </span>
         </label>
@@ -63,22 +63,22 @@
         <div class="buy-energy__price row jc-sb">
 
           <div class="row gap-10">
-            <span>Стоимость с EcoForce</span>
-            <span class="weight-700">{{ totalTrx }} ТRХ</span>
+            <span>{{ $t('Стоимость с EcoForce') }}</span>
+            <span class="weight-700">{{ totalTrx }} {{ $t('TRX') }}</span>
           </div>
 
-          <span class="font-14">Экономия: {{ ecoTrx }}% ~ {{ trxPrice }}$</span>
+          <span class="font-14">{{ $t('Экономия') }}: {{ ecoTrx }}% ~ {{ trxPrice }}$</span>
 
         </div>
 
       </div>
 
       <button class="button button_green w-100 py-8" @click="openModal">
-        Купить энергию
+        {{ $t('Купить энергию') }}
       </button>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none">
-        Инструкция
+        {{ $t('Инструкция') }}
       </button>
 
       <ModalWindow overlayClass="overflow" :isVisible="isModalVisible" @close="closeModal">
@@ -86,36 +86,37 @@
         <div class="popup-order">
 
           <div class="popup-order__title">
-            Заказ № {{ orderInfo.order_number }}
+            {{ $t('Заказ №') }} {{ orderInfo.order_number }}
           </div>
 
           <div class="popup-order__info">
-            Покупка энергии: {{ amount }}
+            {{ $t('Покупка энергии') }}: {{ amount }}
           </div>
 
-          <div v-if="orderInfo.qr_code_deposit_address" class="popup-order__img" v-html="orderInfo.qr_code_deposit_address"
+          <div v-if="orderInfo.qr_code_deposit_address" class="popup-order__img"
+               v-html="orderInfo.qr_code_deposit_address"
                style="width: 162px; height: 160px" width="162"
                height="160" loading="lazy"
-               alt="QR Code Balance"/>
+               :alt="$t('QR код баланса')"/>
 
           <AddressTron2 v-model="orderInfo.deposit_trx_address" read-only customClass="_big"/>
 
-          <CopyPrice :cost="orderInfo.required_trx_amount" />
+          <CopyPrice :cost="orderInfo.required_trx_amount"/>
 
           <div class="popup-order__status">
-            Статус: {{ status }}
+            {{ $t('Статус') }}: {{ orderInfo.status }}
           </div>
 
           <div class="popup-order__block">
-            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy" alt="Warning">
+            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy"
+                 :alt="$t('Предупреждение')">
             <p>
-              Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не
-              возвращаются.
+              {{ $t('Переводите именно эту сумму') }}
             </p>
           </div>
 
           <a href="/order" target="_blank" class="button button_order button_biege py-16 gap-12">
-            Открыть в отдельной вкладке
+            {{ $t('Открыть в отдельной вкладке') }}
             <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.5 1L1.5 14" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
                     stroke-linejoin="round"/>
@@ -130,11 +131,11 @@
       <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
         <div class="popup">
           <div class="popup__header">
-            Заказ № {{ orderInfo.order_number }}
+            {{ $t('Заказ №') }} {{ orderInfo.order_number }}
           </div>
           <div class="row jc-sb">
             <p>
-              Покупка энергии:
+              {{ $t('Покупка энергии') }}:
             </p>
             <b class="font-20">
               {{ orderInfo.energy_amount }}
@@ -142,7 +143,7 @@
           </div>
           <div class="row jc-sb">
             <p>
-              Будет использовано своей энергии
+              {{ $t('Будет использовано своей энергии') }}:
             </p>
             <b class="font-20">
               {{ orderInfo.use_energy_user }}
@@ -150,13 +151,15 @@
           </div>
           <div class="row jc-sb">
             <p>
-              Стоимость <b>{{ orderInfo.required_trx_amount }} TRX</b>
+              {{ $t('Стоимость') }} <b>{{ orderInfo.required_trx_amount }} TRX</b>
             </p>
             <b v-if="balanceTrxDiff > 0" class="text-error">
-              Не хватает: {{ balanceTrxDiff }} TRX
+              {{ $t('Не хватает') }}: {{ balanceTrxDiff }} TRX
             </b>
           </div>
-          <button @click="confimOrder" :disabled="balanceTrxDiff > 0" class="button button_green py-14 w-100 br-8" href="#"> Списать с баланса </button>
+          <button @click="confimOrder" :disabled="balanceTrxDiff > 0" class="button button_green py-14 w-100 br-8"
+          > {{ $t('Списать с баланса') }}
+          </button>
         </div>
       </ModalWindow>
 
@@ -241,8 +244,8 @@ export default {
       normalCost: 18,
       discountCost: 8,
       rentPeriod: 0,
-      amount: 0,
-      inputedAmount: 0,
+      amount: 64285,
+      inputedAmount: 64285,
       transactionCount: 1,
       savingsPercentage: 52,
       savingsAmount: 312,
@@ -271,10 +274,10 @@ export default {
       return this.userStore.loggedIn;
     },
 
-    lostEnergy () {
+    lostEnergy() {
       return this.userStore.user.energy || 0
     },
-    totalTrx () {
+    totalTrx() {
       if (this.amount === 0) {
         return 0;
       }
@@ -287,13 +290,13 @@ export default {
         cost = this.useEnergyStore.energyGlobal.cost_per_week;
       }
 
-      let total = (((this.amount * cost ) / 1_000_000) * this.transactionCount ).toFixed(4);
+      let total = (((this.amount * cost) / 1_000_000) * this.transactionCount).toFixed(4);
       if (this.activateAddress) {
         total = 1 + parseFloat(total);
       }
       return total;
     },
-    defaultTrx () {
+    defaultTrx() {
       if (this.amount === 0) {
         return 0;
       }
@@ -305,33 +308,33 @@ export default {
       } else if (this.rentPeriod === 2) {
         cost = this.useEnergyStore.energyGlobal.tron_cost_per_week;
       }
-      return (((this.amount * cost ) / 1_000_000)* this.transactionCount).toFixed(4) ;
+      return (((this.amount * cost) / 1_000_000) * this.transactionCount).toFixed(4);
     },
-    ecoTrx () {
+    ecoTrx() {
       if (this.amount === 0) {
         return 0;
       }
       let total = this.totalTrx;
-      if (this.activateAddress){
+      if (this.activateAddress) {
         total = total - 1
       }
 
       return (Math.abs((total - this.defaultTrx) / this.defaultTrx * 100)).toFixed(4);
     },
-    userEnergy () {
+    userEnergy() {
       return this.userStore.user.energy || 0
     },
-    trxPrice () {
+    trxPrice() {
       if (this.totalTrx === 0) {
         return 0;
       }
       let total = this.totalTrx;
-      if (this.activateAddress){
+      if (this.activateAddress) {
         total = total - 1
       }
       return (total * this.useTrxStore.trxGlobal.trx_price).toFixed(4);
     },
-    balanceTrxDiff () {
+    balanceTrxDiff() {
       if (this.orderInfo.required_trx_amount === 0) {
         return 0;
       }
@@ -346,7 +349,6 @@ export default {
       immediate: true,
       handler(value) {
         if (value) {
-          console.log(value)
           this.address = this.userStore.user.tron_address;
         }
       }
@@ -374,15 +376,14 @@ export default {
     }
   },
   methods: {
-    saveInputValue () {
+    saveInputValue() {
       this.inputedAmount = this.amount
-      this.changeAmount(this.transactionCount)
     },
-    changeAmount (e) {
+    changeAmount(e) {
       this.transactionCount = e
       this.amount = this.inputedAmount ? parseInt(this.inputedAmount) * this.transactionCount : 0
     },
-    createOrderToAuthorizedUser () {
+    createOrderToAuthorizedUser() {
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
@@ -393,12 +394,10 @@ export default {
         if (this.interval) {
           clearInterval(this.interval);
         }
-        console.log(res.order_id)
-
         this.interval = setInterval(() => {
           publicServices.order.getOrderInfo(res.order_id).then(res => {
             this.orderInfo.status = res.status;
-            if (res.status === 'Оплачено') {
+            if (res.status === 'paid') {
               clearInterval(this.interval);
               this.isModalVisible = false;
               this.getUserDetails();
@@ -411,7 +410,7 @@ export default {
 
       })
     },
-    createOrderToUnAuthorizedUser () {
+    createOrderToUnAuthorizedUser() {
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
@@ -424,10 +423,9 @@ export default {
         }
 
         this.interval = setInterval(() => {
-          console.log(res.order_id)
           publicServices.order.getOrderInfo(res.order_id).then(res => {
             this.orderInfo.status = res.status;
-            if (res.status === 'Оплачено') {
+            if (res.status === 'paid') {
               clearInterval(this.interval);
               this.isModalVisible = false;
             }
@@ -462,7 +460,7 @@ export default {
         this.createOrderToUnAuthorizedUser()
       }
     },
-    confimOrder () {
+    confimOrder() {
 
     },
     closeModal2() {
@@ -483,6 +481,7 @@ export default {
 
 <style scoped lang="scss">
 @import './buy-energy2.scss';
+
 .popup {
   display: flex;
   flex-direction: column;
@@ -496,6 +495,7 @@ export default {
     line-height: 30px;
   }
 }
+
 .popup-order {
   width: 480px;
   padding: 40px 16px;

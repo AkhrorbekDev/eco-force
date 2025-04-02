@@ -24,5 +24,9 @@ export const createUserService = () => {
 
         // Get referral stats
         getReferralStats: () => authApi('/referral-stats/'),
+        getReferrals: (query) => authApi('/referral-earnings/', {
+            method: 'GET',
+            params: query,
+        })
     };
 };

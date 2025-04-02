@@ -44,6 +44,9 @@ export const createEnergyService = () => {
         },
 
         // Get user orders
-        getUserOrders: () => authApi('/user-orders/'),
+        getUserOrders: (query) => authApi('/user-orders/', {
+            method: 'GET',
+            params: query,
+        }),
     };
 };

@@ -3,12 +3,12 @@
   <div class="logout-dropdown" ref="dropdown">
 
     <button class="logout-dropdown__button" @click="handleButtonClick">
-      <img src="/images/user-white.svg" loading="lazy" width="18" height="20" alt="User Icon">
+      <img src="/images/user-white.svg" loading="lazy" width="18" height="20" :alt="$t('Иконка пользователя')">
     </button>
 
     <div class="logout-dropdown__list" v-if="isOpen" @click="logout">
-      <img src="/images/logout.svg" width="24" height="24" loading="lazy" alt="Icon Logout">
-      Выход
+      <img src="/images/logout.svg" width="24" height="24" loading="lazy" :alt="$t('Иконка выхода')">
+      {{ $t('Выход') }}
     </div>
 
   </div>

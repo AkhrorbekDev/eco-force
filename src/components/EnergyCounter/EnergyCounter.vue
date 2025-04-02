@@ -1,9 +1,8 @@
 <template>
   <div class="trx-counter d-grid gap-8">
     <span>
-      Доступно:
+      {{ $t('Доступно:') }}
       <b>
-
         {{total}}
       </b>
     </span>
@@ -12,18 +11,18 @@
       <div class="trx-counter__wrapper">
         <input class="trx-counter__value" v-model="count" type="text" @input="filterInput">
         <span class="trx-counter__max" @click="setMaxValue">
-          max
+          {{ $t('max') }}
         </span>
       </div>
 
       <div class="trx-counter__controls">
-        <div class="trx-counter__button _minus" @click="decrement">–</div>
-        <div class="trx-counter__button _plus" @click="increment">+</div>
+        <div class="trx-counter__button _minus" @click="decrement">{{ $t('–') }}</div>
+        <div class="trx-counter__button _plus" @click="increment">{{ $t('+') }}</div>
       </div>
     </div>
 
     <div v-if="!isMultipleOf" class="font-14 c-red">
-      Сумма должна быть кратна {{ step }}
+      {{ $t('Сумма должна быть кратна') }} {{ step }}
     </div>
 
   </div>
@@ -45,7 +44,7 @@ export default {
     return {
       count: 0,
       step: 100,
-      maxValue: 10000, // Максимальное значение
+      maxValue: 10000, // {{ $t('Максимальное значение') }}
     };
   },
   computed: {

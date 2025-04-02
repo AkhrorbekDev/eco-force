@@ -4,12 +4,12 @@
       type="text"
       :value="modelValue"
       @input="validateAmount"
-      placeholder="Введите сумму"
+      :placeholder="$t('Введите сумму')"
       class="amount-input"
     />
     <select v-model="selectedCurrency">
       <option v-for="currency in currencies" :key="currency" :value="currency">
-        {{ currency }}
+        {{ $t(currency) }}
       </option>
     </select>
   </div>
@@ -28,7 +28,7 @@ export default {
     return {
       amount: '0',
       selectedCurrency: 'TRX',
-      currencies: ['TRX', 'BTC', 'ETH', 'USDT'],  // Добавьте дополнительные валюты по мере необходимости
+      currencies: ['TRX', 'BTC', 'ETH', 'USDT'],  // {{ $t('Добавьте дополнительные валюты по мере необходимости') }}
     };
   },
   methods: {
@@ -38,8 +38,8 @@ export default {
       if (/^\d*$/.test(value)) {
         this.amount = value;
       } else {
-        // Если ввели что-то неверное, просто игнорируем ввод
-        event.target.value = this.amount; // Возвращаем значение поля к предыдущему значению
+        // {{ $t('Если ввели что-то неверное, просто игнорируем ввод') }}
+        event.target.value = this.amount; // {{ $t('Возвращаем значение поля к предыдущему значению') }}
       }
       this.$emit('update:model-value', this.amount);
     },

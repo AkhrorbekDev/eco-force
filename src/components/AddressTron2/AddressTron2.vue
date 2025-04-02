@@ -1,12 +1,12 @@
 <template>
   <div  :class="['address-tron', 'd-grid', 'gap-8', customClass]">
     <div class="address-tron__row" v-if="hasTitle">
-      <span>Адрес <b>TRON</b></span>
+      <span>{{ $t('address') }} <b>{{ $t('TRX') }}</b></span>
     </div>
     <div class="address-tron__value">
-      <input v-model="tronAddress" :readonly="readOnly" placeholder="Введите адрес">
+      <input v-model="tronAddress" :readonly="readOnly" :placeholder="$t('enterAddress')" />
       <span class="address-tron__copy" @click="copyToClipboard">
-        <img src="/images/document-copy.svg" width="20" height="20" loading="lazy" alt="Icon DOCS">
+        <img src="/images/document-copy.svg" width="20" height="20" loading="lazy" :alt="$t('Иконка документа')">
       </span>
       <div v-if="showPopup" class="popup">
         {{ popupMessage }}
@@ -17,7 +17,7 @@
 
 <script>
 import {computed, ref} from 'vue';
-
+import {useI18n} from "vue-i18n";
 export default {
   props: {
     customClass: {
@@ -38,6 +38,7 @@ export default {
     },
   },
   setup(props, {emit}) { // Передаем props в setup
+    const { t } = useI18n();
     const tronAddress = computed({
       get: () => props.modelValue,
       set: (value) => {
@@ -51,13 +52,13 @@ export default {
       if (tronAddress.value) {
         try {
           await navigator.clipboard.writeText(tronAddress.value);
-          showPopupMessage('Адрес скопирован!');
+          showPopupMessage(t('addressCopied'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать адрес.');
+          console.error(t('addressCopyError'), err);
+          showPopupMessage(t('addressErrorMessage'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('addressFieldEmpty'));
       }
     };
 

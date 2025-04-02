@@ -1,38 +1,39 @@
 <template>
   <div
-        class="table-wrapper"
-        :class="{'_active': isTableWrapperVisible}"
+      class="table-wrapper"
+      :class="{'_active': isTableWrapperVisible}"
   >
     <table>
       <thead>
-        <tr>
-          <th>Дата</th>
-          <th>Действие</th>
-          <th>Сумма</th>
-          <th>Статус</th>
-        </tr>
+      <tr>
+        <th>Дата</th>
+        <th>Действие</th>
+        <th>Сумма</th>
+        <th>Статус</th>
+      </tr>
       </thead>
       <tbody>
-      <template v-if="orders?.length > 0">
-        <tr v-for="(order, index) in orders" :key="index">
+      <template v-if="actions?.length > 0">
+        <tr v-for="(order, index) in actions" :key="index">
           <td data-label="Дата:">{{ order.date }}</td>
           <td data-label="Действие:">{{ order.action_type }}</td>
           <td data-label="Сумма:">{{ order.energy_amount }}</td>
           <td data-label="Статус:">{{ order.status }}</td>
         </tr>
       </template>
-        <template v-else>
-          <tr>
-            <td colspan="7" style="text-align: center">Нет данных</td>
-          </tr>
-        </template>
+      <template v-else>
+        <tr>
+          <td colspan="7" style="text-align: center">Нет данных</td>
+        </tr>
+      </template>
       </tbody>
     </table>
 
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
       Показать еще
     </button>
-    <Pagination v-if="false" :total-pages="10" v-model:current-page="currentPage" />
+    <Pagination v-if="actions.length > 0" :total-pages="totalPages" :current-page="currentPage"
+                @update:current-page="getUserOrders({page: $event})"/>
 
   </div>
 </template>
@@ -70,10 +71,7 @@ export default {
       immediate: true,
       handler(value) {
         if (value) {
-          createStakingService().getStakingActions().then((response) => {
-            this.actions = response;
-            this.totalPages = Math.ceil(this.orders.length / this.itemsPerPage);
-          });
+          this.getUserOrders({page: 1});
         }
       }
     },
@@ -90,7 +88,19 @@ export default {
       }
     },
     toggleTableWrapper() {
-      this.isTableWrapperVisible = !this.isTableWrapperVisible; // Переключаем состояние
+      this.isTableWrapperVisible = !this.isTableWrapperVisible;
+      createStakingService().getStakingActions({page: this.currentPage + 1}).then((response) => {
+        this.actions = [...this.actions, ...response.results];
+        this.totalPages = Math.ceil(response.count / 10);
+        this.currentPage = this.currentPage + 1;
+      }); // Переключаем состояние
+    },
+    getUserOrders(query) {
+      createStakingService().getStakingActions(query).then((response) => {
+        this.actions = response.results;
+        this.totalPages = Math.ceil(response.count / 10);
+        this.currentPage = query.page;
+      });
     }
   }
 };
@@ -123,13 +133,14 @@ export default {
 
     &._back {
       svg {
-        transform: scale(-1,-1);
+        transform: scale(-1, -1);
       }
     }
   }
 
   &__items {
     display: flex;
+
     span {
       display: flex;
       justify-content: center;

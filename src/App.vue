@@ -27,40 +27,9 @@ onMounted(async () => {
   // Check if already authenticated
   useTrxStore.initTrxGlobal()
   useEnergyStore.initEnergyGlobal()
-  console.log(isAuthenticated())
-  if (!isAuthenticated()) {
-    try {
-      const session_id = getSessionId()
-      console.log(session_id)
-      if (session_id) {
-        await initializeAuth(session_id)
-        useUserStore.setLoggedIn(true)
-
-        useUserStore.initUserGlobal()
-      } else {
-        useUserStore.setLoggedIn(false)
-        if (timeout) {
-          clearTimeout(timeout)
-        }
-        generateSessionId()
-        timeout = setTimeout(() => {
-          generateSessionId()
-        }, (60 * 10) * 1000)
-      }
-      // Auto-generate session ID and get tokens
-
-
-      // Redirect to dashboard if authentication was successful
-      // if (success) {
-      //   router.push('/dashboard')
-      // }
-    } catch (error) {
-      console.error('Auth initialization error:', error)
-    }
-  } else {
+  if (isAuthenticated()) {
     useUserStore.setLoggedIn(true)
     useUserStore.initUserGlobal()
-
   }
 
   // Mark app as ready regardless of auth result

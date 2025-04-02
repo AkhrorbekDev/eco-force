@@ -1,12 +1,12 @@
 <template>
   <div class="copy-price">
     <span class="copy-price__cost">
-      Стоимость
+      {{ $t('Стоимость') }}
       <b>
         {{ cost }}
       </b>
     </span>
-    <div @click="copyToClipboard" class="copy-price__button">Скопировать</div>
+    <div @click="copyToClipboard" class="copy-price__button">{{ $t('Скопировать') }}</div>
     <div v-if="showPopup" class="popup-min">
       {{ popupMessage }}
     </div>
@@ -15,6 +15,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -26,18 +27,19 @@ export default {
   setup(props) {
     const showPopup = ref(false);
     const popupMessage = ref('');
+    const { t } = useI18n();
 
     const copyToClipboard = async () => {
       if (props.cost) {
         try {
           await navigator.clipboard.writeText(props.cost);
-          showPopupMessage('Скопировано!');
+          showPopupMessage(t('Скопировано!'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать.');
+          console.error(t('Ошибка при копировании:'), err);
+          showPopupMessage(t('Не удалось скопировать.'));
         }
       } else {
-        showPopupMessage('Поле пустое.');
+        showPopupMessage(t('Поле пустое.'));
       }
     };
 

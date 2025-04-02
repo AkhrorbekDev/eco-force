@@ -1,10 +1,10 @@
 <template>
   <div class="address-tron d-grid gap-8">
     <div class="address-tron__row">
-      <span>Адрес <b>TRON</b></span>
+      <span>{{ $t('address') }} <b>TRON</b></span>
       <div class="address-tron__copy" @click="copyToClipboard">
-        <img class="d-none d-desk-block" src="/images/document-copy2.svg" loading="lazy" width="21" height="22" alt="Icon Docs">
-        <img class="d-desk-none" src="/images/document-forward.svg" loading="lazy" width="20" height="20" alt="Icon Docs Forward">
+        <img class="d-none d-desk-block" src="/images/document-copy2.svg" loading="lazy" width="21" height="22" :alt="$t('Icon Docs')">
+        <img class="d-desk-none" src="/images/document-forward.svg" loading="lazy" width="20" height="20" :alt="$t('Icon Docs Forward')">
         <!-- Добавлен попап -->
         <div v-if="showPopup" class="popup">
           {{ popupMessage }}
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="address-tron__value">
-      <input v-model="tronAddress" placeholder="Введите адрес">
+      <input v-model="tronAddress" :placeholder="$t('enterAddress')">
       <span class="address-tron__cross cross" @click="clearInput">
         <i class="cross__line"></i>
       </span>
@@ -22,7 +22,7 @@
 
 <script>
 import {computed, ref} from 'vue';
-
+import {useI18n} from "vue-i18n";
 export default {
   props: {
     modelValue: {
@@ -31,10 +31,10 @@ export default {
     },
   },
   setup(props, {emit}) {
+    const { t } = useI18n();
     const tronAddress = computed({
       get: () => props.modelValue,
       set: (value) => {
-        console.log(value)
         emit('update:modelValue', value);
       }
     });
@@ -45,13 +45,13 @@ export default {
       if (tronAddress.value) {
         try {
           await navigator.clipboard.writeText(tronAddress.value);
-          showPopupMessage('Адрес скопирован!');
+          showPopupMessage(t('addressCopied'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать адрес.');
+          console.error(t('addressCopyError'), err);
+          showPopupMessage(t('addressErrorMessage'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('addressFieldEmpty'));
       }
     };
 

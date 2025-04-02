@@ -3,31 +3,44 @@
   <nav class="menu-main">
     <ul class="menu-main__list">
       <li class="menu-main__item">
-        <router-link to="/">Главная</router-link>
+        <router-link to="/">{{ $t('Главная') }}</router-link>
+      </li>
+      <li v-if="loggedIn" class="menu-main__item">
+        <router-link to="/staking">{{ $t('Стейкинг') }}</router-link>
+      </li>
+      <li v-if="loggedIn" class="menu-main__item">
+        <router-link to="/referralProgram">{{ $t('Реферальная программа') }}</router-link>
+      </li>
+      <li v-if="loggedIn" class="menu-main__item">
+        <router-link to="/api">{{ $t('API') }}</router-link>
       </li>
       <li class="menu-main__item">
-        <router-link to="/staking">Стейкинг</router-link>
+        <router-link to="/faq">{{ $t('FAQ') }}</router-link>
       </li>
       <li class="menu-main__item">
-        <router-link to="/referralProgram">Реферальная программа</router-link>
-      </li>
-      <li class="menu-main__item">
-        <router-link to="/api">API</router-link>
-      </li>
-      <li class="menu-main__item">
-        <router-link to="/faq">FAQ</router-link>
-      </li>
-      <li class="menu-main__item">
-        <router-link to="/about">О нас</router-link>
+        <router-link to="/about">{{ $t('О нас') }}</router-link>
       </li>
     </ul>
   </nav>
-  
+
 </template>
 
 <script lang="ts">
+  import {useUserGlobal} from "@/store/userGlobal.ts";
+
   export default {
     name: 'MenuMain',
+    setup () {
+      const userStore = useUserGlobal()
+      return {
+        userStore
+      }
+    },
+    computed: {
+      loggedIn() {
+        return this.userStore.loggedIn
+      }
+    },
   }
 </script>
 

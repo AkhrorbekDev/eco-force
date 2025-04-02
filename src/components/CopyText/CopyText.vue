@@ -1,22 +1,23 @@
 <template>
   <div  :class="['copy-text', 'd-grid', 'gap-8', customClass]">
     <div class="copy-text__value">
-      <input :value="link" readonly placeholder="Введите адрес">
+      <input :value="link" readonly :placeholder="$t('Введите адрес')">
       <span class="copy-text__copy" @click="copyToClipboard">
-        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" alt="Icon Copy">
+        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" :alt="$t('Иконка копирования')">
       </span>
       <div v-if="showPopup" class="popup">
         {{ popupMessage }}
       </div>
     </div>
     <button @click="copyToClipboard" class="button button_green py-12 d-desk-none br-8">
-      Скопировать
+      {{ $t('Скопировать') }}
     </button>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   props: {
@@ -34,6 +35,7 @@ export default {
     },
   },
   setup() { // Передаем props в setup
+    const { t } = useI18n();
     const text = ref('https://ecoforce.com?invite=12345678');
     const showPopup = ref(false);
     const popupMessage = ref('');
@@ -42,13 +44,13 @@ export default {
       if (text.value) {
         try {
           await navigator.clipboard.writeText(text.value);
-          showPopupMessage('Скопировано!');
+          showPopupMessage(t('Скопировано'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать.');
+          console.error(t('Ошибка при копировании'), err);
+          showPopupMessage(t('Не удалось скопировать'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('Поле ввода пустое'));
       }
     };
 

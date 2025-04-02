@@ -51,8 +51,9 @@ const pages = computed(() => {
     range.push("...");
   }
 
-  let minPage = Math.max(2, currentPage - 1);
+  let minPage = Math.max(1, currentPage - 1);
   let maxPage = Math.min(totalPages - 1, currentPage + 1);
+  console.log(minPage, maxPage);
 
   for (let i = minPage; i <= maxPage; i++) {
     range.push(i);
@@ -65,7 +66,7 @@ const pages = computed(() => {
   range.push(totalPages);
   return range;
 });
- 
+
 const selectPage = (page) => {
   if (typeof page === "number") {
     emit("update:currentPage", page);

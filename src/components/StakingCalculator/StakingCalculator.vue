@@ -4,21 +4,59 @@
       class="staking-calculator">
 
     <div class="staking-calculator__header">
-      <div class="staking-calculator__title">
-        Стейкинг: Калькулятор доходности
-      </div>
+      <h3>{{ $t('Калькулятор стейкинга') }}</h3>
+      <p>{{ $t('Рассчитайте доходность от стейкинга TRX') }}</p>
     </div>
 
     <div class="staking-calculator__body">
 
-      <CurrencyInput v-model="amountCurrency"/>
+      <div class="staking-calculator__input">
+        <CurrencyInput
+          v-model="amount"
+          :max="maxAmount"
+          :placeholder="$t('Введите сумму')"
+          :currency="$t('TRX')"
+        />
+      </div>
 
-      <CustomSlider v-model="amountCurrency" :usd="energyPerPeriod.usd" min="1000" max="50000"/>
+      <div class="staking-calculator__slider">
+        <CustomSlider
+          v-model="amount"
+          :max="maxAmount"
+          :step="1000"
+        />
+      </div>
 
-      <TableStaking :data="energyPerPeriod"/>
+      <div class="staking-calculator__table">
+        <div class="staking-calculator__table-header">
+          <span>{{ $t('Период') }}</span>
+          <span>{{ $t('Доходность') }}</span>
+        </div>
+        <div class="staking-calculator__table-row">
+          <span>{{ $t('1 месяц') }}</span>
+          <span>{{ monthlyIncome }} {{ $t('TRX') }}</span>
+        </div>
+        <div class="staking-calculator__table-row">
+          <span>{{ $t('3 месяца') }}</span>
+          <span>{{ quarterlyIncome }} {{ $t('TRX') }}</span>
+        </div>
+        <div class="staking-calculator__table-row">
+          <span>{{ $t('6 месяцев') }}</span>
+          <span>{{ halfYearlyIncome }} {{ $t('TRX') }}</span>
+        </div>
+        <div class="staking-calculator__table-row">
+          <span>{{ $t('1 год') }}</span>
+          <span>{{ yearlyIncome }} {{ $t('TRX') }}</span>
+        </div>
+      </div>
+
+      <div class="staking-calculator__info">
+        <p>{{ $t('APR') }}: {{ apr }}%</p>
+        <p>{{ $t('Минимальная сумма') }}: 1000 {{ $t('TRX') }}</p>
+      </div>
 
       <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal">
-        Начать стейкинг
+        {{ $t('Начать стейкинг') }}
       </button>
 
       <ModalWindow :isVisible="isModalVisible" @close="closeModal">
@@ -26,24 +64,23 @@
         <div class="popup">
 
           <div class="popup__header">
-            Стейкинг TRX
+            {{ $t('Стейкинг TRX') }}
           </div>
 
-          <TrxCounter v-model="amountCurrency" :max="useUserStore.user.trx_balance"/>
+          <TrxCounter v-model="amount" :max="useUserStore.user.trx_balance"/>
 
           <!-- class for error check_error -->
           <label class="check">
             <input v-model="agree" class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
-              С
-              <span class="c-green" @click="openModal3">правилами</span>
-              стейкинга ознакомлен
+              {{ $t('С правилами стейкинга ознакомлен') }}
+              <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
             </span>
           </label>
 
           <button class="button button_green py-12 w-100" @click="stake">
-            Начать стейкинг
+            {{ $t('Начать стейкинг') }}
           </button>
 
         </div>
@@ -56,44 +93,39 @@
         <div class="popup-rule">
 
           <div class="popup-rule__header">
-            Условия и правила стейкинга
+            {{ $t('Условия и правила стейкинга') }}
           </div>
 
           <div class="popup-rule__body">
             <div>
               <b>
-                1. Общие положения
+                {{ $t('1. Общие положения') }}
               </b>
               <p>
-                1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для
-                получения энергии и дохода.
+                {{ $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.') }}
               </p>
               <p>
-                1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание
-                связанных рисков.
+                {{ $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.') }}
               </p>
               <p>
-                1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при
-                добавлении токенов в стейкинг.
+                {{ $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.') }}
               </p>
             </div>
             <div>
               <b>
-                2. Порядок стейкинга
+                {{ $t('2. Порядок стейкинга') }}
               </b>
               <p>
-                2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..
+                {{ $t('2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..') }}
               </p>
               <p>
-                2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.
+                {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
               </p>
               <p>
-                2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге
-                сети Tron.
+                {{ $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.') }}
               </p>
             </div>
           </div>
-
 
         </div>
 
@@ -145,7 +177,7 @@ export default {
   data() {
     return {
       normalCost: 18,
-      amountCurrency: 0,
+      amount: 0,
       discountCost: 8,
       savingsPercentage: 52,
       savingsAmount: 312,
@@ -154,12 +186,18 @@ export default {
       isModalVisible2: false,
       isModalVisible3: false,
       energy: '130 000',
-      status: 'Ожидание оплаты',
+      status: this.$t('Ожидание оплаты'),
       staking: {
         user_staked_trx: 0,
         daily_energy_earned: 0,
         total_accrued_energy: 0,
-      }
+      },
+      maxAmount: 50000,
+      monthlyIncome: 0,
+      quarterlyIncome: 0,
+      halfYearlyIncome: 0,
+      yearlyIncome: 0,
+      apr: 0
     };
   },
   computed: {
@@ -173,8 +211,8 @@ export default {
       energyPerTrx = parseFloat(this.useTrxStore.trxGlobal.energy_per_trx);
       buybackCost = this.useEnergyStore.energyGlobal.buyback_cost;
 
-      const usd = (this.amountCurrency * trxPrice).toFixed(2);
-      const dailyEnergy = (this.amountCurrency * energyPerTrx).toFixed(2);
+      const usd = (this.amount * trxPrice).toFixed(2);
+      const dailyEnergy = (this.amount * energyPerTrx).toFixed(2);
 
       const weeklyEnergy = dailyEnergy * 7;
       const monthlyEnergy = dailyEnergy * 30;
@@ -184,6 +222,11 @@ export default {
       const monthlyTrx = (monthlyEnergy * buybackCost / 1_000_000).toFixed(2);
       const yearlyTrx = (yearlyEnergy * buybackCost / 1_000_000).toFixed(2);
 
+      this.monthlyIncome = monthlyTrx;
+      this.quarterlyIncome = weeklyTrx * 3;
+      this.halfYearlyIncome = weeklyTrx * 6;
+      this.yearlyIncome = yearlyTrx;
+      this.apr = (yearlyEnergy * 100 / this.amount).toFixed(2);
 
       return {
         energy: {
@@ -220,7 +263,7 @@ export default {
       if (!this.agree) {
         return;
       }
-      createStakingService().stakeAmount(this.amountCurrency)
+      createStakingService().stakeAmount(this.amount)
           .then((response) => {
             this.useUserStore.getUserDetails();
             this.isModalVisible = false;

@@ -1,7 +1,7 @@
 <template>
   <main class="main">
 
-    <section class="section-panels">
+    <section v-if="loggedIn" class="section-panels">
 
       <div class="container">
         <div class="section-panels__row">

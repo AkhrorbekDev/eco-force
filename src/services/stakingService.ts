@@ -21,6 +21,10 @@ export const createStakingService = (token) => {
         }),
 
         // Get staking action history
-        getStakingActions: () => authApi('/staking-actions/'),
+        getStakingActions: (query) => authApi('/staking-actions/', {
+            method: 'GET',
+            params: query,
+
+        }),
     };
 };
