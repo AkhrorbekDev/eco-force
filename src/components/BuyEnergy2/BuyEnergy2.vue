@@ -54,7 +54,7 @@
           <span class="check__text font-14">
             {{ $t('Использовать свою энергию') }}
             <span class="check__text-gray d-mob-block">
-              ({{ $t('будет использовано') }} {{ lostEnergy }})
+              ({{ $t('будет использовано') }} {{ userEnergyToBuy }})
             </span>
           </span>
         </label>
@@ -329,6 +329,9 @@ export default {
     userEnergy() {
       return this.userStore.user.energy || 0
     },
+    userEnergyToBuy () {
+      return this.userStore.user.energy > 0 && this.userStore.user.energy > this.amount ? this.amount : this.userStore.user.energy
+    },
     trxPrice() {
       if (this.totalTrx === 0) {
         return 0;
@@ -396,7 +399,7 @@ export default {
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
-        use_energy_user: this.useUserEnergy ? this.userEnergy : 0,
+        use_energy_user: this.useUserEnergy ? this.userEnergyToBuy : 0,
       }).then(res => {
         this.orderInfo = res;
         this.isModalVisible2 = true;
