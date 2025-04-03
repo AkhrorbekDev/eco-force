@@ -3,10 +3,10 @@
     <div class="items">
       <div v-for="(item, index) in items" :key="index" class="item">
         <span class="item__icon">
-          <img :src="item.imageUrl" :alt="item.altText" class="item__image" width="22" height="22" loading="lazy" />
+          <img :src="item.imageUrl" :alt="$t(item.altText)" class="item__image" width="22" height="22" loading="lazy" />
         </span>
         <div class="item__title">
-          {{ item.title }}
+          {{ $t(item.title) }}
         </div>
         <p v-html="item.text"></p>
       </div>

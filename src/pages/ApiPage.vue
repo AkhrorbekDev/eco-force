@@ -18,39 +18,39 @@
         <div class="section-api__content">
 
           <h1 class="section-api__title">
-            API
+            {{ $t('API') }}
           </h1>
 
           <div class="block">
             <label class="block__label">
               <span>
                 <b>
-                  API
+                  {{ $t('API') }}
                 </b>
-                ключ
+                {{ $t('ключ') }}
               </span>
               <input :value="apiKey" readonly class="input" type="text">
             </label>
             <button @click="generateApiKey" class="button button_green br-8 py-14">
-              Сгенерировать
+              {{ $t('Сгенерировать') }}
             </button>
           </div>
 
           <div class="d-grid gap-12">
             <p>
-              Данный функционал позволяет взаимодействовать с нашим сервисом через API.
+              {{ $t('Данный функционал позволяет взаимодействовать с нашим сервисом через API.') }}
             </p>
             <p>
-              Вам доступно управление адресами кошельков, покупка энергии и другие функции.
+              {{ $t('Вам доступно управление адресами кошельков, покупка энергии и другие функции.') }}
             </p>
             <a class="c-green" href="#">
-              Вся документация
+              {{ $t('Вся документация') }}
             </a>
           </div>
 
           <a class="button-goto" href="/faq">
-            FAQ
-            <img src="/images/arrow-left.svg" width="24" height="24" loading="lazy" alt="Arrow Left">
+            {{ $t('FAQ') }}
+            <img src="/images/arrow-left.svg" width="24" height="24" loading="lazy" :alt="$t('Arrow Left')">
           </a>
 
         </div>
@@ -67,6 +67,7 @@ import PanelStaking from '@/components/PanelStaking/PanelStaking.vue';
 import {createUserService} from "@/services/index.js";
 import {useUserGlobal} from "@/store/userGlobal.js";
 import {computed} from "vue";
+import {useToast} from "vue-toastification";
 
 export default {
   name: 'ApiPage',
@@ -78,7 +79,9 @@ export default {
   setup() {
     const userStore = useUserGlobal();
     const loggedIn = computed(() => userStore.loggedIn);
+    const toast = useToast();
     return {
+      toast,
       loggedIn
     }
   },
@@ -88,9 +91,14 @@ export default {
     }
   },
   methods: {
-    generateApiKey() {
+    generateApiKey(e) {
+      e.loading.start()
       createUserService().generateApiKey().then(res => {
         this.apiKey = res.api_key
+      }).catch(err => {
+        this.toast.error(err.message || this.$t('errorOccurred'));
+      }).finally(() => {
+        e.loading.stop()
       });
     }
   }

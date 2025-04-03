@@ -2,23 +2,23 @@
   <table>
     <thead>
       <tr>
-        <th>Период</th>
-        <th>Энергия</th>
-        <th>TRX</th>
+        <th>{{ $t('Период') }}</th>
+        <th>{{ $t('Энергия') }}</th>
+        <th>{{ $t('TRX') }}</th>
       </tr>
     </thead>
     <tbody>
       <tr >
-        <td>Еженедельно</td>
+        <td>{{ $t('Еженедельно') }}</td>
         <td>{{ data.energy.weekly }}</td>
         <td>{{ data.trx.weekly}} ~ {{ ( data.trx.weekly ? (data.trx.weekly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr><tr >
-        <td>За месяц</td>
+        <td>{{ $t('За месяц') }}</td>
         <td>{{ data.energy.monthly  }}</td>
         <td>{{ data.trx.monthly}} ~ {{ ( data.trx.monthly ? (data.trx.monthly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr>
       <tr >
-        <td>За год</td>
+        <td>{{ $t('За год') }}</td>
         <td>{{ data.energy.yearly }}</td>
         <td>{{ data.trx.yearly}} ~ {{ ( data.trx.yearly ? (data.trx.yearly * useTrxStore.trxGlobal.trx_price).toFixed(2) : 0) }} $</td>
       </tr>
@@ -61,14 +61,14 @@ export default {
   data() {
     return {
       labels: {
-        daily: 'Ежедневно',
-        weekly: 'Еженедельно',
-        yearly: 'Ежегодно',
+        daily: this.$t('Ежедневно'),
+        weekly: this.$t('Еженедельно'),
+        yearly: this.$t('Ежегодно'),
       },
       rows: [
-        { period: 'Ежедневно', energy: '22 400', trx: '1,2 ~ 0,28$' },
-        { period: 'За месяц', energy: '672 000', trx: '34 ~ 8,4 $' },
-        { period: 'За год', energy: '8 176 000', trx: '408 ~ 102,2$' }
+        { period: this.$t('Ежедневно'), energy: '22 400', trx: '1,2 ~ 0,28$' },
+        { period: this.$t('За месяц'), energy: '672 000', trx: '34 ~ 8,4 $' },
+        { period: this.$t('За год'), energy: '8 176 000', trx: '408 ~ 102,2$' }
       ]
     };
   }

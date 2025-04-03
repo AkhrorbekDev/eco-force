@@ -3,7 +3,7 @@
 
     <div class="my-staking__header">
       <div class="my-staking__title">
-        Мой стейкинг
+        {{ $t('Мой стейкинг') }}
       </div>
     </div>
 
@@ -11,7 +11,7 @@
 
       <div class="my-staking__row">
         <span class="my-staking__name">
-          В стейкиге:
+          {{ $t('В стейкиге:') }}
         </span>
         <p class="my-staking__value">
           <span>
@@ -24,25 +24,24 @@
       </div>
       <div class="my-staking__row">
         <span class="my-staking__name">
-          Доходность в день:
+          {{ $t('Доходность в день:') }}
         </span>
         <p class="my-staking__value">
           <span>
             ~ {{ staking.daily_energy_earned }}
           </span>
-          <img src="/images/lightning.svg" alt="Icon Lightning">
+          <img src="/images/lightning.svg" :alt="$t('Icon Lightning')">
         </p>
       </div>
       <div class="my-staking__row">
         <span class="my-staking__name">
-          Заработано всего:
+          {{ $t('Заработано всего:') }}
         </span>
         <p class="my-staking__value">
           <span>
-
             {{ staking.total_accrued_energy }}
           </span>
-          <img src="/images/lightning.svg" alt="Icon Lightning">
+          <img src="/images/lightning.svg" :alt="$t('Icon Lightning')">
         </p>
       </div>
 

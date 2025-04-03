@@ -73,9 +73,9 @@
 
       </div>
 
-      <button class="button button_green w-100 py-8" @click="openModal">
+      <BaseButton class="button button_green w-100 py-8" @on:click="openModal">
         {{ $t('Купить энергию') }}
-      </button>
+      </BaseButton>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none">
         {{ $t('Инструкция') }}
@@ -153,13 +153,14 @@
             <p>
               {{ $t('Стоимость') }} <b>{{ orderInfo.required_trx_amount }} TRX</b>
             </p>
-            <b v-if="balanceTrxDiff > 0" class="text-error">
+            <b @click="showAddBalanceModal" v-if="balanceTrxDiff > 0" class="text-error">
               {{ $t('Не хватает') }}: {{ balanceTrxDiff }} TRX
             </b>
           </div>
-          <button @click="confimOrder" :disabled="balanceTrxDiff > 0" class="button button_green py-14 w-100 br-8"
+          <BaseButton @on:click="confirmOrder"
+                      class="button button_green py-14 w-100 br-8"
           > {{ $t('Списать с баланса') }}
-          </button>
+          </BaseButton>
         </div>
       </ModalWindow>
 
@@ -182,10 +183,13 @@ import {useEnergyGlobal} from "@/store/energyGlobal.js";
 import {useTrxGlobal} from "@/store/trxGlobal.js";
 import publicServices from "@/services/publicServices.js";
 import {createEnergyService} from "@/services/index.js";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
+import {useToast} from "vue-toastification";
 
 export default {
   name: 'BuyEnergy',
   components: {
+    BaseButton,
     AddressTron,
     AddressTron2,
     TransactionCounter,
@@ -232,11 +236,12 @@ export default {
     const userStore = useUserGlobal()
     const useEnergyStore = useEnergyGlobal()
     const useTrxStore = useTrxGlobal()
-
+    const toast = useToast()
     return {
       userStore,
       useEnergyStore,
-      useTrxStore
+      useTrxStore,
+      toast
     }
   },
   data() {
@@ -376,6 +381,9 @@ export default {
     }
   },
   methods: {
+    showAddBalanceModal () {
+      this.$emit('showAddBalanceModal', this.balanceTrxDiff)
+    },
     saveInputValue() {
       this.inputedAmount = this.amount
     },
@@ -383,11 +391,12 @@ export default {
       this.transactionCount = e
       this.amount = this.inputedAmount ? parseInt(this.inputedAmount) * this.transactionCount : 0
     },
-    createOrderToAuthorizedUser() {
+    createOrderToAuthorizedUser(e) {
+      e.loading.start()
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
-        use_energy_user: this.userEnergy,
+        use_energy_user: this.useUserEnergy ? this.userEnergy : 0,
       }).then(res => {
         this.orderInfo = res;
         this.isModalVisible2 = true;
@@ -400,17 +409,19 @@ export default {
             if (res.status === 'paid') {
               clearInterval(this.interval);
               this.isModalVisible = false;
-              this.getUserDetails();
+              this.userStore.initUserGlobal();
             }
-          }).catch(err => {
-            console.log(err)
           })
         }, 3000);
       }).catch(err => {
+        this.toast.error(err.message || this.$t('errorOccurred'));
 
+      }).finally(() => {
+        e.loading.stop()
       })
     },
-    createOrderToUnAuthorizedUser() {
+    createOrderToUnAuthorizedUser(e) {
+      e.loading.start()
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
@@ -423,7 +434,7 @@ export default {
         }
 
         this.interval = setInterval(() => {
-          publicServices.order.getOrderInfo(res.order_id).then(res => {
+          publicServices.order.getOrderInfoPublic(res.order_id).then(res => {
             this.orderInfo.status = res.status;
             if (res.status === 'paid') {
               clearInterval(this.interval);
@@ -434,34 +445,48 @@ export default {
           })
         }, 3000);
       }).catch(err => {
-        console.log(err)
+        this.toast.error(err.message || this.$t('errorOccurred'));
+      }).finally(() => {
+        e.loading.stop()
       })
     },
     validate() {
       if (this.address === '') {
-        this.$toast?.error('Введите адрес кошелька');
+        this.toast.error(this.$t('Введите адрес кошелька'));
         return false;
       }
       if (this.amount === 0) {
-        this.$toast?.error('Введите количество энергии');
+        this.toast.error(this.$t('Введите количество энергии'));
         return false;
       }
       return true;
     },
-    openModal() {
+    openModal(e) {
       this.requestSending = true
       if (!this.validate()) {
         this.requestSending = false
+        e.loading.stop()
         return
       }
       if (this.loggedIn) {
-        this.createOrderToAuthorizedUser()
+        this.createOrderToAuthorizedUser(e)
       } else {
-        this.createOrderToUnAuthorizedUser()
+        this.createOrderToUnAuthorizedUser(e)
       }
     },
-    confimOrder() {
-
+    confirmOrder(e) {
+      e.loading.start()
+      createEnergyService().confirmOrder({
+        order_id: this.orderInfo.order_id,
+      }).then(res => {
+        this.isModalVisible2 = false;
+        this.toast.success(res.message);
+        this.userStore.initUserGlobal();
+      }).catch(err => {
+        this.toast.error(err.message || this.$t('errorOccurred'));
+      }).finally(() => {
+        e.loading.stop()
+      })
     },
     closeModal2() {
       this.isModalVisible2 = false;

@@ -1,7 +1,7 @@
 <template>
   <div class="rental-period d-grid gap-8">
     <span>
-      Срок аренды
+      {{ $t('Срок аренды') }}
     </span>
     <div class="rental-period__row">
       <div
@@ -10,7 +10,7 @@
         @click="setActivePeriod(index)"
         :class="['rental-period__button', { _active: activePeriod === index }]"
       >
-        {{ period }}
+        {{ $t(period) }}
       </div>
     </div>
   </div>

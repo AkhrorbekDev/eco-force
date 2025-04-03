@@ -51,13 +51,13 @@ export default {
       if (tronAddress.value) {
         try {
           await navigator.clipboard.writeText(tronAddress.value);
-          showPopupMessage('Адрес скопирован!');
+          showPopupMessage(t('addressCopied'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать адрес.');
+          console.error(t('addressCopyError'), err);
+          showPopupMessage(t('addressErrorMessage'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('addressFieldEmpty'));
       }
     };
 

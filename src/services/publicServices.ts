@@ -52,6 +52,18 @@ export const orderService = {
      * @returns {Promise<Object>} Order details
      */
     getOrderInfo(orderId) {
+        return api('/authorized-user-order/', {
+            method: 'POST',
+            body: {order_id: orderId}
+        })
+    },
+
+    /**
+     * Get information about an existing order
+     * @param {string} orderId - Unique order identifier
+     * @returns {Promise<Object>} Order details
+     */
+    getOrderInfoPublic(orderId) {
         return api('/unauthorized-user-order/', {
             method: 'POST',
             body: {order_id: orderId}

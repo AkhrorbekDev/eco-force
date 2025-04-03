@@ -58,7 +58,7 @@ export default {
     isMultipleOf() {
       return this.modelValue % this.step === 0;
     },
-    maxValue () {
+    maxValue() {
       return this.$props.max
     }
   },
@@ -87,7 +87,7 @@ export default {
 
     },
     setMaxValue() {
-      let count = this.maxValue;
+      let count = parseInt(this.maxValue, 10);
       this.$emit('update:modelValue', count);
     }
   }

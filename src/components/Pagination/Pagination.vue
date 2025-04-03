@@ -8,7 +8,7 @@
           0.344058C1.09186 0.0557252 1.61603 0.112392 1.9052 0.470724L5.92853 5.47072C6.05103 5.62322 6.1127 5.80822 6.1127 5.99322Z"
               fill="#1AC200"/>
       </svg>
-      Back
+      {{ $t('Back') }}
     </button>
     <div class="pagination__items">
       <span
@@ -21,7 +21,7 @@
       </span>
     </div>
     <button class="pagination__button" @click="selectPage(currentPage + 1)" :disabled="currentPage === totalPages">
-      Next
+      {{ $t('Next') }}
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M6.1127 5.99322C6.1127 6.18322 6.04853 6.37239 5.91936 6.52656L1.7527 11.5266C1.45853 11.8799 0.932698
           11.9282 0.579365 11.6332C0.226031 11.3391 0.178531 10.8141 0.472698 10.4599L4.2027 5.98406L0.606865 1.51572C0.318531 1.15739 0.375198 0.632392 0.733531

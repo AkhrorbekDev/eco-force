@@ -15,9 +15,9 @@ export const createWalletService = (token) => {
         }),
 
         // Confirm withdrawal
-        confirmWithdrawal: (withdrawalRequestId, confirmationCode) => authApi('/withdraw/confirm/', {
+        confirmWithdrawal: (options = {withdrawalRequestId: '', confirmationCode: ''}) => authApi('/withdraw/confirm/', {
             method: 'POST',
-            body: { withdrawal_request_id: withdrawalRequestId, confirmation_code: confirmationCode },
+            body: options,
         }),
 
         // Resend confirmation code

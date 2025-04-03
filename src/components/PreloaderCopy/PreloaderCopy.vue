@@ -2,7 +2,7 @@
   <div class="preloader-copy d-grid gap-8">
     <div class="preloader-copy__row jc-sb">
       <span>
-        Прелоадер
+        {{ $t('Прелоадер') }}
       </span>
       <div class="preloader-copy__copy" @click="copyToClipboard">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,24 +24,26 @@
 
 <script>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default {
   setup() {
     const field = ref('');
     const showPopup = ref(false);
     const popupMessage = ref('');
+    const { t } = useI18n();
 
     const copyToClipboard = async () => {
       if (field.value) {
         try {
           await navigator.clipboard.writeText(field.value);
-          showPopupMessage('Скопировано!');
+          showPopupMessage(t('Скопировано!'));
         } catch (err) {
-          console.error('Ошибка при копировании:', err);
-          showPopupMessage('Не удалось скопировать.');
+          console.error(t('Ошибка при копировании:'), err);
+          showPopupMessage(t('Не удалось скопировать.'));
         }
       } else {
-        showPopupMessage('Поле ввода пустое.');
+        showPopupMessage(t('Поле ввода пустое.'));
       }
     };
 

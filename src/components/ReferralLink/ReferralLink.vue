@@ -4,10 +4,10 @@
 
       <div class="block__head">
         <div class="block__title">
-          Реферальная ссылка
+          {{ $t('Реферальная ссылка') }}
         </div>
         <span class="d-none d-desk-block c-green font-14 weight-500">
-          Terms of use
+          {{ $t('Terms of use') }}
         </span>
       </div>
 

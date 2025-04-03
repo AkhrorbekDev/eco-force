@@ -4,7 +4,7 @@
 
       <div class="block__info">
         <div class="block__title">
-          Рефералов
+          {{ $t('Рефералов') }}
         </div>
         <span class="block__number">
           {{ quantity || 0 }}
@@ -12,7 +12,7 @@
       </div>
 
       <div class="block__icon">
-        <img src="/images/users.svg" width="32" height="32" loading="lazy" alt="Icon Users">
+        <img src="/images/users.svg" width="32" height="32" loading="lazy" :alt="$t('Icon Users')">
       </div>
 
     </div>

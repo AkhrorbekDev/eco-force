@@ -17,7 +17,7 @@
       <div class="container">
 
         <h1 class="section-faq__title">
-          FAQ
+          {{ $t('FAQ') }}
         </h1>
 
         <AccordionMain/>

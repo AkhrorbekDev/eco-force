@@ -6,10 +6,10 @@
     <table>
       <thead>
       <tr>
-        <th>Партнер</th>
-        <th>Дата</th>
-        <th>Действие</th>
-        <th>Доход в TRX</th>
+        <th>{{ $t('Партнер') }}</th>
+        <th>{{ $t('Дата') }}</th>
+        <th>{{ $t('Действие') }}</th>
+        <th>{{ $t('Доход в TRX') }}</th>
       </tr>
       </thead>
       <tbody>
@@ -24,7 +24,7 @@
       </template>
       <template v-else>
         <tr>
-          <td colspan="7" style="text-align: center">Нет данных</td>
+          <td colspan="7" style="text-align: center">{{ $t('Нет данных') }}</td>
         </tr>
       </template>
       </tbody>

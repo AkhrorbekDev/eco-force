@@ -43,9 +43,9 @@
 
       <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
 
-      <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
+      <BaseButton @on:click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
         {{ $t('Вывести') }}
-      </button>
+      </BaseButton>
 
     </div>
   </ModalWindow>
@@ -86,22 +86,22 @@
           <input :class="{
             invalid: !confirmationCode && sendStart,
           }" v-model="confirmationCode" type="text" class="input">
-          <button class="button button_green br-8">
+          <BaseButton @on:click="resendCode" class="button button_green br-8">
             {{ $t('Выслать код') }}
-          </button>
+          </BaseButton>
         </div>
       </div>
 
-      <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
+      <BaseButton class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
         {{ $t('Вывести') }}
-      </button>
+      </BaseButton>
 
     </div>
 
   </ModalWindow>
 
   <!-- Пополнение -->
-   <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
+  <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
     <div class="popup-order">
       <div class="popup-order__title">
         {{ $t('Ваш адрес для пополнения баланса в TRX') }}
@@ -127,9 +127,12 @@ import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import {useUserGlobal} from "@/store/userGlobal.js";
 import {createEnergyService, createWalletService} from "@/services/index.js";
 import AmountTrx from "@/components/AmountTrx/AmountTrx.vue";
+import {useToast} from "vue-toastification";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
 
 export default {
   components: {
+    BaseButton,
     AmountTrx,
     ModalWindow,
     AddressTron2
@@ -149,14 +152,16 @@ export default {
       request_id: '',
       isModalVisible: false,
       isModalVisible2: false,
+      isModalVisible3: false,
       isButtonsActive: false,
       // Добавляем новое состояние для управления классом
     };
   },
   setup() {
     const userStore = useUserGlobal()
-
+    const toast = useToast()
     return {
+      toast,
       userStore,
     }
   },
@@ -191,34 +196,64 @@ export default {
       createWalletService().requestAddress().then((response) => {
         this.paymentEndpoint = response
         this.address = response.address
+      }).catch((error) => {
+        this.toast.error(error.message || this.$t('errorOccurred'));
       });
     },
-    sendWithDrawal() {
+    sendWithDrawal(e) {
       this.sendStart = true
       if (!this.address) {
+        this.toast.error(this.$t('Введите адрес кошелька'))
         return;
       }
       this.sendStart = false
-
-      createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address}).then((response) => {
-        this.request_id = response.request_id;
-        this.closeModal()
-      });
-      this.openModal3();
+      e.loading.start()
+      createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address})
+          .then((response) => {
+            this.request_id = response.request_id;
+            this.closeModal()
+            this.openModal3();
+            this.toast.success(response.message)
+          })
+          .catch((error) => {
+            this.toast.error(error.message || this.$t('errorOccurred'));
+          })
+          .finally(() => {
+            e.loading.stop()
+          });
 
     },
-    confirmWithdrawal() {
+    confirmWithdrawal(e) {
+
+      if (!this.confirmationCode) {
+        this.toast.error(this.$t('Введите код подтверждения'))
+        return;
+      }
+
+      e.loading.start()
       createWalletService().confirmWithdrawal({
         request_id: this.request_id,
         code: this.confirmationCode
       }).then((response) => {
+        this.toast.success(response.message)
         this.closeModal3();
-      });
+      }).catch((error) => {
+        this.toast.error(error.message || this.$t('errorOccurred'));
+      })
+          .finally(() => {
+            e.loading.stop()
+          });
     },
 
-    resendCode() {
-      createWalletService().resendWithdrawalCode({request_id: this.request_id}).then((response) => {
+    resendCode(e) {
+      e.loading.start()
+      createWalletService().resendWithdrawalCode(this.request_id).then((response) => {
         this.request_id = response.request_id;
+        this.toast.success(response.message)
+      }).catch(err => {
+        this.toast.error(err.message || this.$t('errorOccurred'));
+      }).finally(() => {
+        e.loading.stop()
       });
     },
     openModal() {
@@ -227,11 +262,17 @@ export default {
     openModal2() {
       this.isModalVisible2 = true;
     },
+    openModal3() {
+      this.isModalVisible3 = true;
+    },
     closeModal() {
       this.isModalVisible = false;
     },
     closeModal2() {
       this.isModalVisible2 = false;
+    },
+    closeModal3() {
+      this.isModalVisible3 = false;
     },
     toggleButtonsClass() {
       this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
@@ -348,6 +389,7 @@ export default {
   }
 
 }
+
 .popup-order {
   width: 480px;
   padding: 40px;

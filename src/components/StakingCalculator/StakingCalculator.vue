@@ -5,7 +5,7 @@
 
     <div class="staking-calculator__header">
       <div class="staking-calculator__title">
-        Стейкинг: Калькулятор доходности
+        {{ $t('Стейкинг: Калькулятор доходности') }}
       </div>
     </div>
 
@@ -18,7 +18,7 @@
       <TableStaking :data="energyPerPeriod"/>
 
       <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal">
-        Начать стейкинг
+        {{ $t('Начать стейкинг') }}
       </button>
 
       <ModalWindow :isVisible="isModalVisible" @close="closeModal">
@@ -26,7 +26,7 @@
         <div class="popup">
 
           <div class="popup__header">
-            Стейкинг TRX
+            {{ $t('Стейкинг TRX') }}
           </div>
 
           <TrxCounter v-model="amountCurrency" :max="useUserStore.user.trx_balance"/>
@@ -36,15 +36,15 @@
             <input v-model="agree" class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
-              С
-              <span class="c-green" @click="openModal3">правилами</span>
-              стейкинга ознакомлен
+              {{ $t('С') }}
+              <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
+              {{ $t('стейкинга ознакомлен') }}
             </span>
           </label>
 
-          <button class="button button_green py-12 w-100" @click="stake">
-            Начать стейкинг
-          </button>
+          <BaseButton class="button button_green py-12 w-100" @on:click="stake">
+            {{ $t('Начать стейкинг') }}
+          </BaseButton>
 
         </div>
 
@@ -56,40 +56,44 @@
         <div class="popup-rule">
 
           <div class="popup-rule__header">
-            Условия и правила стейкинга
+            {{ $t('Условия и правила стейкинга') }}
           </div>
 
           <div class="popup-rule__body">
             <div>
               <b>
-                1. Общие положения
+                {{ $t('1. Общие положения') }}
               </b>
               <p>
-                1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для
-                получения энергии и дохода.
+                {{
+                  $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.')
+                }}
               </p>
               <p>
-                1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание
-                связанных рисков.
+                {{
+                  $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.')
+                }}
               </p>
               <p>
-                1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при
-                добавлении токенов в стейкинг.
+                {{
+                  $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.')
+                }}
               </p>
             </div>
             <div>
               <b>
-                2. Порядок стейкинга
+                {{ $t('2. Порядок стейкинга') }}
               </b>
               <p>
-                2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..
+                {{ $t('2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..') }}
               </p>
               <p>
-                2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.
+                {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
               </p>
               <p>
-                2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге
-                сети Tron.
+                {{
+                  $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.')
+                }}
               </p>
             </div>
           </div>
@@ -115,10 +119,13 @@ import {useEnergyGlobal} from "@/store/energyGlobal.js";
 import {useTrxGlobal} from "@/store/trxGlobal.js";
 import CurrencyInput from "@/components/CurrencyInput/CurrencyInput.vue";
 import {useUserGlobal} from "@/store/userGlobal.js";
+import {useToast} from "vue-toastification";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
 
 export default {
-  name: 'BuyEnergy',
+  name: 'StakingCalculator',
   components: {
+    BaseButton,
     CurrencyInput,
     CalculatorProfit,
     ModalWindow,
@@ -136,7 +143,9 @@ export default {
     const useEnergyStore = useEnergyGlobal();
     const useUserStore = useUserGlobal();
     const useTrxStore = useTrxGlobal();
+    const toast = useToast();
     return {
+      toast,
       useEnergyStore,
       useUserStore,
       useTrxStore
@@ -216,17 +225,21 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    stake() {
+    stake(e) {
       if (!this.agree) {
         return;
       }
+      e.loading.start()
       createStakingService().stakeAmount(this.amountCurrency)
           .then((response) => {
-            this.useUserStore.getUserDetails();
+            this.useUserStore.initUserGlobal();
             this.isModalVisible = false;
           })
           .catch((error) => {
-            console.log(error)
+                this.toast.error(error.message || this.$t('errorOccurred'));
+              }
+          ).finally(() => {
+            e.loading.stop()
           });
 
     },

@@ -6,31 +6,31 @@
     <table>
       <thead>
       <tr>
-        <th>Дата</th>
-        <th>Действие</th>
-        <th>Сумма</th>
-        <th>Статус</th>
+        <th>{{ $t('Дата') }}</th>
+        <th>{{ $t('Действие') }}</th>
+        <th>{{ $t('Сумма') }}</th>
+        <th>{{ $t('Статус') }}</th>
       </tr>
       </thead>
       <tbody>
       <template v-if="actions?.length > 0">
         <tr v-for="(order, index) in actions" :key="index">
-          <td data-label="Дата:">{{ order.date }}</td>
-          <td data-label="Действие:">{{ order.action_type }}</td>
-          <td data-label="Сумма:">{{ order.energy_amount }}</td>
-          <td data-label="Статус:">{{ order.status }}</td>
+          <td data-label="{{ $t('Дата') }}:">{{ order.date }}</td>
+          <td data-label="{{ $t('Действие') }}:">{{ order.action_type }}</td>
+          <td data-label="{{ $t('Сумма') }}:">{{ order.energy_amount }}</td>
+          <td data-label="{{ $t('Статус') }}:">{{ order.status }}</td>
         </tr>
       </template>
       <template v-else>
         <tr>
-          <td colspan="7" style="text-align: center">Нет данных</td>
+          <td colspan="7" style="text-align: center">{{ $t('Нет данных') }}</td>
         </tr>
       </template>
       </tbody>
     </table>
 
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
-      Показать еще
+      {{ $t('Показать еще') }}
     </button>
     <Pagination v-if="actions.length > 0" :total-pages="totalPages" :current-page="currentPage"
                 @update:current-page="getUserOrders({page: $event})"/>

@@ -17,7 +17,7 @@
       <div class="container">
 
           <h1 class="section-calc__title">
-            Отправляйте USDT в сети Tron в 2 раза дешевле!
+            {{ $t('Отправляйте USDT в сети Tron в 2 раза дешевле!') }}
           </h1>
 
           <div class="section-calc__row">
@@ -31,7 +31,7 @@
     <section class="section-history">
       <div class="container">
         <h2 class="section-history__title">
-          История операций
+          {{ $t('История операций') }}
         </h2>
 
         <TableOperation />

@@ -6,22 +6,22 @@
         <div class="section-api__content">
 
           <h1 class="section-api__title">
-            О компании
+            {{ $t('О компании') }}
           </h1>
           <div class="row gap-8">
-            <button @click="openModal" class="button button_green">popup 1</button>
-            <button @click="openModal2" class="button button_green">popup 2</button>
-            <button @click="openModal3" class="button button_green">popup 3</button>
+            <button @click="openModal" class="button button_green">{{ $t('popup 1') }}</button>
+            <button @click="openModal2" class="button button_green">{{ $t('popup 2') }}</button>
+            <button @click="openModal3" class="button button_green">{{ $t('popup 3') }}</button>
           </div>
 
           <ModalWindow :isVisible="isModalVisible" @close="closeModal">
             <div class="popup1">
 
               <p>
-                Короткий текст.
+                {{ $t('Короткий текст.') }}
               </p>
 
-              <a class="button button_green py-14 w-100 br-8" href="#"> Кнопка </a>
+              <a class="button button_green py-14 w-100 br-8" href="#"> {{ $t('Кнопка') }} </a>
 
             </div>
           </ModalWindow>
@@ -29,15 +29,14 @@
           <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
             <div class="popup2">
               <div class="popup2__title">
-                Заголовок сообщения может быть длинным
+                {{ $t('Заголовок сообщения может быть длинным') }}
               </div>
 
               <p class="mb-20">
-                Значимость этих проблем настолько очевидна, что дальнейшее развитие различных форм деятельности позволяет выполнять 
-                важные задания по разработке направлений прогрессивного развития.
+                {{ $t('Значимость этих проблем настолько очевидна, что дальнейшее развитие различных форм деятельности позволяет выполнять важные задания по разработке направлений прогрессивного развития.') }}
               </p>
 
-              <a class="button button_green py-14 w-100 br-8" href="#"> Кнопка </a>
+              <a class="button button_green py-14 w-100 br-8" href="#"> {{ $t('Кнопка') }} </a>
 
             </div>
           </ModalWindow>
@@ -45,13 +44,12 @@
           <ModalWindow :isVisible="isModalVisible3" @close="closeModal3">
             <div class="popup3">
               <p class="mb-20">
-                Длинный текст. Значимость этих проблем настолько очевидна, что дальнейшее развитие различных форм деятельности 
-                позволяет выполнять важные задания по разработке направлений прогрессивного развития.
+                {{ $t('Длинный текст. Значимость этих проблем настолько очевидна, что дальнейшее развитие различных форм деятельности позволяет выполнять важные задания по разработке направлений прогрессивного развития.') }}
               </p>
 
               <div class="row gap-12">
-                <a class="button button_green py-14 w-100 br-8" href="#"> Кнопка </a>
-                <a class="button button_bordered py-14 w-100 br-8" href="#"> Кнопка </a>
+                <a class="button button_green py-14 w-100 br-8" href="#"> {{ $t('Кнопка') }} </a>
+                <a class="button button_bordered py-14 w-100 br-8" href="#"> {{ $t('Кнопка') }} </a>
               </div>
 
             </div>

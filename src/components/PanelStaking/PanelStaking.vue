@@ -31,90 +31,61 @@
 
 
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
-    <div class="popup-take">
-      <div class="popup-take__header">
-        {{ $t('Вывод из стейкинга') }}
+
+    <div class="popup">
+
+      <div class="popup__header">
+        {{ $t('Вывод из стейкинга') }} TRX
       </div>
 
-      <div class="address-tron d-grid gap-8 mb-16">
-        <span>{{ $t('Адрес') }} <b>{{ $t('TRX') }}</b></span>
-        <div :class="{
-          invalid: !address && sendStart,
-        }" class="address-tron__value">
-          <input v-model="address" type="text">
-        </div>
-      </div>
+      <TrxCounter v-model="exitAmount" :max="userStore.user.total_staked_trx"/>
 
-      <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
+      <!-- class for error check_error -->
+      <label class="check">
+        <input v-model="unstakeAgree" class="check__input" type="checkbox">
+        <i class="check__square"></i>
+        <span class="check__text font-14">
+              {{
+            $t('После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится.')
+          }}
+            </span>
+      </label>
 
-      <button @click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
+      <BaseButton @on:click="unstake" class="button button_green py-12 w-100" href="#">
         {{ $t('Вывести') }}
-      </button>
+      </BaseButton>
+
     </div>
-  </ModalWindow>
 
-  <ModalWindow :isVisible="isModalVisible3" @close="closeModal3">
-    <div class="popup-confirm">
-      <div class="popup-confirm__header">
-        {{ $t('Подтверждение вывода') }}
-      </div>
-
-      <div class="d-grid gap-8 mb-16">
-        <span class="c-gray2">
-          {{ $t('Адрес вывода') }}
-        </span>
-        <p>
-          {{ address }}
-        </p>
-      </div>
-
-      <p class="mb-32">
-        {{ $t('Количество') }}
-        <b>
-          {{ $t('TRX') }}: {{ exitAmount }}
-        </b>
-      </p>
-
-      <div class="d-grid gap-8 mb-24">
-        <p class="mb-32">
-          {{ $t('Код подтверждения из') }}
-          <b>
-            {{ $t('Telegram') }}
-          </b>
-        </p>
-        <div class="popup-confirm__actions">
-          <input :class="{
-            invalid: !confirmationCode && sendStart,
-          }" v-model="confirmationCode" type="text" class="input">
-          <button class="button button_green br-8">
-            {{ $t('Выслать код') }}
-          </button>
-        </div>
-      </div>
-
-      <button class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
-        {{ $t('Вывести') }}
-      </button>
-    </div>
   </ModalWindow>
 
   <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
-    <div class="popup-order">
-      <div class="popup-order__title">
-        {{ $t('Стейкинг TRX') }}
+
+    <div class="popup">
+
+      <div class="popup__header">
+        {{ $t('Стейкинг') }} TRX
       </div>
-      <div v-if="paymentEndpoint.qr_code" class="popup-order__img" v-html="paymentEndpoint.qr_code"
-           style="width: 162px; height: 160px" width="162"
-           height="160" loading="lazy"
-           :alt="$t('QR код стейкинга')"/>
-      <AddressTron2 v-model="paymentEndpoint.address" read-only :hasTitle="false" customClass="_big mb-12"/>
-      <b class="mb-24 d-block">
-        {{ $t('Переведите любую сумму') }}
-      </b>
-      <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
-        {{ $t('Закрыть') }}
-      </button>
+
+      <TrxCounter v-model="amountCurrency" :max="userStore.user.trx_balance"/>
+
+      <!-- class for error check_error -->
+      <label class="check">
+        <input v-model="agree" class="check__input" type="checkbox">
+        <i class="check__square"></i>
+        <span class="check__text font-14">
+              {{ $t('С') }}
+              <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
+              {{ $t('стейкинга ознакомлен') }}
+            </span>
+      </label>
+
+      <BaseButton class="button button_green py-12 w-100" @on:click="stake">
+        {{ $t('Начать стейкинг') }}
+      </BaseButton>
+
     </div>
+
   </ModalWindow>
 
   <ModalWindow overlayClass="overflow" :isVisible="isModalVisible3" @close="closeModal3">
@@ -131,13 +102,19 @@
             {{ $t('1. Общие положения') }}
           </b>
           <p>
-            {{ $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.') }}
+            {{
+              $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.')
+            }}
           </p>
           <p>
-            {{ $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.') }}
+            {{
+              $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.')
+            }}
           </p>
           <p>
-            {{ $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.') }}
+            {{
+              $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.')
+            }}
           </p>
         </div>
         <div>
@@ -151,7 +128,9 @@
             {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
           </p>
           <p>
-            {{ $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.') }}
+            {{
+              $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.')
+            }}
           </p>
         </div>
       </div>
@@ -170,9 +149,12 @@ import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import {createStakingService, createWalletService} from "@/services/index.js";
 import {useUserGlobal} from "@/store/userGlobal.js";
 import TrxCounter from "@/components/TrxCounter/TrxCounter.vue";
+import {useToast} from "vue-toastification";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
 
 export default {
   components: {
+    BaseButton,
     TrxCounter,
     ModalWindow,
     AddressTron2,
@@ -202,8 +184,9 @@ export default {
   },
   setup() {
     const userStore = useUserGlobal()
-
+    const toast = useToast()
     return {
+      toast,
       userStore,
     }
   },
@@ -235,28 +218,38 @@ export default {
     getPaymentEndpoint() {
       createWalletService().requestAddress().then((response) => {
         this.paymentEndpoint = response
-      });
+      }).catch((error => {
+        this.toast.error(this.$t('errorOccurred'))
+      }));
     },
-    sendWithDrawal() {
+    sendWithDrawal(e) {
       this.sendStart = true
       if (!this.address) {
         return;
       }
       this.sendStart = false
+      e.loading.start()
 
-      createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address}).then((response) => {
-        this.request_id = response.request_id;
-        this.closeModal()
-      });
+      createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address})
+          .then((response) => {
+            this.request_id = response.request_id;
+            this.closeModal()
+          });
       this.openModal3();
 
     },
-    confirmWithdrawal() {
+    confirmWithdrawal(e) {
+      e.loading.start()
       createWalletService().confirmWithdrawal({
         request_id: this.request_id,
         code: this.confirmationCode
       }).then((response) => {
         this.closeModal3();
+        this.toast.success(this.$t(response.message))
+      }).catch((error) => {
+        this.toast.error(error.message || this.$t('errorOccurred'))
+      }).finally(() => {
+        e.loading.stop()
       });
     },
 
@@ -270,37 +263,54 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
+      this.exitAmount = 0
     },
     openModal2() {
       this.isModalVisible2 = true;
     },
-    stake() {
+    stake(e) {
       if (!this.agree) {
         return;
       }
+      console.log(e)
       createStakingService().stakeAmount(this.amountCurrency)
           .then((response) => {
-            this.userStore.getUserDetails();
-            this.isModalVisible = false;
+            this.userStore.initUserGlobal();
+            this.closeModal2()
+            this.toast.success(response.message)
           })
           .catch((error) => {
-            console.log(error)
+            this.toast.error(error.message || this.$t('errorOccurred'));
+          })
+          .finally(() => {
+            e.loading.stop()
           });
 
     },
     closeModal2() {
       this.isModalVisible2 = false;
+      this.amountCurrency = 0
     },
-    unstake () {
+    unstake(e) {
 
       if (!this.unstakeAgree) {
         return;
       }
 
       if (this.exitAmount > 0) {
-        createStakingService().unstakeAmount(this.exitAmount).then((response) => {
-          this.closeModal()
-        });
+        e.loading.start()
+        createStakingService()
+            .unstakeAmount(this.exitAmount)
+            .then(response => {
+              this.closeModal()
+              this.toast.success(response.message)
+            })
+            .catch(err => {
+              this.toast.error(err.message || this.$t('errorOccurred'));
+            })
+            .finally(() => {
+              e.loading.stop()
+            })
       }
     },
     openModal3() {
@@ -318,6 +328,7 @@ export default {
 
 <style scoped lang="scss">
 @import './PanelStaking.scss';
+
 .popup {
   display: flex;
   flex-direction: column;
@@ -331,6 +342,7 @@ export default {
     line-height: 30px;
   }
 }
+
 .popup-take {
   display: flex;
   flex-direction: column;

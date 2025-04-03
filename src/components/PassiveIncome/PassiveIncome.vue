@@ -3,14 +3,14 @@
   <section class="section">
     <div class="container">
       <h2 class="h2">
-        Стейкинг с пассивным доходом 27% годовых
+        {{ $t('Стейкинг с пассивным доходом 27% годовых') }}
       </h2>
 
       <div class="items">
         <div v-for="(item, index) in items" :key="index" class="item">
-          <img :src="item.imageUrl" :alt="item.altText" class="image" width="88" height="88" loading="lazy" />
+          <img :src="item.imageUrl" :alt="$t(item.altText)" class="image" width="88" height="88" loading="lazy" />
           <div class="item__text">
-            {{ item.text }}
+            {{ $t(item.text) }}
           </div>
         </div>
       </div>
@@ -40,12 +40,12 @@ export default {
         {
           imageUrl: '/images/icon-2.svg',
           altText: 'Safe',
-          text: 'Использование энергии для своих нужд.'
+          text: 'Использование энергии для своих нужд.'
         },
         {
           imageUrl: '/images/icon-2.svg',
           altText: 'Safe',
-          text: 'Использование энергии для своих нужд.'
+          text: 'Использование энергии для своих нужд.'
         },
         {
           imageUrl: '/images/icon-3.svg',

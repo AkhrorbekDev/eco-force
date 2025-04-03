@@ -18,8 +18,9 @@ export const createEnergyService = () => {
         }),
 
         // Confirm order execution
-        confirmOrder: () => authApi('/confirm-order/', {
+        confirmOrder: (data) => authApi('/confirm-order/', {
             method: 'POST',
+            body: data,
         }),
         /**
          * Get information about energy pricing

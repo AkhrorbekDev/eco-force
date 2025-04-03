@@ -6,37 +6,37 @@
     <table>
       <thead>
         <tr>
-          <th>Заказ</th>
-          <th>Дата</th>
-          <th>Адрес</th>
-          <th>Энергия</th>
-          <th>Срок</th>
-          <th>Статус</th>
-          <th>Стоимость</th>
+          <th>{{ $t('Заказ') }}</th>
+          <th>{{ $t('Дата') }}</th>
+          <th>{{ $t('Адрес') }}</th>
+          <th>{{ $t('Энергия') }}</th>
+          <th>{{ $t('Срок') }}</th>
+          <th>{{ $t('Статус') }}</th>
+          <th>{{ $t('Стоимость') }}</th>
         </tr>
       </thead>
       <tbody>
       <template v-if="orders?.length > 0">
         <tr v-for="(order, index) in orders" :key="index">
-          <td data-label="Заказ:">{{ order.order_number }}</td>
-          <td data-label="Дата:">{{ order.date }}</td>
-          <td data-label="Адрес:">{{ order.delegation_address }}</td>
-          <td data-label="Энергия:">{{ order.energy_amount }}</td>
-          <td data-label="Срок:">{{ order.duration }}</td>
-          <td data-label="Статус:">{{ order.status }}</td>
-          <td data-label="Стоимость:">{{ order.required_trx_amount }}</td>
+          <td data-label="{{ $t('Заказ') }}:">{{ order.order_number }}</td>
+          <td data-label="{{ $t('Дата') }}:">{{ order.date }}</td>
+          <td data-label="{{ $t('Адрес') }}:">{{ order.delegation_address }}</td>
+          <td data-label="{{ $t('Энергия') }}:">{{ order.energy_amount }}</td>
+          <td data-label="{{ $t('Срок') }}:">{{ order.duration }}</td>
+          <td data-label="{{ $t('Статус') }}:">{{ order.status }}</td>
+          <td data-label="{{ $t('Стоимость') }}:">{{ order.required_trx_amount }}</td>
         </tr>
       </template>
         <template v-else>
           <tr>
-            <td colspan="7" style="text-align: center">Нет данных</td>
+            <td colspan="7" style="text-align: center">{{ $t('Нет данных') }}</td>
           </tr>
         </template>
       </tbody>
     </table>
 
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
-      Показать еще
+      {{ $t('Показать еще') }}
     </button>
     <Pagination v-if="false" :total-pages="totalPages" v-model:current-page="currentPage" />
 

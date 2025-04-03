@@ -51,9 +51,9 @@
         </b>
       </p>
 
-      <button class="button button_green py-14 w-100 br-8" @click="sellEnergy">
+      <BaseButton class="button button_green py-14 w-100 br-8" @on:click="sellEnergy">
         {{ $t('Отправить') }}
-      </button>
+      </BaseButton>
 
     </div>
 
@@ -77,9 +77,9 @@
         {{ error }}
       </p>
 
-      <button class="button button_green py-14 w-100 br-8" @click="buyEnergy">
+      <BaseButton class="button button_green py-14 w-100 br-8" @on:click="buyEnergy">
         {{ $t('Отправить') }}
-      </button>
+      </BaseButton>
 
     </div>
 
@@ -94,9 +94,11 @@ import {createUserService, createEnergyService} from "@/services";
 import {useUserGlobal} from "@/store/userGlobal.js";
 import {useEnergyGlobal} from "@/store/energyGlobal.js";
 import {useTrxGlobal} from "@/store/trxGlobal.js";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
 
 export default {
   components: {
+    BaseButton,
     ModalWindow,
     EnergyCounter,
   },
@@ -133,27 +135,32 @@ export default {
   },
   methods: {
 
-    buyEnergy() {
+    buyEnergy(e) {
       if (!this.promocode) {
         this.error = this.$t('Введите промокод')
       } else {
+        e.loading.start()
         createUserService().usePromoCode({code: this.promocode}).then((response) => {
           this.$emit('on:success', response)
         }).catch((error) => {
           this.error = error.data.detail || error.message
+        }).finally(() => {
+          e.loading.stop()
         });
       }
     },
-    sellEnergy() {
+    sellEnergy(e) {
       if (this.sellEnergyAmount <= 0) {
         this.error = this.$t('Введите количество энергии')
         return
       }
-
+      e.loading.start()
       createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
         this.$emit('on:success', response)
       }).catch((error) => {
         this.error = error.data.detail || error.message
+      }).finally(() => {
+        e.loading.stop()
       });
     },
     openModal() {

@@ -8,27 +8,27 @@
       </span>
 
       <div class="page-order__title">
-        Заказ № HFSWX56
+        {{ $t('Заказ № HFSWX56') }}
       </div>
 
       <div class="page-order__info">
-        Покупка энергии: {{ energy }}
+        {{ $t('Покупка энергии:') }} {{ energy }}
       </div>
 
-      <img class="page-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" alt="QR Code Order">
+      <img class="page-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
 
       <AddressTron2 customClass="_big" />
 
       <CopyPrice />
 
       <div class="page-order__status">
-        Статус: {{ status }}
+        {{ $t('Статус:') }} {{ status }}
       </div>
 
       <div class="page-order__block">
-        <img class="page-order__img-warning" src="/images/warning.png" width="24" height="24" loading="lazy" alt="Warning">
+        <img class="page-order__img-warning" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
         <p>
-          Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.
+          {{ $t('Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.') }}
         </p>
       </div>
 

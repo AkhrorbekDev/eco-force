@@ -2,7 +2,7 @@
   <section class="section">
     <div class="container">
       <h3 class="h3">
-        Посмотрите видео о возможностях EcoForce
+        {{ $t('Посмотрите видео о возможностях EcoForce') }}
       </h3>
 
       <div class="video-wrapper" :class="{ 'video-playing': isVideoPlaying }">
@@ -11,14 +11,14 @@
           src="/images/video-poster.png" 
           width="792" 
           height="444" 
-          alt="Poster"
+          :alt="$t('Poster')"
           @click="playVideo"
           v-if="!isVideoPlaying"
         >
         <video controls ref="videoElement">
           <source src="/images/sample-5s.mp4">
-          Тег video не поддерживается вашим браузером. 
-          <a href="https://1drv.ms/u/s!AuCV_lt33VoHiad7qrHRE1ZDCDMHDA?e=kEilU7">Скачайте видео</a>.
+          {{ $t('Тег video не поддерживается вашим браузером.') }}
+          <a href="https://1drv.ms/u/s!AuCV_lt33VoHiad7qrHRE1ZDCDMHDA?e=kEilU7">{{ $t('Скачайте видео') }}</a>.
         </video>
       </div>
 
