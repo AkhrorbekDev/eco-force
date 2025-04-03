@@ -92,7 +92,7 @@
         </div>
       </div>
 
-      <BaseButton class="button button_green py-14 w-100 br-8" @click="confirmWithdrawal">
+      <BaseButton class="button button_green py-14 w-100 br-8" @on:click="confirmWithdrawal">
         {{ $t('Вывести') }}
       </BaseButton>
 
@@ -210,7 +210,7 @@ export default {
       e.loading.start()
       createWalletService().withdrawFunds({amount: this.exitAmount, wallet_address: this.address})
           .then((response) => {
-            this.request_id = response.request_id;
+            this.request_id = response.withdrawal_request_id;
             this.closeModal()
             this.openModal3();
             this.toast.success(response.message)
@@ -248,7 +248,6 @@ export default {
     resendCode(e) {
       e.loading.start()
       createWalletService().resendWithdrawalCode(this.request_id).then((response) => {
-        this.request_id = response.request_id;
         this.toast.success(response.message)
       }).catch(err => {
         this.toast.error(err.message || this.$t('errorOccurred'));

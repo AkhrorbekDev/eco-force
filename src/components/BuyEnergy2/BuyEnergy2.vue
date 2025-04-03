@@ -396,6 +396,7 @@ export default {
     },
     createOrderToAuthorizedUser(e) {
       e.loading.start()
+      console.log(this.useUserEnergy)
       createEnergyService().createOrder({
         delegation_address: this.address,
         energy_amount: this.amount,
