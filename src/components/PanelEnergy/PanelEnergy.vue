@@ -95,6 +95,7 @@ import {useUserGlobal} from "@/store/userGlobal.js";
 import {useEnergyGlobal} from "@/store/energyGlobal.js";
 import {useTrxGlobal} from "@/store/trxGlobal.js";
 import BaseButton from "@/components/BaseButton/BaseButton.vue";
+import {useToast} from "vue-toastification";
 
 export default {
   components: {
@@ -107,8 +108,9 @@ export default {
     const userStore = useUserGlobal()
     const useEnergyStore = useEnergyGlobal()
     const useTrxStore = useTrxGlobal()
-
+    const toast = useToast()
     return {
+      toast,
       userStore,
       useEnergyStore,
       useTrxStore
@@ -140,7 +142,7 @@ export default {
         this.error = this.$t('Введите промокод')
       } else {
         e.loading.start()
-        createUserService().usePromoCode({code: this.promocode}).then((response) => {
+        createUserService().usePromoCode(this.promocode).then((response) => {
           this.$emit('on:success', response)
         }).catch((error) => {
           this.error = error.data.detail || error.message
@@ -157,6 +159,7 @@ export default {
       e.loading.start()
       createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
         this.$emit('on:success', response)
+        this.toast.success(response.message || this.$t('successProcess'))
       }).catch((error) => {
         this.error = error.data.detail || error.message
       }).finally(() => {

@@ -227,6 +227,13 @@ export default {
     },
     stake(e) {
       if (!this.agree) {
+        this.toast.error(this.$t('Вы должны согласиться с условиями и правилами стейкинга'));
+        e.loading.stop()
+        return;
+      }
+      if (this.amountCurrency <= 0) {
+        this.toast.error(this.$t('Введите количество для стейкинга'));
+        e.loading.stop()
         return;
       }
       e.loading.start()

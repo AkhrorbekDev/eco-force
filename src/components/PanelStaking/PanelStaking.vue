@@ -270,9 +270,15 @@ export default {
     },
     stake(e) {
       if (!this.agree) {
+        this.toast.error(this.$t('Вы должны согласиться с условиями стейкинга'));
+        e.loading.stop()
         return;
       }
-      console.log(e)
+      if (this.amountCurrency <= 0) {
+        this.toast.error(this.$t('Введите количество для стейкинга'));
+        e.loading.stop()
+        return;
+      }
       createStakingService().stakeAmount(this.amountCurrency)
           .then((response) => {
             this.userStore.initUserGlobal();
@@ -294,6 +300,8 @@ export default {
     unstake(e) {
 
       if (!this.unstakeAgree) {
+        this.toast.error(this.$t('Вы должны согласиться с условиями стейкинга'));
+        e.loading.stop()
         return;
       }
 
@@ -311,6 +319,8 @@ export default {
             .finally(() => {
               e.loading.stop()
             })
+      } else {
+        this.toast.error(this.$t('Введите количеству для вывода'))
       }
     },
     openModal3() {
