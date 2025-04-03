@@ -1,16 +1,16 @@
 <template>
   <div class="language-dropdown" ref="dropdown">
     <button class="language-dropdown__button"  @click="handleButtonClick">
-      {{ languageAbbreviations[selectedLanguage] }}
+      {{ languageAbbreviations[selectedLanguage.name] }}
     </button>
     <ul class="language-dropdown__list" v-if="isOpen">
       <li
         v-for="language in languages"
         :key="language"
         @click="handleLanguageClick(language)"
-        :class="{ 'language-dropdown__item': true, '_active': language === selectedLanguage }"
+        :class="{ 'language-dropdown__item': true, '_active': language.code === selectedLanguage.code }"
       >
-        {{ $t(language) }}
+        {{ language.name }}
       </li>
     </ul>
   </div>
@@ -20,6 +20,8 @@
 
 <script>
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
+import {useI18n} from "vue-i18n";
+import {Language} from "@/i18n/index.js";
 
 export default {
   components: {
@@ -28,14 +30,30 @@ export default {
   data() {
     return {
       isOpen: false,
-      selectedLanguage: 'Russia',
-      languages: ['Russia', 'English'],
+      selectedLanguage: {
+        name: 'Russia',
+        code: Language.RU
+      },
+      languages: [{
+        name: 'Russia',
+        code: Language.RU
+      }, {
+        name: 'English',
+        code: Language.EN
+      }],
       languageAbbreviations: {
         Russia: 'Ru',
         English: 'En',
       },
       isModalVisible: false
     };
+  },
+  setup () {
+    const {locale} = useI18n({useScope: 'global'});
+
+    return {
+      locale
+    }
   },
   methods: {
     toggleDropdown() {
@@ -48,12 +66,14 @@ export default {
     },
     selectLanguage(language) {
       this.selectedLanguage = language;
+      this.locale = language.code;
       this.toggleDropdown()
     },
     handleButtonClick() {
       this.toggleDropdown();
     },
     handleLanguageClick(language) {
+      console.log(this)
       this.selectLanguage(language);
     },
     openModal() {
