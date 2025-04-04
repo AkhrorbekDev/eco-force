@@ -15,10 +15,10 @@
       <tbody>
       <template v-if="actions?.length > 0">
         <tr v-for="(order, index) in actions" :key="index">
-          <td data-label="{{ $t('Дата') }}:">{{ order.date }}</td>
-          <td data-label="{{ $t('Действие') }}:">{{ order.action_type }}</td>
-          <td data-label="{{ $t('Сумма') }}:">{{ order.energy_amount }}</td>
-          <td data-label="{{ $t('Статус') }}:">{{ order.status }}</td>
+          <td :data-label="$t('Дата')">{{ order.created_at }}</td>
+          <td :data-label="$t('Действие')">{{ order.action_type }}</td>
+          <td :data-label="$t('Сумма')">{{ order.amount }}</td>
+          <td :data-label="$t('Статус')">{{ order.status }}</td>
         </tr>
       </template>
       <template v-else>

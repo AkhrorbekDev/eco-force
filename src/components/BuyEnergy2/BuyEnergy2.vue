@@ -115,7 +115,7 @@
             </p>
           </div>
 
-          <a href="/order" target="_blank" class="button button_order button_biege py-16 gap-12">
+          <a :href="`/order?order_id=${orderInfo.orderId}`" target="_blank" class="button button_order button_biege py-16 gap-12">
             {{ $t('Открыть в отдельной вкладке') }}
             <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.5 1L1.5 14" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"

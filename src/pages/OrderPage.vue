@@ -40,6 +40,8 @@
 <script>
 import AddressTron2 from '@/components/AddressTron2/AddressTron2.vue';
 import CopyPrice from '@/components/CopyPrice/CopyPrice.vue';
+import {createUserService} from "@/services/index.js";
+import publicServices from "@/services/publicServices.js";
 export default {
   name: 'OrderPage',
   components: {
@@ -52,6 +54,18 @@ export default {
       status: 'Оплачено',
     }
   },
+  mounted() {
+    if (this.$route.query.order_id) {
+      publicServices.order.getOrderInfo(this.$route.query.order_id)
+        .then((response) => {
+          this.energy = response.data.energy;
+          this.status = response.data.status;
+        })
+        .catch((error) => {
+          console.error('Error fetching order info:', error);
+        });
+    }
+  }
 }
 </script>
 
