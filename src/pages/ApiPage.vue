@@ -31,9 +31,9 @@
               </span>
               <input :value="apiKey" readonly class="input" type="text">
             </label>
-            <button @click="generateApiKey" class="button button_green br-8 py-14">
+            <BaseButton @on:click="generateApiKey" class="button button_green br-8 py-14">
               {{ $t('Сгенерировать') }}
-            </button>
+            </BaseButton>
           </div>
 
           <div class="d-grid gap-12">
@@ -68,10 +68,12 @@ import {createUserService} from "@/services/index.js";
 import {useUserGlobal} from "@/store/userGlobal.js";
 import {computed} from "vue";
 import {useToast} from "vue-toastification";
+import BaseButton from "@/components/BaseButton/BaseButton.vue";
 
 export default {
   name: 'ApiPage',
   components: {
+    BaseButton,
     PanelBalance,
     PanelStaking,
     PanelEnergy,
@@ -96,7 +98,7 @@ export default {
       createUserService().generateApiKey().then(res => {
         this.apiKey = res.api_key
       }).catch(err => {
-        this.toast.error(err.message || this.$t('errorOccurred'));
+        this.toast.error(err.data.error || this.$t('errorOccurred'));
       }).finally(() => {
         e.loading.stop()
       });

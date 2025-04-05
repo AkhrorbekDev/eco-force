@@ -195,7 +195,7 @@ export default {
     this.onResizeBtnClose()
     window.addEventListener('resize', this.onResizeBtnClose);
   },
-  beforeUnmount() {
+  unmounted() {
     window.removeEventListener('resize', this.onResizeBtnClose);
     document.removeEventListener('click', this.clickOutside);
   },
