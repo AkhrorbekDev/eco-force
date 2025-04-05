@@ -18,13 +18,13 @@
       <tbody>
       <template v-if="orders?.length > 0">
         <tr v-for="(order, index) in orders" :key="index">
-          <td data-label="{{ $t('Заказ') }}:">{{ order.order_number }}</td>
-          <td data-label="{{ $t('Дата') }}:">{{ order.date }}</td>
-          <td data-label="{{ $t('Адрес') }}:">{{ order.delegation_address }}</td>
-          <td data-label="{{ $t('Энергия') }}:">{{ order.energy_amount }}</td>
-          <td data-label="{{ $t('Срок') }}:">{{ order.duration }}</td>
-          <td data-label="{{ $t('Статус') }}:">{{ order.status }}</td>
-          <td data-label="{{ $t('Стоимость') }}:">{{ order.required_trx_amount }}</td>
+          <td :data-label="$t('Заказ')">: {{ order.order_number }}</td>
+          <td :data-label="$t('Дата')">: {{ order.date }}</td>
+          <td :data-label="$t('Адрес')">: {{ order.delegation_address }}</td>
+          <td :data-label="$t('Энергия')">: {{ order.energy_amount }}</td>
+          <td :data-label="$t('Срок')">: {{ order.duration }}</td>
+          <td :data-label="$t('Статус')">: {{ order.status }}</td>
+          <td :data-label="$t('Стоимость')">: {{ order.required_trx_amount }}</td>
         </tr>
       </template>
         <template v-else>

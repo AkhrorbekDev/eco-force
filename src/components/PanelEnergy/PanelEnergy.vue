@@ -19,12 +19,12 @@
       </span>
     </div>
 
-    <div class="panel__buttons" :class="{ '_active': isButtonsActive }">
+    <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
       <button @click="openModal" class="button button_bordered">{{ $t('Продать') }}</button>
       <button @click="openModal2" class="button button_green">{{ $t('Получить') }}</button>
     </div>
 
-    <div class="panel__dots d-desk-none" @click="toggleButtonsClass">
+    <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
       <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
     </div>
 
@@ -133,10 +133,30 @@ export default {
     }
   },
   mounted() {
-
+    this.onResizeBtnClose()
+    window.addEventListener('resize', this.onResizeBtnClose);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.onResizeBtnClose);
+    document.removeEventListener('click', this.clickOutside);
   },
   methods: {
-
+    onResizeBtnClose() {
+      document.removeEventListener('click', this.clickOutside);
+      if (window.innerWidth < 768) {
+        document.addEventListener('click', this.clickOutside);
+      } else {
+        document.removeEventListener('click', this.clickOutside);
+      }
+    },
+    clickOutside (e) {
+      if (this.$refs.btnDots.contains(e.target)) {
+        return
+      }
+      if ((this.isButtonsActive && !this.$refs.controlBtns.contains(e.target)) ) {
+        this.isButtonsActive = false
+      }
+    },
     buyEnergy(e) {
       if (!this.promocode) {
         this.error = this.$t('Введите промокод')
@@ -145,7 +165,7 @@ export default {
         createUserService().usePromoCode(this.promocode).then((response) => {
           this.$emit('on:success', response)
         }).catch((error) => {
-          this.error = error.data.detail || error.message
+          this.error = error.data.error || error.message
         }).finally(() => {
           e.loading.stop()
         });
@@ -160,6 +180,7 @@ export default {
       createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
         this.$emit('on:success', response)
         this.toast.success(response.message || this.$t('successProcess'))
+        this.closeModal()
       }).catch((error) => {
         this.error = error.data.detail || error.message
       }).finally(() => {
@@ -168,9 +189,11 @@ export default {
     },
     openModal() {
       this.isModalVisible = true;
+      this.isButtonsActive = false
     },
     closeModal() {
       this.isModalVisible = false;
+      this.isButtonsActive = false
     },
     openModal2() {
       this.isModalVisible2 = true;

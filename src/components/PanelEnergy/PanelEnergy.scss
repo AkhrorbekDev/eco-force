@@ -48,7 +48,7 @@
 
   &__buttons {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 
@@ -62,11 +62,16 @@
     &__buttons {
       position: absolute;
       top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
       grid-template-columns: 1fr;
       gap: 4px;
       display: none;
+      z-index: 10;
+      right: 20px;
+      padding: 16px;
+      background: var(--color4);
+      border-radius: 6px;
+      box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+
       &._active {
         display: grid;
       }

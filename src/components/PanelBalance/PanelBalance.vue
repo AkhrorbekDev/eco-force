@@ -13,12 +13,12 @@
       </span>
     </div>
 
-    <div class="panel__buttons" :class="{ '_active': isButtonsActive }">
+    <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
       <button @click="openModal" class="button button_bordered">{{ $t('Вывести') }}</button>
       <button @click="openModal2" class="button button_green">{{ $t('Пополнить') }}</button>
     </div>
 
-    <div class="panel__dots d-desk-none" @click="toggleButtonsClass">
+    <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
       <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
     </div>
 
@@ -190,8 +190,32 @@ export default {
       }
     },
   },
-
+  mounted() {
+    this.getPaymentEndpoint()
+    this.onResizeBtnClose()
+    window.addEventListener('resize', this.onResizeBtnClose);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.onResizeBtnClose);
+    document.removeEventListener('click', this.clickOutside);
+  },
   methods: {
+    onResizeBtnClose() {
+      document.removeEventListener('click', this.clickOutside);
+      if (window.innerWidth < 768) {
+        document.addEventListener('click', this.clickOutside);
+      } else {
+        document.removeEventListener('click', this.clickOutside);
+      }
+    },
+    clickOutside (e) {
+      if (this.$refs.btnDots.contains(e.target)) {
+        return
+      }
+      if (this.isButtonsActive && !this.$refs.controlBtns.contains(e.target)) {
+        this.isButtonsActive = false
+      }
+    },
     getPaymentEndpoint() {
       createWalletService().requestAddress().then((response) => {
         this.paymentEndpoint = response
@@ -216,7 +240,8 @@ export default {
             this.toast.success(response.message)
           })
           .catch((error) => {
-            this.toast.error(error.message || this.$t('errorOccurred'));
+            console.log(error)
+            this.toast.error(error.data.error || this.$t('errorOccurred'));
           })
           .finally(() => {
             e.loading.stop()
@@ -238,7 +263,7 @@ export default {
         this.toast.success(response.message)
         this.closeModal3();
       }).catch((error) => {
-        this.toast.error(error.message || this.$t('errorOccurred'));
+        this.toast.error(error.data.error || this.$t('errorOccurred'));
       })
           .finally(() => {
             e.loading.stop()
@@ -250,16 +275,18 @@ export default {
       createWalletService().resendWithdrawalCode(this.request_id).then((response) => {
         this.toast.success(response.message)
       }).catch(err => {
-        this.toast.error(err.message || this.$t('errorOccurred'));
+        this.toast.error(err.data.error || this.$t('errorOccurred'));
       }).finally(() => {
         e.loading.stop()
       });
     },
     openModal() {
       this.isModalVisible = true;
+      this.isButtonsActive = false
     },
     openModal2() {
       this.isModalVisible2 = true;
+      this.isButtonsActive = false
     },
     openModal3() {
       this.isModalVisible3 = true;
