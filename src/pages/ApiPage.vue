@@ -97,6 +97,7 @@ export default {
       e.loading.start()
       createUserService().generateApiKey().then(res => {
         this.apiKey = res.api_key
+        this.toast.success(res.message);
       }).catch(err => {
         this.toast.error(err.data.error || this.$t('errorOccurred'));
       }).finally(() => {
