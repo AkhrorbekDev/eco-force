@@ -35,7 +35,6 @@ export default {
           await navigator.clipboard.writeText(props.cost);
           showPopupMessage(t('Скопировано!'));
         } catch (err) {
-          console.error(t('Ошибка при копировании:'), err);
           showPopupMessage(t('Не удалось скопировать.'));
         }
       } else {

@@ -17,7 +17,7 @@
       <div class="container">
 
           <h1 class="section-calc__title">
-            {{ $t('Отправляйте USDT в сети Tron в 2 раза дешевле!') }}
+            {{ $t('home_heading') }}
           </h1>
 
           <div class="section-calc__row">

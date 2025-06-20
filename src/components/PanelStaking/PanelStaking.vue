@@ -97,7 +97,7 @@
       </div>
 
       <div class="popup-rule__body">
-        <div>
+        <div v-for="(item,i) in $rm('terms_and_conditions')" :key="i">
           <b>
             {{ $t('1. Общие положения') }}
           </b>

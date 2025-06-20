@@ -6,7 +6,7 @@
         <span class="panel__icon">
           <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка пользователя')">
         </span>
-        {{ $t('Баланс') }} {{ $t('TRX') }}:
+        {{ $t('balance') }} {{ $t('TRX') }}:
       </div>
       <span class="panel__amount">
         {{ userStore.user.trx_balance || 0 }}

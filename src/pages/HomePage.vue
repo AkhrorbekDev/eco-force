@@ -15,7 +15,7 @@
       <div class="container">
 
         <h1 class="section-calc__title">
-          {{ $t('Отправляйте USDT в сети Tron в 2 раза дешевле!') }}
+          {{ $t('send_usdt_on_the_tron_network_for_2_times_cheaper') }}
         </h1>
 
         <div class="section-calc__row">
@@ -29,7 +29,7 @@
     <section v-if="userStore.loggedIn" class="section-history">
       <div class="container">
         <h2 class="section-history__title">
-          {{ $t('История операций') }}
+          {{ $t('history') }}
         </h2>
 
         <TableOperation/>

@@ -4,11 +4,11 @@ import app_ru from './locales/app_ru.json'
 import {createI18n} from "vue-i18n";
 
 export enum Language {
-    EN = 'en',
-    RU = 'ru',
+    EN = 'en-US',
+    RU = 'ru-RU',
 }
 
-const defaultLanguage = Language.RU
+const defaultLanguage = Language.EN
 
 const i18n = createI18n({
     locale: defaultLanguage,

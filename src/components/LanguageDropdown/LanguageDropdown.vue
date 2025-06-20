@@ -1,21 +1,21 @@
 <template>
   <div class="language-dropdown" ref="dropdown">
-    <button class="language-dropdown__button"  @click="handleButtonClick">
+    <button class="language-dropdown__button" @click="handleButtonClick">
       {{ languageAbbreviations[selectedLanguage.name] }}
     </button>
     <ul class="language-dropdown__list" v-if="isOpen">
       <li
-        v-for="language in languages"
-        :key="language"
-        @click="handleLanguageClick(language)"
-        :class="{ 'language-dropdown__item': true, '_active': language.code === selectedLanguage.code }"
+          v-for="language in languages"
+          :key="language"
+          @click="handleLanguageClick(language)"
+          :class="{ 'language-dropdown__item': true, '_active': language.code === selectedLanguage.code }"
       >
         {{ language.name }}
       </li>
     </ul>
   </div>
 
-  <ModalWindow :isVisible="isModalVisible" :disableContent="true" />
+  <ModalWindow :isVisible="isModalVisible" :disableContent="true"/>
 </template>
 
 <script>
@@ -48,7 +48,7 @@ export default {
       isModalVisible: false
     };
   },
-  setup () {
+  setup() {
     const {locale} = useI18n({useScope: 'global'});
 
     return {
@@ -116,16 +116,17 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './language-dropdown';
+@import './language-dropdown';
 
-  .modal-open_language {
-    .header {
-      position: relative;
-      z-index: calc( var(--z-index-modal) + 1);
-    }
-    .logout-dropdown {
-      pointer-events: none;
-    }
+.modal-open_language {
+  .header {
+    position: relative;
+    z-index: calc(var(--z-index-modal) + 1);
   }
+
+  .logout-dropdown {
+    pointer-events: none;
+  }
+}
 
 </style>

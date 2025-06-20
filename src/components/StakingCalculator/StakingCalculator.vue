@@ -56,43 +56,47 @@
         <div class="popup-rule">
 
           <div class="popup-rule__header">
-            {{ $t('Условия и правила стейкинга') }}
+            {{ $t('staking_terms_and_conditions') }}
           </div>
 
           <div class="popup-rule__body">
             <div>
               <b>
-                {{ $t('1. Общие положения') }}
+                1.{{ $t('terms_and_conditions.general_provisions.title') }}
               </b>
               <p>
-                {{
-                  $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.')
+                1.1.{{
+                  $t('terms_and_conditions.general_provisions.text1')
                 }}
               </p>
               <p>
-                {{
-                  $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.')
+                1.2.{{
+                  $t('terms_and_conditions.general_provisions.text2')
                 }}
               </p>
               <p>
-                {{
-                  $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.')
+                1.3.{{
+                  $t('terms_and_conditions.general_provisions.text3')
                 }}
               </p>
             </div>
             <div>
               <b>
-                {{ $t('2. Порядок стейкинга') }}
+                1.{{ $t('terms_and_conditions.staking_procedure.title') }}
               </b>
               <p>
-                {{ $t('2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..') }}
+                1.1.{{
+                  $t('terms_and_conditions.staking_procedure.text1')
+                }}
               </p>
               <p>
-                {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
+                1.2.{{
+                  $t('terms_and_conditions.staking_procedure.text2')
+                }}
               </p>
               <p>
-                {{
-                  $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.')
+                1.3.{{
+                  $t('terms_and_conditions.staking_procedure.text3')
                 }}
               </p>
             </div>
@@ -246,8 +250,8 @@ export default {
                 this.toast.error(error.message || this.$t('errorOccurred'));
               }
           ).finally(() => {
-            e.loading.stop()
-          });
+        e.loading.stop()
+      });
 
     },
     closeModal2() {
