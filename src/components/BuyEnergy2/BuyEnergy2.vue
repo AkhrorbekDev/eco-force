@@ -2,7 +2,7 @@
   <div class="buy-energy">
 
     <div class="buy-energy__header">
-      <div class="buy-energy__title">{{ $t('Купить энергию TRON') }}</div>
+      <div class="buy-energy__title">{{ $t('buy_tron_energy') }}</div>
       <span class="buy-energy__question">
           ?
       </span>
@@ -17,7 +17,7 @@
           <input v-model="activateAddress" class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            {{ $t('Добавить активацию за 1 TRX') }}
+            {{ $t('add_activation_for_1_trx') }}
           </span>
         </label>
 
@@ -29,7 +29,7 @@
         <input v-model="activateAddress" class="check__input" type="checkbox" checked>
         <i class="check__square"></i>
         <span class="check__text font-14">
-          {{ $t('Добавить активацию за 1 TRX') }}
+          {{ $t('add_activation_for_1_trx') }}
         </span>
       </label>
 
@@ -42,7 +42,7 @@
       </div>
 
       <div class="buy-energy__cost">
-        <span class="font-14 c-gray">{{ $t('Обычная стоимость') }}:</span>
+        <span class="font-14 c-gray">{{ $t('regular_price') }}:</span>
         <span class="font-14 line-through">{{ defaultTrx }} {{ $t('TRX') }}</span>
       </div>
 
@@ -52,9 +52,9 @@
           <input v-model="useUserEnergy" class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            {{ $t('Использовать свою энергию') }}
+            {{ $t('use_your_energy') }}
             <span class="check__text-gray d-mob-block">
-              ({{ $t('будет использовано') }} {{ userEnergyToBuy }})
+              ({{ $t('will_be_used') }} {{ userEnergyToBuy }})
             </span>
           </span>
         </label>
@@ -63,22 +63,22 @@
         <div class="buy-energy__price row jc-sb">
 
           <div class="row gap-10">
-            <span>{{ $t('Стоимость с EcoForce') }}</span>
+            <span>{{ $t('cost_with_ecoforce') }}</span>
             <span class="weight-700">{{ totalTrx }} {{ $t('TRX') }}</span>
           </div>
 
-          <span class="font-14">{{ $t('Экономия') }}: {{ ecoTrx }}% ~ {{ trxPrice }}$</span>
+          <span class="font-14">{{ $t('savings') }}: {{ ecoTrx }}% ~ {{ trxPrice }}$</span>
 
         </div>
 
       </div>
 
       <BaseButton class="button button_green w-100 py-8" @on:click="openModal">
-        {{ $t('Купить энергию') }}
+        {{ $t('buy_energy') }}
       </BaseButton>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none">
-        {{ $t('Инструкция') }}
+        {{ $t('instruction') }}
       </button>
 
       <ModalWindow overlayClass="overflow" :isVisible="isModalVisible" @close="closeModal">
@@ -86,37 +86,36 @@
         <div class="popup-order">
 
           <div class="popup-order__title">
-            {{ $t('Заказ №') }} {{ orderInfo.order_number }}
+            {{ $t('order_№') }} {{ orderInfo.order_number }}
           </div>
 
           <div class="popup-order__info">
-            {{ $t('Покупка энергии') }}: {{ amount }}
+            {{ $t('energy_purchase') }}: {{ amount }}
           </div>
 
           <div v-if="orderInfo.qr_code_deposit_address" class="popup-order__img"
                v-html="orderInfo.qr_code_deposit_address"
                style="width: 162px; height: 160px" width="162"
-               height="160" loading="lazy"
-               :alt="$t('QR код баланса')"/>
+               height="160" loading="lazy"/>
 
           <AddressTron2 v-model="orderInfo.deposit_trx_address" read-only customClass="_big"/>
 
           <CopyPrice :cost="orderInfo.required_trx_amount"/>
 
           <div class="popup-order__status">
-            {{ $t('Статус') }}: {{ orderInfo.status }}
+            {{ $t('status') }}: {{ orderInfo.status }}
           </div>
 
           <div class="popup-order__block">
             <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy"
                  :alt="$t('Предупреждение')">
             <p>
-              {{ $t('Переводите именно эту сумму') }}
+              {{ $t('transfer_amount_hint') }}
             </p>
           </div>
 
           <a :href="`/order?order_id=${orderInfo.orderId}`" target="_blank" class="button button_order button_biege py-16 gap-12">
-            {{ $t('Открыть в отдельной вкладке') }}
+            {{ $t('open_in_a_new_tab') }}
             <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.5 1L1.5 14" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
                     stroke-linejoin="round"/>
@@ -131,11 +130,11 @@
       <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
         <div class="popup">
           <div class="popup__header">
-            {{ $t('Заказ №') }} {{ orderInfo.order_number }}
+            {{ $t('order_№') }} {{ orderInfo.order_number }}
           </div>
           <div class="row jc-sb">
             <p>
-              {{ $t('Покупка энергии') }}:
+              {{ $t('energy_purchase') }}:
             </p>
             <b class="font-20">
               {{ orderInfo.energy_amount }}
@@ -143,7 +142,7 @@
           </div>
           <div class="row jc-sb">
             <p>
-              {{ $t('Будет использовано своей энергии') }}:
+              {{ $t('your_energy_will_be_used') }}:
             </p>
             <b class="font-20">
               {{ orderInfo.use_energy_user }}
@@ -151,15 +150,15 @@
           </div>
           <div class="row jc-sb">
             <p>
-              {{ $t('Стоимость') }} <b>{{ orderInfo.required_trx_amount }} TRX</b>
+              {{ $t('cost') }} <b>{{ orderInfo.required_trx_amount }} TRX</b>
             </p>
             <b @click="showAddBalanceModal" v-if="balanceTrxDiff > 0" class="text-error">
-              {{ $t('Не хватает') }}: {{ balanceTrxDiff }} TRX
+              {{ $t('not_enough') }}: {{ balanceTrxDiff }} TRX
             </b>
           </div>
           <BaseButton @on:click="confirmOrder"
                       class="button button_green py-14 w-100 br-8"
-          > {{ $t('Списать с баланса') }}
+          > {{ $t('deduct_from_balance') }}
           </BaseButton>
         </div>
       </ModalWindow>
@@ -261,7 +260,6 @@ export default {
       useUserEnergy: false,
       timeout: false,
       energy: '130 000',
-      status: 'Ожидание оплаты',
       address: '',
       requestSending: false,
       orderInfo: {
@@ -418,7 +416,7 @@ export default {
           })
         }, 3000);
       }).catch(err => {
-        this.toast.error(err.message || this.$t('errorOccurred'));
+        this.toast.error(err.message || this.$t('an_error_occurred'));
 
       }).finally(() => {
         e.loading.stop()
@@ -449,18 +447,18 @@ export default {
           })
         }, 3000);
       }).catch(err => {
-        this.toast.error(err.message || this.$t('errorOccurred'));
+        this.toast.error(err.message || this.$t('an_error_occurred'));
       }).finally(() => {
         e.loading.stop()
       })
     },
     validate() {
       if (this.address === '') {
-        this.toast.error(this.$t('Введите адрес кошелька'));
+        this.toast.error(this.$t('enter_wallet_address'));
         return false;
       }
       if (this.amount === 0) {
-        this.toast.error(this.$t('Введите количество энергии'));
+        this.toast.error(this.$t('enter_energy_amount'));
         return false;
       }
       return true;
@@ -487,7 +485,7 @@ export default {
         this.toast.success(res.message);
         this.userStore.initUserGlobal();
       }).catch(err => {
-        this.toast.error(err.message || this.$t('errorOccurred'));
+        this.toast.error(err.message || this.$t('an_error_occurred'));
       }).finally(() => {
         e.loading.stop()
       })

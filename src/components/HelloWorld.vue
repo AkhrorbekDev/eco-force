@@ -10,7 +10,7 @@ const count = ref(0)
   <h1>{{ $t('count is') }} {{ count }}</h1>
 
   <div class="card">
-    <button type="button" @click="count++">{{ $t('Edit') }} {{ $t('components/HelloWorld.vue') }} {{ $t('to test HMR') }}</button>
+    <button type="button" @click="count++">{{ $t('edit') }} {{ $t('components/HelloWorld.vue') }} {{ $t('to test HMR') }}</button>
     <p>
       {{ $t('Check out') }}
       <a href="https://github.com/vuejs/create-vue" target="_blank">{{ $t('create-vue') }}</a>,

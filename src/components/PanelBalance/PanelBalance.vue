@@ -14,8 +14,8 @@
     </div>
 
     <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('Вывести') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('Пополнить') }}</button>
+      <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
+      <button @click="openModal2" class="button button_green">{{ $t('deposit') }}</button>
     </div>
 
     <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
@@ -29,11 +29,11 @@
     <div class="popup-take">
 
       <div class="popup-take__header">
-        {{ $t('Вывод средств') }}
+        {{ $t('withdrawal') }}
       </div>
 
       <div class="address-tron d-grid gap-8 mb-16">
-        <span>{{ $t('Адрес') }} <b>{{ $t('TRX') }}</b></span>
+        <span>{{ $t('address') }} <b>{{ $t('TRX') }}</b></span>
         <div :class="{
           invalid: !address && sendStart,
         }" class="address-tron__value">
@@ -44,7 +44,7 @@
       <AmountTrx :total-amount="userStore.user.total_staked_trx || 0" v-model:amount="exitAmount"/>
 
       <BaseButton @on:click="sendWithDrawal" class="button button_green py-14 w-100 br-8 mt-24">
-        {{ $t('Вывести') }}
+        {{ $t('withdraw') }}
       </BaseButton>
 
     </div>
@@ -61,7 +61,7 @@
 
       <div class="d-grid gap-8 mb-16">
         <span class="c-gray2">
-          {{ $t('Адрес вывода') }}
+          {{ $t('withdrawal_address') }}
         </span>
         <p>
           {{ address }}
@@ -69,7 +69,7 @@
       </div>
 
       <p class="mb-32">
-        {{ $t('Количество') }}
+        {{ $t('amount') }}
         <b>
           {{ $t('TRX') }}: {{ exitAmount }}
         </b>
@@ -77,7 +77,7 @@
 
       <div class="d-grid gap-8 mb-24">
         <p class="mb-32">
-          {{ $t('Код подтверждения из') }}
+          {{ $t('confirmation_code_from') }}
           <b>
             {{ $t('Telegram') }}
           </b>
@@ -87,13 +87,13 @@
             invalid: !confirmationCode && sendStart,
           }" v-model="confirmationCode" type="text" class="input">
           <BaseButton @on:click="resendCode" class="button button_green br-8">
-            {{ $t('Выслать код') }}
+            {{ $t('send_code') }}
           </BaseButton>
         </div>
       </div>
 
       <BaseButton class="button button_green py-14 w-100 br-8" @on:click="confirmWithdrawal">
-        {{ $t('Вывести') }}
+        {{ $t('withdraw') }}
       </BaseButton>
 
     </div>
@@ -104,18 +104,17 @@
   <ModalWindow :isVisible="isModalVisible2" @close="closeModal2">
     <div class="popup-order">
       <div class="popup-order__title">
-        {{ $t('Ваш адрес для пополнения баланса в TRX') }}
+        {{ $t('your_trx_balance_top-up_address') }}
       </div>
       <div v-if="paymentEndpoint.qr_code" class="popup-order__img" v-html="paymentEndpoint.qr_code"
            style="width: 162px; height: 160px" width="162"
-           height="160" loading="lazy"
-           :alt="$t('QR код баланса')"/>
+           height="160" loading="lazy"/>
       <AddressTron2 v-model="paymentEndpoint.address" read-only :hasTitle="false" customClass="_big mb-12"/>
       <b class="mb-24 d-block">
-        {{ $t('Переведите любую сумму') }}
+        {{ $t('transfer_any_amount') }}
       </b>
       <button class="button button_green py-14 w-100 br-8" @click="closeModal2">
-        {{ $t('Закрыть') }}
+        {{ $t('close') }}
       </button>
     </div>
   </ModalWindow>
@@ -221,13 +220,13 @@ export default {
         this.paymentEndpoint = response
         this.address = response.address
       }).catch((error) => {
-        this.toast.error(error.message || this.$t('errorOccurred'));
+        this.toast.error(error.message || this.$t('an_error_occurred'));
       });
     },
     sendWithDrawal(e) {
       this.sendStart = true
       if (!this.address) {
-        this.toast.error(this.$t('Введите адрес кошелька'))
+        this.toast.error(this.$t('enter_wallet_address'))
         return;
       }
       this.sendStart = false
@@ -241,7 +240,7 @@ export default {
           })
           .catch((error) => {
             console.log(error)
-            this.toast.error(error.data.error || this.$t('errorOccurred'));
+            this.toast.error(error.data.error || this.$t('an_error_occurred'));
           })
           .finally(() => {
             e.loading.stop()
@@ -251,7 +250,7 @@ export default {
     confirmWithdrawal(e) {
 
       if (!this.confirmationCode) {
-        this.toast.error(this.$t('Введите код подтверждения'))
+        this.toast.error(this.$t('enter_confirmation_code'))
         return;
       }
 
@@ -263,7 +262,7 @@ export default {
         this.toast.success(response.message)
         this.closeModal3();
       }).catch((error) => {
-        this.toast.error(error.data.error || this.$t('errorOccurred'));
+        this.toast.error(error.data.error || this.$t('an_error_occurred'));
       })
           .finally(() => {
             e.loading.stop()
@@ -275,7 +274,7 @@ export default {
       createWalletService().resendWithdrawalCode(this.request_id).then((response) => {
         this.toast.success(response.message)
       }).catch(err => {
-        this.toast.error(err.data.error || this.$t('errorOccurred'));
+        this.toast.error(err.data.error || this.$t('an_error_occurred'));
       }).finally(() => {
         e.loading.stop()
       });

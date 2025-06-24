@@ -3,12 +3,12 @@
   <section class="section">
     <div class="container">
       <h2 class="h2">
-        {{ $t('Для кого может быть полезен этот сервис') }}
+        {{ $t('who_can_benefit_from_this_service') }}
       </h2>
 
       <div class="items">
         <div v-for="(item, index) in items" :key="index" class="item">
-          <img :src="item.imageUrl" :alt="item.altText" class="item__image" width="94" height="94" loading="lazy" />
+          <img :src="item.imageUrl" :alt="item.altText" class="item__image" width="94" height="94" loading="lazy"/>
           <div class="item__title">
             {{ item.title }}
           </div>
@@ -24,7 +24,6 @@
 </template>
 
 
-
 <script>
 export default {
   data() {
@@ -32,27 +31,27 @@ export default {
       items: [
         {
           imageUrl: '/images/line_icon1.svg',
-          altText: this.$t('Users'),
-          title: this.$t('Пользователи сети Tron'),
-          text: this.$t('Если вы регулярно отправляете USDT или другие токены в сети Tron, сервис поможет значительно снизить расходы на комиссии, делая транзакции более выгодными.'),
+          altText: this.$t('users'),
+          title: this.$t('tron_network_users'),
+          text: this.$t('desc1'),
         },
         {
           imageUrl: '/images/line_icon2.svg',
-          altText: this.$t('Shedule'),
-          title: this.$t('Инвесторы с минимальным капиталом'),
-          text: this.$t('Даже небольшие вложения в стейкинг позволят ежедневно накапливать энергию. Вы сможете использовать её для экономии на транзакциях или получать доход, продавая её обратно.'),
+          altText: this.$t('schedule'),
+          title: this.$t('investors_with_minimal_capital'),
+          text: this.$t('desc2'),
         },
         {
           imageUrl: '/images/line_icon3.svg',
           altText: this.$t('Crypto processing'),
-          title: this.$t('Крипто-процессинговые сервисы (через API)'),
-          text: this.$t('Для сервисов, обрабатывающих большой объём транзакций в сети Tron, использование энергии через наш сервис позволит снизить затраты на комиссии.'),
+          title: this.$t('crypto_processing_services_(via_api)'),
+          text: this.$t('desc3'),
         },
         {
           imageUrl: '/images/line_icon4.svg',
           altText: this.$t('Exchange'),
-          title: this.$t('Обменные пункты криптовалют (через API)'),
-          text: this.$t('Онлайн-обменники могут арендовать энергию для оптимизации издержек.'),
+          title: this.$t('cryptocurrency_exchange_points_(via_api)'),
+          text: this.$t('online_exchangers_can_rent_energy_to_optimize_costs'),
         },
       ]
     };
@@ -66,11 +65,13 @@ export default {
 .section {
   padding: 22px 0 0;
 }
-.items  {
+
+.items {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
+
 .item {
   padding: 32px 40px 40px;
   background: var(--color4);
@@ -99,20 +100,23 @@ export default {
   .section {
     padding: 24px 0;
   }
-  .items  {
+  .items {
     grid-template-columns: 1fr;
     gap: 12px;
   }
   .item {
     padding: 12px;
+
     &__image {
       width: 78px;
       height: 78px;
     }
+
     &__title {
       font-size: 18px;
       line-height: 26px;
     }
+
     &__text {
       font-size: 16px;
       line-height: 24px;

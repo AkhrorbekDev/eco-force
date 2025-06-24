@@ -7,7 +7,7 @@
         <span class="panel__icon">
           <img src="/images/p-icon3.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка молнии')">
         </span>
-        {{ $t('Энергия') }}:
+        {{ $t('energy') }}:
       </div>
       <div class="panel__info">
         <span class="c-gray-light">24h</span>
@@ -20,8 +20,8 @@
     </div>
 
     <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('Продать') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('Получить') }}</button>
+      <button @click="openModal" class="button button_bordered">{{ $t('sell') }}</button>
+      <button @click="openModal2" class="button button_green">{{ $t('get') }}</button>
     </div>
 
     <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
@@ -35,24 +35,24 @@
     <div class="popup-sale">
 
       <div class="popup-sale__header">
-        {{ $t('Продажа энергии') }}
+        {{ $t('energy_sale') }}
       </div>
 
       <EnergyCounter :total="userStore.user.energy || 0" v-model="sellEnergyAmount"/>
 
       <p class="my-12">
-        {{ $t('Курс') }}: {{ useEnergyStore.energyGlobal.buyback_cost }} {{ $t('SUN') }} {{ $t('за 1 единицу энергии') }}
+        {{ $t('rate') }}: {{ useEnergyStore.energyGlobal.buyback_cost }} {{ $t('SUN') }} {{ $t('per_1_energy_unit') }}
       </p>
 
       <p class="mb-12">
-        {{ $t('К зачислению на баланс') }}:
+        {{ $t('to_be_credited_to_the_balance') }}:
         <b>
           {{ trx_received }} {{ $t('TRX') }}
         </b>
       </p>
 
       <BaseButton class="button button_green py-14 w-100 br-8" @on:click="sellEnergy">
-        {{ $t('Отправить') }}
+        {{ $t('send') }}
       </BaseButton>
 
     </div>
@@ -64,21 +64,21 @@
     <div class="popup-energy">
 
       <div class="popup-energy__title">
-        {{ $t('Энергия') }}
+        {{ $t('energy') }}
       </div>
 
       <b class="mb-8 d-block">
-        {{ $t('Введи промокод и получи') }} <b>65000</b> {{ $t('энергии бесплатно') }}!
+        {{ $t('enter_promo_code_and_get') }} <b>65000</b> {{ $t('free_energy') }}!
       </b>
 
-      <input v-model="promocode" class="input mb-8" :placeholder="$t('Введите промокод')" type="text">
+      <input v-model="promocode" class="input mb-8" :placeholder="$t('enter_promo_code')" type="text">
 
       <p v-if="error" class="font-14 c-red mb-16">
         {{ error }}
       </p>
 
       <BaseButton class="button button_green py-14 w-100 br-8" @on:click="buyEnergy">
-        {{ $t('Отправить') }}
+        {{ $t('send') }}
       </BaseButton>
 
     </div>
@@ -159,7 +159,7 @@ export default {
     },
     buyEnergy(e) {
       if (!this.promocode) {
-        this.error = this.$t('Введите промокод')
+        this.error = this.$t('enter_promo_code')
       } else {
         e.loading.start()
         createUserService().usePromoCode(this.promocode).then((response) => {
@@ -173,13 +173,13 @@ export default {
     },
     sellEnergy(e) {
       if (this.sellEnergyAmount <= 0) {
-        this.error = this.$t('Введите количество энергии')
+        this.error = this.$t('enter_energy_amount')
         return
       }
       e.loading.start()
       createEnergyService().sellEnergy(this.sellEnergyAmount).then((response) => {
         this.$emit('on:success', response)
-        this.toast.success(response.message || this.$t('successProcess'))
+        this.toast.success(response.message || this.$t('successful_process'))
         this.closeModal()
       }).catch((error) => {
         this.error = error.data.detail || error.message

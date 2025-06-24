@@ -7,7 +7,7 @@
         <span class="panel__icon">
           <img src="/images/p-icon2.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка стейкинга')">
         </span>
-        {{ $t('Стейкинг') }} {{ $t('TRX') }}:
+        {{ $t('staking') }} {{ $t('TRX') }}:
       </div>
       <div class="panel__info">
         <span class="c-gray-light">APR</span>
@@ -19,8 +19,8 @@
     </div>
 
     <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('Вывести') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('Стейкать') }}</button>
+      <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
+      <button @click="openModal2" class="button button_green">{{ $t('stake') }}</button>
     </div>
 
     <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
@@ -35,7 +35,7 @@
     <div class="popup">
 
       <div class="popup__header">
-        {{ $t('Вывод из стейкинга') }} TRX
+        {{ $t('withdrawal_from_staking') }} TRX
       </div>
 
       <TrxCounter v-model="exitAmount" :max="userStore.user.total_staked_trx"/>
@@ -46,13 +46,13 @@
         <i class="check__square"></i>
         <span class="check__text font-14">
               {{
-            $t('После подтверждения вывода стейкинга, средства поступят на баланс через 14 дней, а генерация энергии остановится.')
+            $t('desc4')
           }}
             </span>
       </label>
 
       <BaseButton @on:click="unstake" class="button button_green py-12 w-100" href="#">
-        {{ $t('Вывести') }}
+        {{ $t('withdraw') }}
       </BaseButton>
 
     </div>
@@ -64,7 +64,7 @@
     <div class="popup">
 
       <div class="popup__header">
-        {{ $t('Стейкинг') }} TRX
+        {{ $t('staking') }} TRX
       </div>
 
       <TrxCounter v-model="amountCurrency" :max="userStore.user.trx_balance"/>
@@ -74,14 +74,14 @@
         <input v-model="agree" class="check__input" type="checkbox">
         <i class="check__square"></i>
         <span class="check__text font-14">
-              {{ $t('С') }}
-              <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
-              {{ $t('стейкинга ознакомлен') }}
+              {{ $t('i_have_read_and_agree_to_the_staking_rules') }}
+              <span class="c-green" @click="openModal3">{{ $t('staking_read') }}</span>
+              {{ $t('rules') }}
             </span>
       </label>
 
       <BaseButton class="button button_green py-12 w-100" @on:click="stake">
-        {{ $t('Начать стейкинг') }}
+        {{ $t('start_staking') }}
       </BaseButton>
 
     </div>
@@ -93,43 +93,47 @@
     <div class="popup-rule">
 
       <div class="popup-rule__header">
-        {{ $t('Условия и правила стейкинга') }}
+        {{ $t('staking_terms_and_conditions') }}
       </div>
 
       <div class="popup-rule__body">
-        <div v-for="(item,i) in $rm('terms_and_conditions')" :key="i">
+        <div>
           <b>
-            {{ $t('1. Общие положения') }}
+            1. {{ $t('terms_and_conditions.general_provisions.title') }}
           </b>
           <p>
-            {{
-              $t('1.1. Стейкинг осуществляется на платформе EcoForce и позволяет пользователям замораживать токены TRX для получения энергии и дохода.')
+            1.1 {{
+              $t('terms_and_conditions.general_provisions.text1')
             }}
           </p>
           <p>
-            {{
-              $t('1.2. Участие в стейкинге является добровольным, и пользователь несёт ответственность за понимание связанных рисков.')
+            1.2 {{
+              $t('terms_and_conditions.general_provisions.text2')
             }}
           </p>
           <p>
-            {{
-              $t('1.3. Стейкинг регулируется настоящими условиями и правилами, которые пользователь принимает при добавлении токенов в стейкинг.')
+            1.3 {{
+              $t('terms_and_conditions.general_provisions.text3')
             }}
           </p>
         </div>
         <div>
           <b>
-            {{ $t('2. Порядок стейкинга') }}
+            2. {{ $t('terms_and_conditions.staking_procedure.title') }}
           </b>
           <p>
-            {{ $t('2.1. Пользователь добавляет токены TRX в стейкинг через личный кабинет на платформе..') }}
+            2.1 {{
+              $t('terms_and_conditions.staking_procedure.text1')
+            }}
           </p>
           <p>
-            {{ $t('2.2. Замороженные токены TRX автоматически участвуют в общем пуле стейкинга платформы.') }}
+            2.2 {{
+              $t('terms_and_conditions.staking_procedure.text2')
+            }}
           </p>
           <p>
-            {{
-              $t('2.3. Энергия начисляется динамически и рассчитывается на основе общей суммы TRX, находящихся в стейкинге сети Tron.')
+            2.3 {{
+              $t('terms_and_conditions.staking_procedure.text3')
             }}
           </p>
         </div>
@@ -243,7 +247,7 @@ export default {
       createWalletService().requestAddress().then((response) => {
         this.paymentEndpoint = response
       }).catch((error => {
-        this.toast.error(this.$t('errorOccurred'))
+        this.toast.error(this.$t('an_error_occurred'))
       }));
     },
     sendWithDrawal(e) {
@@ -271,7 +275,7 @@ export default {
         this.closeModal3();
         this.toast.success(this.$t(response.message))
       }).catch((error) => {
-        this.toast.error(error.message || this.$t('errorOccurred'))
+        this.toast.error(error.message || this.$t('an_error_occurred'))
       }).finally(() => {
         e.loading.stop()
       });
@@ -298,12 +302,12 @@ export default {
     },
     stake(e) {
       if (!this.agree) {
-        this.toast.error(this.$t('Вы должны согласиться с условиями стейкинга'));
+        this.toast.error(this.$t('desc5'));
         e.loading.stop()
         return;
       }
       if (this.amountCurrency <= 0) {
-        this.toast.error(this.$t('Введите количество для стейкинга'));
+        this.toast.error(this.$t('enter_out_amount'));
         e.loading.stop()
         return;
       }
@@ -314,7 +318,7 @@ export default {
             this.toast.success(response.message)
           })
           .catch((error) => {
-            this.toast.error(error.message || this.$t('errorOccurred'));
+            this.toast.error(error.message || this.$t('an_error_occurred'));
           })
           .finally(() => {
             e.loading.stop()
@@ -328,7 +332,7 @@ export default {
     unstake(e) {
 
       if (!this.unstakeAgree) {
-        this.toast.error(this.$t('Вы должны согласиться с условиями стейкинга'));
+        this.toast.error(this.$t('desc5'));
         e.loading.stop()
         return;
       }
@@ -342,13 +346,13 @@ export default {
               this.toast.success(response.message)
             })
             .catch(err => {
-              this.toast.error(err.message || this.$t('errorOccurred'));
+              this.toast.error(err.message || this.$t('an_error_occurred'));
             })
             .finally(() => {
               e.loading.stop()
             })
       } else {
-        this.toast.error(this.$t('Введите количеству для вывода'))
+        this.toast.error(this.$t('enter_out_amount'))
       }
     },
     openModal3() {

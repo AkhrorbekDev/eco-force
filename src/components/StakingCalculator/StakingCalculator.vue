@@ -5,7 +5,7 @@
 
     <div class="staking-calculator__header">
       <div class="staking-calculator__title">
-        {{ $t('Стейкинг: Калькулятор доходности') }}
+        {{ $t('staking_f_calculator') }}
       </div>
     </div>
 
@@ -18,7 +18,7 @@
       <TableStaking :data="energyPerPeriod"/>
 
       <button class="button button_green w-100 py-8 py-mob-12 br-8" @click="openModal">
-        {{ $t('Начать стейкинг') }}
+        {{ $t('start_staking') }}
       </button>
 
       <ModalWindow :isVisible="isModalVisible" @close="closeModal">
@@ -26,7 +26,7 @@
         <div class="popup">
 
           <div class="popup__header">
-            {{ $t('Стейкинг TRX') }}
+            {{ $t('staking') }}TRX
           </div>
 
           <TrxCounter v-model="amountCurrency" :max="useUserStore.user.trx_balance"/>
@@ -36,14 +36,14 @@
             <input v-model="agree" class="check__input" type="checkbox">
             <i class="check__square"></i>
             <span class="check__text font-14">
-              {{ $t('С') }}
-              <span class="c-green" @click="openModal3">{{ $t('правилами') }}</span>
-              {{ $t('стейкинга ознакомлен') }}
+              {{ $t('i_have_read_and_agree_to_the_staking_rules') }}
+              <span class="c-green" @click="openModal3">{{ $t('staking_read') }}</span>
+              {{ $t('rules') }}
             </span>
           </label>
 
           <BaseButton class="button button_green py-12 w-100" @on:click="stake">
-            {{ $t('Начать стейкинг') }}
+            {{ $t('start_staking') }}
           </BaseButton>
 
         </div>
@@ -231,12 +231,12 @@ export default {
     },
     stake(e) {
       if (!this.agree) {
-        this.toast.error(this.$t('Вы должны согласиться с условиями и правилами стейкинга'));
+        this.toast.error(this.$t('desc5'));
         e.loading.stop()
         return;
       }
       if (this.amountCurrency <= 0) {
-        this.toast.error(this.$t('Введите количество для стейкинга'));
+        this.toast.error(this.$t('enter_staking_amount'));
         e.loading.stop()
         return;
       }
@@ -247,7 +247,7 @@ export default {
             this.isModalVisible = false;
           })
           .catch((error) => {
-                this.toast.error(error.message || this.$t('errorOccurred'));
+                this.toast.error(error.message || this.$t('an_error_occurred'));
               }
           ).finally(() => {
         e.loading.stop()

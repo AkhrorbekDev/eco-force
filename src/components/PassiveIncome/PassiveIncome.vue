@@ -3,12 +3,12 @@
   <section class="section">
     <div class="container">
       <h2 class="h2">
-        {{ $t('Стейкинг с пассивным доходом 27% годовых') }}
+        {{ $t('desc9') }}
       </h2>
 
       <div class="items">
         <div v-for="(item, index) in items" :key="index" class="item">
-          <img :src="item.imageUrl" :alt="$t(item.altText)" class="image" width="88" height="88" loading="lazy" />
+          <img :src="item.imageUrl" :alt="$t(item.altText)" class="image" width="88" height="88" loading="lazy"/>
           <div class="item__text">
             {{ $t(item.text) }}
           </div>
@@ -21,7 +21,6 @@
 </template>
 
 
-
 <script>
 export default {
   data() {
@@ -30,32 +29,17 @@ export default {
         {
           imageUrl: '/images/icon-1.svg',
           altText: 'Lightning',
-          text: 'Возможность использовать минимальную сумму для накопления энергии.'
-        },
-        {
-          imageUrl: '/images/icon-1.svg',
-          altText: 'Lightning',
-          text: 'Возможность использовать минимальную сумму для накопления энергии.'
+          text: 'desc6'
         },
         {
           imageUrl: '/images/icon-2.svg',
           altText: 'Safe',
-          text: 'Использование энергии для своих нужд.'
-        },
-        {
-          imageUrl: '/images/icon-2.svg',
-          altText: 'Safe',
-          text: 'Использование энергии для своих нужд.'
+          text: 'desc7'
         },
         {
           imageUrl: '/images/icon-3.svg',
           altText: 'Money',
-          text: 'Продажа энергии обратно сервису для моментального получения дохода.'
-        },
-        {
-          imageUrl: '/images/icon-3.svg',
-          altText: 'Money',
-          text: 'Продажа энергии обратно сервису для моментального получения дохода.'
+          text: 'desc8'
         },
       ]
     };
@@ -69,11 +53,13 @@ export default {
 .section {
   padding: 22px 0;
 }
-.items  {
+
+.items {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
+
 .item {
   display: flex;
   align-items: center;
@@ -96,10 +82,12 @@ export default {
   }
   .item {
     padding: 12px;
+
     &__text {
       font-size: 16px;
       line-height: 22px;
     }
+
     img {
       width: 60px;
       height: 60px;
