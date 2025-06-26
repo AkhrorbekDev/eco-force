@@ -27,24 +27,24 @@
                 <b>
                   {{ $t('API') }}
                 </b>
-                {{ $t('ключ') }}
+                {{ $t('desc43') }}
               </span>
               <input :value="apiKey" readonly class="input" type="text">
             </label>
             <BaseButton @on:click="generateApiKey" class="button button_green br-8 py-14">
-              {{ $t('Сгенерировать') }}
+              {{ $t('desc44') }}
             </BaseButton>
           </div>
 
           <div class="d-grid gap-12">
             <p>
-              {{ $t('Данный функционал позволяет взаимодействовать с нашим сервисом через API.') }}
+              {{ $t('desc45') }}
             </p>
             <p>
-              {{ $t('Вам доступно управление адресами кошельков, покупка энергии и другие функции.') }}
+              {{ $t('desc46') }}
             </p>
             <a class="c-green" href="#">
-              {{ $t('Вся документация') }}
+              {{ $t('desc47') }}
             </a>
           </div>
 

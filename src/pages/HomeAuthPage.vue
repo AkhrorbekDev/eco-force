@@ -31,7 +31,7 @@
     <section class="section-history">
       <div class="container">
         <h2 class="section-history__title">
-          {{ $t('История операций') }}
+          {{ $t('operations_history') }}
         </h2>
 
         <TableOperation />

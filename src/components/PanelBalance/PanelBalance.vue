@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel" @click="toggleButtonsClass">
 
     <div class="panel__head">
       <div class="panel__name">
@@ -18,10 +18,21 @@
       <button @click="openModal2" class="button button_green">{{ $t('deposit') }}</button>
     </div>
 
-    <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
+    <div ref="btnDots" class="panel__dots d-desk-none" >
       <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
     </div>
 
+    <transition name="panel-buttons-transition">
+      <div
+          v-show="isButtonsActive || windowWidth > 768"
+          ref="controlBtns"
+          class="panel__buttons"
+          :class="{ '_active': isButtonsActive, '_desktop': windowWidth > 768 }"
+      >
+        <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
+        <button @click="openModal2" class="button button_green">{{ $t('deposit') }}</button>
+      </div>
+    </transition>
   </div>
 
   <!-- Вывести -->
@@ -56,7 +67,7 @@
     <div class="popup-confirm">
 
       <div class="popup-confirm__header">
-        {{ $t('Подтверждение вывода') }}
+        {{ $t('desc49') }}
       </div>
 
       <div class="d-grid gap-8 mb-16">
@@ -123,8 +134,8 @@
 <script>
 import AddressTron2 from '../AddressTron2/AddressTron2.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
-import {useUserGlobal} from "@/store/userGlobal.js";
-import {createEnergyService, createWalletService} from "@/services/index.js";
+import {useUserGlobal} from "@/store/userGlobal";
+import {createWalletService} from "@/services/index";
 import AmountTrx from "@/components/AmountTrx/AmountTrx.vue";
 import {useToast} from "vue-toastification";
 import BaseButton from "@/components/BaseButton/BaseButton.vue";
@@ -153,6 +164,8 @@ export default {
       isModalVisible2: false,
       isModalVisible3: false,
       isButtonsActive: false,
+      windowWidth: window.innerWidth,
+
       // Добавляем новое состояние для управления классом
     };
   },
@@ -193,12 +206,17 @@ export default {
     this.getPaymentEndpoint()
     this.onResizeBtnClose()
     window.addEventListener('resize', this.onResizeBtnClose);
+    window.addEventListener('resize', this.updateWindowWidth);
   },
   unmounted() {
     window.removeEventListener('resize', this.onResizeBtnClose);
     document.removeEventListener('click', this.clickOutside);
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
   methods: {
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
     onResizeBtnClose() {
       document.removeEventListener('click', this.clickOutside);
       if (window.innerWidth < 768) {
@@ -207,7 +225,7 @@ export default {
         document.removeEventListener('click', this.clickOutside);
       }
     },
-    clickOutside (e) {
+    clickOutside(e) {
       if (this.$refs.btnDots.contains(e.target)) {
         return
       }
@@ -309,7 +327,29 @@ export default {
 
 <style scoped lang="scss">
 @import './PanelBalanace.scss';
-
+.panel-buttons-transition-enter-active,
+.panel-buttons-transition-leave-active {
+  transition: height 0.3s, opacity 0.3s;
+  overflow: hidden;
+}
+.panel-buttons-transition-enter-from,
+.panel-buttons-transition-leave-to {
+  height: 0;
+  opacity: 0;
+}
+.panel-buttons-transition-enter-to,
+.panel-buttons-transition-leave-from {
+  height: 48px; // укажите нужную высоту блока с кнопками
+  opacity: 1;
+}
+.panel__buttons {
+  position: absolute;
+  &._desktop {
+    position: static;
+    opacity: 1;
+    transform: none;
+  }
+}
 .popup {
   display: flex;
   flex-direction: column;

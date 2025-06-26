@@ -23,7 +23,7 @@
     <section class="section-staking">
       <div class="container">
         <h1 class="section-staking__title">
-          {{ $t('Стейкинг') }}
+          {{ $t('staking') }}
         </h1>
 
         <div class="section-staking__row">
@@ -42,7 +42,7 @@
     <section v-if="loggedIn" class="section-history">
       <div class="container">
         <h2 class="section-history__title">
-          {{ $t('История операций') }}
+          {{ $t('operations_history') }}
         </h2>
 
         <TableStakingActions/>

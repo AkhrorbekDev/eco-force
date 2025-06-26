@@ -28,7 +28,7 @@
       <div class="page-order__block">
         <img class="page-order__img-warning" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
         <p>
-          {{ $t('Переводите именно эту сумму. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.') }}
+          {{ $t('transfer_amount_hint') }}
         </p>
       </div>
 

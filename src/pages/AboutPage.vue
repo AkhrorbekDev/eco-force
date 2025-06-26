@@ -6,7 +6,7 @@
         <div class="section-api__content">
 
           <h1 class="section-api__title">
-            {{ $t('О компании') }}
+            {{ $t('desc42') }}
           </h1>
           <div class="row gap-8">
             <button @click="openModal" class="button button_green">{{ $t('popup 1') }}</button>

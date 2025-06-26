@@ -22,7 +22,7 @@
     <section class="section-intro">
       <div class="container">
         <h1 class="section-intro__title">
-          {{ $t('Реферальная программа') }}
+          {{ $t('referral_program') }}
         </h1>
 
         <div class="section-intro__row">
@@ -39,7 +39,7 @@
     <section class="section-history">
       <div class="container">
         <h2 class="section-history__title">
-          {{ $t('Мои партнеры') }}
+          {{ $t('desc48') }}
         </h2>
 
         <TableOperation2 />
