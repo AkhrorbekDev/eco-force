@@ -16,16 +16,16 @@
 
       <div class="footer__info">
         <p class="footer__support font-14">
-          {{ $t('Техподдержка') }}:
+          {{ $t('support') }}:
           <a class="footer__mail" href="mailto:@tg_address">
             @tg_address
           </a>
         </p>
         <div class="footer__year font-14">
-          {{ $t('©2025, EcoForce') }}
+          ©2025, EcoForce
         </div>
         <a class="footer__politics font-14" href="#">
-          {{ $t('Политика конфиденциальности') }}
+          {{ $t('privacy_policy') }}
         </a>
       </div>
 

@@ -1,12 +1,12 @@
 <template>
   <div class="copy-price">
     <span class="copy-price__cost">
-      {{ $t('Стоимость') }}
+      {{ $t('cost') }}
       <b>
         {{ cost }}
       </b>
     </span>
-    <div @click="copyToClipboard" class="copy-price__button">{{ $t('Скопировать') }}</div>
+    <div @click="copyToClipboard" class="copy-price__button">{{ $t('copy') }}</div>
     <div v-if="showPopup" class="popup-min">
       {{ popupMessage }}
     </div>
@@ -33,12 +33,12 @@ export default {
       if (props.cost) {
         try {
           await navigator.clipboard.writeText(props.cost);
-          showPopupMessage(t('Скопировано!'));
+          showPopupMessage(t('copied'));
         } catch (err) {
-          showPopupMessage(t('Не удалось скопировать.'));
+          showPopupMessage(t('failed_to_copy'));
         }
       } else {
-        showPopupMessage(t('Поле пустое.'));
+        showPopupMessage(t('Поле ввода пустое'));
       }
     };
 

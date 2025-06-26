@@ -1,13 +1,13 @@
 <template>
   <div class="trx-counter d-grid gap-8">
     <span>
-      {{$t('Количество')}} {{ $t('TRX') }}
+      {{$t('amount')}} TRX
     </span>
     <div class="trx-counter__row">
       <div class="trx-counter__wrapper">
         <input class="trx-counter__value" :value="amount" type="text" @input="filterInput">
         <span class="trx-counter__max" @click="setMaxValue">
-          {{ $t('максимум') }}
+          {{ $t('max') }}
         </span>
       </div>
     </div>

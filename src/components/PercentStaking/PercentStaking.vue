@@ -2,11 +2,11 @@
   <div class="percent-staking">
 
     <div class="percent-staking__title">
-      {{ $t('22% годовых пассивного дохода от стейкинга ваших TRX') }}
+      {{ $t('desc17') }}
     </div>
 
     <p class="percent-staking__text">
-      {{ $t('Стейкинг TRX позволяет получать доход в виде энергии, которую можно использовать для транзакций или продать.') }}
+      {{ $t('desc18') }}
     </p>
 
     <img class="percent-staking__img" src="/images/hand-with-monets.svg" loading="lazy" width="295" height="248" :alt="$t('Hand with monets')">
@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-   
+
     };
   },
 };
@@ -33,6 +33,6 @@ export default {
 <style scoped lang="scss">
   @import './PercentStaking.scss';
 
- 
+
 
 </style>

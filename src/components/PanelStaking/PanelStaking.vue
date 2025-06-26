@@ -7,7 +7,7 @@
         <span class="panel__icon">
           <img src="/images/p-icon2.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка стейкинга')">
         </span>
-        {{ $t('staking') }} {{ $t('TRX') }}:
+        {{ $t('staking') }} TRX:
       </div>
       <div class="panel__info">
         <span class="c-gray-light">APR</span>

@@ -2,7 +2,7 @@
   <div class="send-usdt d-grid gap-8">
     <div class="send-usdt__row jc-sb">
       <span>
-        {{ $t('Куда отправляете') }} <b>{{ $t('USDT') }}</b>
+        {{ $t('where_are_you_sending') }} <b>USDT</b>
       </span>
       <div class="send-usdt__copy" @click="copyToClipboard">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="send-usdt__value mb-8">
-      <input v-model="tronAddress" :placeholder="$t('Введите адрес')">
+      <input v-model="tronAddress" :placeholder="$t('enter_address')">
       <span class="send-usdt__cross cross" @click="clearInput">
         <i class="cross__line"></i>
       </span>

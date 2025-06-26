@@ -6,10 +6,10 @@
     <table>
       <thead>
       <tr>
-        <th>{{ $t('Партнер') }}</th>
-        <th>{{ $t('Дата') }}</th>
-        <th>{{ $t('Действие') }}</th>
-        <th>{{ $t('Доход в TRX') }}</th>
+        <th>{{ $t('desc32') }}</th>
+        <th>{{ $t('date') }}</th>
+        <th>{{ $t('desc33') }}</th>
+        <th>{{ $t('desc34') }}</th>
       </tr>
       </thead>
       <tbody>
@@ -24,7 +24,7 @@
       </template>
       <template v-else>
         <tr>
-          <td colspan="7" style="text-align: center">{{ $t('Нет данных') }}</td>
+          <td colspan="7" style="text-align: center">{{ $t('no_data') }}</td>
         </tr>
       </template>
       </tbody>

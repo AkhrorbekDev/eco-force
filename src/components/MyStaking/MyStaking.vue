@@ -3,7 +3,7 @@
 
     <div class="my-staking__header">
       <div class="my-staking__title">
-        {{ $t('Мой стейкинг') }}
+        {{ $t('desc13') }}
       </div>
     </div>
 
@@ -11,7 +11,7 @@
 
       <div class="my-staking__row">
         <span class="my-staking__name">
-          {{ $t('В стейкиге:') }}
+          {{ $t('desc14') }}
         </span>
         <p class="my-staking__value">
           <span>
@@ -24,7 +24,7 @@
       </div>
       <div class="my-staking__row">
         <span class="my-staking__name">
-          {{ $t('Доходность в день:') }}
+          {{ $t('desc15') }}
         </span>
         <p class="my-staking__value">
           <span>
@@ -35,7 +35,7 @@
       </div>
       <div class="my-staking__row">
         <span class="my-staking__name">
-          {{ $t('Заработано всего:') }}
+          {{ $t('desc16') }}
         </span>
         <p class="my-staking__value">
           <span>

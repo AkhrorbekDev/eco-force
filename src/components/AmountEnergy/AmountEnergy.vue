@@ -1,6 +1,6 @@
 <template>
   <div class="amount-energy d-grid gap-8">
-    <span> {{$t('Количество энергии')}} </span>
+    <span> {{$t('energy_amount')}} </span>
     <div class="row">
       <div class="amount-energy__value">
         <input
@@ -27,7 +27,7 @@
 
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
     <div class="popup">
-      <div class="popup__header">{{ $t('Калькулятор транзакций') }}</div>
+      <div class="popup__header">{{ $t('transaction_calculator') }}</div>
       <div v-show="loading" class="loader-bar-container">
         <div class="loader-bar" :style="{ width: progress + '%' }"></div>
       </div>
@@ -36,7 +36,7 @@
           <SendUsdt v-model="delegationAddress.address" @update:model-value="sendAddress(index)"
                     @on:delete="deleteAddress(index)"/>
 
-          <p class="font-14 c-green mb-20">{{ $t('Необходимо энергии') }}: {{ delegationAddress.energy_cost }}</p>
+          <p class="font-14 c-green mb-20">{{ $t('energy_required') }}: {{ delegationAddress.energy_cost }}</p>
 
         </template>
 
@@ -47,12 +47,12 @@
 
         <!-- Кнопка "добавить еще" -->
         <div v-if="delegationAddresses.length < 3" class="popup__add font-14" @click="addAddress">
-          + {{ $t('добавить еще') }}
+          + {{ $t('add_more') }}
         </div>
 
         <div class="popup__total">
           <span class="font-14">
-            {{ $t('Итого') }}:
+            {{ $t('total') }}:
           </span>
           <div class="row gap-10 ai-c">
             <span class="popup__amount">
@@ -63,7 +63,7 @@
         </div>
 
         <button :disabled="disableSaveButton" class="button button_green py-12 w-100" @click="saveEnergyCosts">
-          {{ $t('Заполнить') }}
+          {{ $t('fill') }}
         </button>
       </div>
     </div>

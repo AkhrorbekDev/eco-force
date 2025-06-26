@@ -1,19 +1,18 @@
 <template>
 
-    <div class="items">
-      <div v-for="(item, index) in items" :key="index" class="item">
+  <div class="items">
+    <div v-for="(item, index) in items" :key="index" class="item">
         <span class="item__icon">
-          <img :src="item.imageUrl" :alt="$t(item.altText)" class="item__image" width="22" height="22" loading="lazy" />
+          <img :src="item.imageUrl" :alt="$t(item.altText)" class="item__image" width="22" height="22" loading="lazy"/>
         </span>
-        <div class="item__title">
-          {{ $t(item.title) }}
-        </div>
-        <p v-html="item.text"></p>
+      <div class="item__title">
+        {{ $t(item.title) }}
       </div>
+      <p v-html="item.text"></p>
     </div>
+  </div>
 
 </template>
-
 
 
 <script>
@@ -24,20 +23,20 @@ export default {
         {
           imageUrl: '/images/r-icon1.svg',
           altText: 'Icon Dollar',
-          title: 'Получайте 5% от каждой покупки энергии вашим партнёром.',
-          text: 'Каждый раз, когда приглашённый вами пользователь приобретает энергию, 5% от её стоимости поступают на ваш баланс.',
+          title: 'desc19',
+          text: 'desc20',
         },
         {
           imageUrl: '/images/r-icon2.svg',
           altText: 'Icon Energy',
-          title: 'Зарабатывайте 5% от дохода партнёра в стейкинге.',
-          text: 'Если ваш партнёр застейкал TRX, вы будете ежедневно получать 5% от его дохода в энергии, которую он генерирует в стейкинге.',
+          title: 'desc21',
+          text: 'desc22',
         },
         {
           imageUrl: '/images/r-icon3.svg',
           altText: 'Icon Energy',
-          title: 'Создавайте свой промокод и делитесь им!',
-          text: 'Создавайте свой промокод и делитесь им! Ваш партнёр <b>получит бесплатную энергию</b>, а вы станете его реферером и начнёте получать пассивный доход от его активности. Ваш промокод можно использовать 100 раз по умолчанию. Один пользователь может применить только один промокод. Если вам требуется увеличить лимит использований кода, свяжитесь с техподдержкой.',
+          title: 'desc23',
+          text: 'desc24',
         },
       ]
     };
@@ -51,10 +50,12 @@ export default {
 .section {
   padding: 22px 0 0;
 }
+
 .h2 {
   margin-bottom: 40px;
 }
-.items  {
+
+.items {
   display: grid;
   gap: 40px;
   padding: 40px;
@@ -62,9 +63,10 @@ export default {
   border-radius: 16px;
   box-shadow: 0px 4px 12px 0px #0000000F;
   @media (max-width: $mobile) {
-   padding: 10px; 
+    padding: 10px;
   }
 }
+
 .item {
   display: grid;
   grid-template-columns: 56px 1fr;

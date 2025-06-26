@@ -8,11 +8,11 @@
       </span>
 
       <div class="page-order__title">
-        {{ $t('Заказ № HFSWX56') }}
+        {{ $t('order_№') }}
       </div>
 
       <div class="page-order__info">
-        {{ $t('Покупка энергии:') }} {{ energy }}
+        {{ $t('energy_purchase') }}: {{ energy }}
       </div>
 
       <img class="page-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
@@ -22,7 +22,7 @@
       <CopyPrice />
 
       <div class="page-order__status">
-        {{ $t('Статус:') }} {{ status }}
+        {{ $t('status') }} {{ status }}
       </div>
 
       <div class="page-order__block">

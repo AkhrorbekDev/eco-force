@@ -12,12 +12,12 @@
     </div>
 
     <span class="copy-text__change" @click="focusInput">
-      {{ $t('изменить') }}
+      {{ $t('edit') }}
     </span>
 
     <div class="copy-text__limit">
       <span class="c-green">
-        {{ $t('лимит') }}
+        {{ $t('limit') }}
       </span>
       0/100
     </div>
@@ -56,9 +56,9 @@ export default {
       if (text.value) {
         try {
           await navigator.clipboard.writeText(text.value);
-          showPopupMessage(t('Скопировано'));
+          showPopupMessage(t('copied'));
         } catch (err) {
-          showPopupMessage(t('Не удалось скопировать'));
+          showPopupMessage(t('failed_to_copy'));
         }
       } else {
         showPopupMessage(t('Поле ввода пустое'));

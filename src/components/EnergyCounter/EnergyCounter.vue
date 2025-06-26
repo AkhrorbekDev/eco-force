@@ -1,7 +1,7 @@
 <template>
   <div class="trx-counter d-grid gap-8">
     <span>
-      {{ $t('Доступно:') }}
+      {{ $t('available:') }}
       <b>
         {{total}}
       </b>
@@ -22,7 +22,7 @@
     </div>
 
     <div v-if="!isMultipleOf" class="font-14 c-red">
-      {{ $t('Сумма должна быть кратна') }} {{ step }}
+      {{ $t('amount_must_be_a_multiple_of') }} {{ step }}
     </div>
 
   </div>

@@ -8,7 +8,7 @@
 
     <div class="logout-dropdown__list" v-if="isOpen" @click="logout">
       <img src="/images/logout.svg" width="24" height="24" loading="lazy" :alt="$t('Иконка выхода')">
-      {{ $t('Выход') }}
+      {{ $t('exit') }}
     </div>
 
   </div>

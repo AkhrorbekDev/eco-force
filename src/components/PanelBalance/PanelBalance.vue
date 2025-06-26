@@ -6,7 +6,7 @@
         <span class="panel__icon">
           <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка пользователя')">
         </span>
-        {{ $t('balance') }} {{ $t('TRX') }}:
+        {{ $t('balance') }} TRX:
       </div>
       <span class="panel__amount">
         {{ userStore.user.trx_balance || 0 }}
@@ -33,7 +33,7 @@
       </div>
 
       <div class="address-tron d-grid gap-8 mb-16">
-        <span>{{ $t('address') }} <b>{{ $t('TRX') }}</b></span>
+        <span>{{ $t('address') }} <b>TRX</b></span>
         <div :class="{
           invalid: !address && sendStart,
         }" class="address-tron__value">
@@ -71,7 +71,7 @@
       <p class="mb-32">
         {{ $t('amount') }}
         <b>
-          {{ $t('TRX') }}: {{ exitAmount }}
+          TRX: {{ exitAmount }}
         </b>
       </p>
 

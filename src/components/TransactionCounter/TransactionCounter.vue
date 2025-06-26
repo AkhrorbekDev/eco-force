@@ -2,7 +2,7 @@
   <div class="transaction-counter d-grid gap-8">
     <div class="row jc-sb">
       <span>
-        {{ $t('Транзакций') }}
+        {{ $t('transitions') }}
       </span>
       <span class="question d-desk-none">
         <i>
@@ -13,12 +13,12 @@
     <div class="transaction-counter__row">
       <input class="transaction-counter__value" v-model="count" type="text" @input="filterInput">
       <div class="transaction-counter__controls">
-        <div class="transaction-counter__button _minus" @click="decrement">{{ $t('–') }}</div>
-        <div class="transaction-counter__button _plus" @click="increment">{{ $t('+') }}</div>
+        <div class="transaction-counter__button _minus" @click="decrement">-</div>
+        <div class="transaction-counter__button _plus" @click="increment">+</div>
       </div>
     </div>
     <div v-if="error" class="transaction-counter__error">
-      {{ $t('Значение должно быть кратно') }} {{ step }}
+      {{ $t('value_must_be_a_multiple_of') }} {{ step }}
     </div>
   </div>
 </template>

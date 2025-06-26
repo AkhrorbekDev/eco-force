@@ -17,7 +17,7 @@
         >
         <video controls ref="videoElement">
           <source src="/images/sample-5s.mp4">
-          <a href="https://1drv.ms/u/s!AuCV_lt33VoHiad7qrHRE1ZDCDMHDA?e=kEilU7">{{ $t('Скачайте видео') }}</a>.
+          <a href="https://1drv.ms/u/s!AuCV_lt33VoHiad7qrHRE1ZDCDMHDA?e=kEilU7">{{ $t('desc40') }}</a>.
         </video>
       </div>
 

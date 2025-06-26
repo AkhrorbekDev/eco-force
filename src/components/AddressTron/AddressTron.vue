@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="address-tron__value">
-      <input v-model="tronAddress" :placeholder="$t('enterAddress')">
+      <input v-model="tronAddress" :placeholder="$t('enter_address')">
       <span class="address-tron__cross cross" @click="clearInput">
         <i class="cross__line"></i>
       </span>

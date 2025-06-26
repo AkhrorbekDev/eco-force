@@ -4,7 +4,7 @@
       type="text"
       :value="modelValue"
       @input="validateAmount"
-      :placeholder="$t('Введите сумму')"
+      :placeholder="$t('enter_amount')"
       class="amount-input"
     />
     <select v-model="selectedCurrency">

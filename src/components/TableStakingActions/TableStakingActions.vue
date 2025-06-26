@@ -6,31 +6,31 @@
     <table>
       <thead>
       <tr>
-        <th>{{ $t('Дата') }}</th>
-        <th>{{ $t('Действие') }}</th>
-        <th>{{ $t('Сумма') }}</th>
-        <th>{{ $t('Статус') }}</th>
+        <th>{{ $t('date') }}</th>
+        <th>{{ $t('desc32') }}</th>
+        <th>{{ $t('desc35') }}</th>
+        <th>{{ $t('status') }}</th>
       </tr>
       </thead>
       <tbody>
       <template v-if="actions?.length > 0">
         <tr v-for="(order, index) in actions" :key="index">
-          <td :data-label="$t('Дата')">{{ order.created_at }}</td>
-          <td :data-label="$t('Действие')">{{ order.action_type }}</td>
-          <td :data-label="$t('Сумма')">{{ order.amount }}</td>
-          <td :data-label="$t('Статус')">{{ order.status }}</td>
+          <td :data-label="$t('date')">{{ order.created_at }}</td>
+          <td :data-label="$t('desc32')">{{ order.action_type }}</td>
+          <td :data-label="$t('desc35')">{{ order.amount }}</td>
+          <td :data-label="$t('status')">{{ order.status }}</td>
         </tr>
       </template>
       <template v-else>
         <tr>
-          <td colspan="7" style="text-align: center">{{ $t('Нет данных') }}</td>
+          <td colspan="7" style="text-align: center">{{ $t('no_data') }}</td>
         </tr>
       </template>
       </tbody>
     </table>
 
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
-      {{ $t('Показать еще') }}
+      {{ $t('show_more') }}
     </button>
     <Pagination v-if="actions.length > 0" :total-pages="totalPages" :current-page="currentPage"
                 @update:current-page="getUserOrders({page: $event})"/>

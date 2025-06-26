@@ -2,7 +2,7 @@
   <div class="buy-energy">
 
     <div class="buy-energy__header">
-      <div class="buy-energy__title">{{ $t('Купить энергию TRON') }}</div>
+      <div class="buy-energy__title">{{ $t('buy_tron_energy') }}</div>
       <span class="buy-energy__question">
         <i>
           ?
@@ -20,14 +20,14 @@
           <input class="check__input" type="checkbox" checked>
           <i class="check__square"></i>
           <span class="check__text font-14">
-            {{ $t('Добавить активацию за 1 TRX') }}
+            {{ $t('add_activation_for_1_trx') }}
           </span>
         </label>
 
         <TransactionCounter />
 
       </div>
-    
+
       <div class="buy-energy__wrapper row jc-sb mb-10">
 
         <RentalPeriod />
@@ -37,22 +37,22 @@
       </div>
 
       <div class="buy-energy__cost">
-        <span class="font-14 c-gray">{{ $t('Обычная стоимость') }}:</span>
-        <span class="font-14 line-through">{{ normalCost }} {{ $t('TRX') }}</span>
+        <span class="font-14 c-gray">{{ $t('regular_price') }}:</span>
+        <span class="font-14 line-through">{{ normalCost }} TRX</span>
       </div>
 
       <div class="buy-energy__discount">
 
         <div class="row gap-10">
-          <span>{{ $t('Стоимость с EcoForce') }}</span>
-          <span class="weight-700">{{ discountCost }} {{ $t('TRX') }}</span>
+          <span>{{ $t('cost_with_ecoforce') }}</span>
+          <span class="weight-700">{{ discountCost }} TRX</span>
         </div>
 
-        <span class="font-14">{{ $t('Экономия') }}: {{ savingsPercentage }}% ~ {{ savingsAmount }}$</span>
+        <span class="font-14">{{ $t('savings') }}: {{ savingsPercentage }}% ~ {{ savingsAmount }}$</span>
       </div>
 
       <button class="button button_green w-100 py-8 py-mob-12" @click="openModal" >
-        {{ $t('Купить энергию') }}
+        {{ $t('buy_energy') }}
       </button>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none" >

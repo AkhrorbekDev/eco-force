@@ -37,9 +37,9 @@ export default {
       if (field.value) {
         try {
           await navigator.clipboard.writeText(field.value);
-          showPopupMessage(t('Скопировано!'));
+          showPopupMessage(t('copied'));
         } catch (err) {
-          showPopupMessage(t('Не удалось скопировать.'));
+          showPopupMessage(t('failed_to_copy'));
         }
       } else {
         showPopupMessage(t('Поле ввода пустое.'));

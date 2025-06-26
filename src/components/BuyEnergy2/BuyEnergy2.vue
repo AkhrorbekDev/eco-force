@@ -43,7 +43,7 @@
 
       <div class="buy-energy__cost">
         <span class="font-14 c-gray">{{ $t('regular_price') }}:</span>
-        <span class="font-14 line-through">{{ defaultTrx }} {{ $t('TRX') }}</span>
+        <span class="font-14 line-through">{{ defaultTrx }} TRX</span>
       </div>
 
       <div class="buy-energy__discount">
@@ -64,7 +64,7 @@
 
           <div class="row gap-10">
             <span>{{ $t('cost_with_ecoforce') }}</span>
-            <span class="weight-700">{{ totalTrx }} {{ $t('TRX') }}</span>
+            <span class="weight-700">{{ totalTrx }} TRX</span>
           </div>
 
           <span class="font-14">{{ $t('savings') }}: {{ ecoTrx }}% ~ {{ trxPrice }}$</span>

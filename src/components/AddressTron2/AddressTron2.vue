@@ -1,10 +1,10 @@
 <template>
   <div  :class="['address-tron', 'd-grid', 'gap-8', customClass]">
     <div class="address-tron__row" v-if="hasTitle">
-      <span>{{ $t('address') }} <b>{{ $t('TRX') }}</b></span>
+      <span>{{ $t('address') }} <b>TRX</b></span>
     </div>
     <div class="address-tron__value">
-      <input v-model="tronAddress" :readonly="readOnly" :placeholder="$t('enterAddress')" />
+      <input v-model="tronAddress" :readonly="readOnly" :placeholder="$t('enter_address')" />
       <span class="address-tron__copy" @click="copyToClipboard">
         <img src="/images/document-copy.svg" width="20" height="20" loading="lazy" :alt="$t('Иконка документа')">
       </span>

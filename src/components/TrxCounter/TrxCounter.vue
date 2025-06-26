@@ -1,7 +1,7 @@
 <template>
   <div class="trx-counter d-grid gap-8">
     <span>
-      {{ $t('TRX') }}
+      TRX
     </span>
     <div class="trx-counter__row">
 
@@ -13,13 +13,13 @@
       </div>
 
       <div class="trx-counter__controls">
-        <div class="trx-counter__button _minus" @click="decrement">{{ $t('–') }}</div>
-        <div class="trx-counter__button _plus" @click="increment">{{ $t('+') }}</div>
+        <div class="trx-counter__button _minus" @click="decrement">-</div>
+        <div class="trx-counter__button _plus" @click="increment">+</div>
       </div>
     </div>
 
     <div v-if="!isMultipleOf" class="font-14 c-red">
-      {{ $t('Значение должно быть кратно') }} {{ step }}
+      {{ $t('value_must_be_a_multiple_of') }} {{ step }}
     </div>
 
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div  :class="['copy-text', 'd-grid', 'gap-8', customClass]">
     <div class="copy-text__value">
-      <input :value="link" readonly :placeholder="$t('Введите адрес')">
+      <input :value="link" readonly :placeholder="$t('enter_address')">
       <span class="copy-text__copy" @click="copyToClipboard">
         <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" :alt="$t('Иконка копирования')">
       </span>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <button @click="copyToClipboard" class="button button_green py-12 d-desk-none br-8">
-      {{ $t('Скопировать') }}
+      {{ $t('copy') }}
     </button>
   </div>
 </template>
@@ -44,9 +44,9 @@ export default {
       if (text.value) {
         try {
           await navigator.clipboard.writeText(text.value);
-          showPopupMessage(t('Скопировано'));
+          showPopupMessage(t('copied'));
         } catch (err) {
-          showPopupMessage(t('Не удалось скопировать'));
+          showPopupMessage(t('failed_to_copy'));
         }
       } else {
         showPopupMessage(t('Поле ввода пустое'));

@@ -4,7 +4,7 @@
 
     <div class="block__head">
       <div class="block__title">
-        {{ $t('Промокод для бесплатной энергии') }}
+        {{ $t('promo_code_for_free_energy') }}
       </div>
     </div>
 

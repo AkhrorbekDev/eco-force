@@ -4,7 +4,7 @@
       <tr>
         <th>{{ $t('Период') }}</th>
         <th>{{ $t('Энергия') }}</th>
-        <th>{{ $t('TRX') }}</th>
+        <th>TRX</th>
       </tr>
     </thead>
     <tbody>

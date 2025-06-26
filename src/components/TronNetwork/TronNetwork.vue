@@ -3,7 +3,7 @@
 
     <div class="tron-network__header">
       <div class="tron-network__title">
-        {{ $t('Статистика сети TRON') }}
+        {{ $t('desc36') }}
       </div>
     </div>
 
@@ -16,7 +16,7 @@
             <img src="/images/n-icon1.svg" width="26" height="21" loading="lazy" :alt="$t('Icon TRX')">
           </i>
           <span>
-            {{ $t('Курс TRX:') }}
+            {{ $t('desc37') }}
           </span>
           <p class="tron-network__value d-desk-none">
             {{ stats.trx_price }} USDT
@@ -45,7 +45,7 @@
             <img src="/images/n-icon2.svg" width="25" height="25" loading="lazy" :alt="$t('Icon Lightning')">
           </i>
           <span>
-            {{ $t('Энергии за 1 TRX:') }}
+            {{ $t('desc38') }}
           </span>
           <p class="tron-network__value d-desk-none">
             {{ stats.energy_per_trx }}
@@ -73,7 +73,7 @@
           <i class="tron-network__icon _3">
             <img src="/images/n-icon3.svg" width="25" height="25" loading="lazy" :alt="$t('Icon Wallet')">
           </i>
-          {{ $t('В стейкинге TRX:') }}
+          {{ $t('desc39') }}
           <p class="tron-network__value d-desk-none">
             {{ stats.total_staked_trx }}
           </p>

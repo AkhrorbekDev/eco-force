@@ -47,7 +47,7 @@
       <p class="mb-12">
         {{ $t('to_be_credited_to_the_balance') }}:
         <b>
-          {{ trx_received }} {{ $t('TRX') }}
+          {{ trx_received }} TRX
         </b>
       </p>
 

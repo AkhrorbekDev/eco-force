@@ -1,24 +1,23 @@
 <template>
 
-    <div class="block">
+  <div class="block">
 
-      <div class="block__info">
-        <div class="block__title">
-          {{ $t('Рефералов') }}
-        </div>
-        <span class="block__number">
+    <div class="block__info">
+      <div class="block__title">
+        {{ $t('desc27') }}
+      </div>
+      <span class="block__number">
           {{ quantity || 0 }}
         </span>
-      </div>
-
-      <div class="block__icon">
-        <img src="/images/users.svg" width="32" height="32" loading="lazy" :alt="$t('Icon Users')">
-      </div>
-
     </div>
 
-</template>
+    <div class="block__icon">
+      <img src="/images/users.svg" width="32" height="32" loading="lazy" :alt="$t('Icon Users')">
+    </div>
 
+  </div>
+
+</template>
 
 
 <script setup>
@@ -36,11 +35,12 @@ defineProps({
 .section {
   padding: 22px 0 0;
 }
+
 .h2 {
   margin-bottom: 40px;
 }
 
-.block  {
+.block {
   display: flex;
   justify-content: space-between;
   gap: 32px;

@@ -1,14 +1,14 @@
 <template>
   <div class="rental-period d-grid gap-8">
     <span>
-      {{ $t('Срок аренды') }}
+      {{ $t('desc28') }}
     </span>
     <div class="rental-period__row">
       <div
-        v-for="(period, index) in periods"
-        :key="index"
-        @click="setActivePeriod(index)"
-        :class="['rental-period__button', { _active: activePeriod === index }]"
+          v-for="(period, index) in periods"
+          :key="index"
+          @click="setActivePeriod(index)"
+          :class="['rental-period__button', { _active: activePeriod === index }]"
       >
         {{ $t(period) }}
       </div>
@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      periods: ['Час', 'День', 'Неделя'],
+      periods: ['desc31', 'desc29', 'desc30'],
       activePeriod: 0
     };
   },
