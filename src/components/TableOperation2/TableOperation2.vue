@@ -30,7 +30,7 @@
       </tbody>
     </table>
 
-    <Pagination v-if="false" :total-pages="totalPages" :current-page="currentPage"
+    <Pagination v-if="totalPages > 1" :total-pages="totalPages" :current-page="currentPage"
                 @update:current-page="getUserOrders({page: $event})"/>
 
 

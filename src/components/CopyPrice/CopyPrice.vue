@@ -38,7 +38,7 @@ export default {
           showPopupMessage(t('failed_to_copy'));
         }
       } else {
-        showPopupMessage(t('Поле ввода пустое'));
+        showPopupMessage(t('input_field_is_empty'));
       }
     };
 

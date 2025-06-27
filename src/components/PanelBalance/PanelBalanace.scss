@@ -13,7 +13,7 @@
 
   &__head {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 
   &__name {
@@ -36,33 +36,27 @@
     font-size: 20px;
     line-height: 24px;
     font-weight: 600;
+    margin-left: auto;
+
   }
 
   &__buttons {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 
   @media (max-width: $mobile) {
     position: relative;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
+    max-width: unset;
     gap: 6px;
     padding: 10px;
     &__buttons {
-      position: absolute;
-      top: 50%;
-      grid-template-columns: 1fr;
-      gap: 4px;
-      display: none;
-      z-index: 10;
-      right: 20px;
-      padding: 16px;
       background: var(--color4);
       border-radius: 6px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
       &._active {
         display: grid;
       }

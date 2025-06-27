@@ -1,44 +1,44 @@
 <template>
   <div
-        class="table-wrapper"
-        :class="{'_active': isTableWrapperVisible}"
+      class="table-wrapper"
+      :class="{'_active': isTableWrapperVisible}"
   >
     <table>
       <thead>
-        <tr>
-          <th>{{ $t('order_№') }}</th>
-          <th>{{ $t('date') }}</th>
-          <th>{{ $t('address') }}</th>
-          <th>{{ $t('energy') }}</th>
-          <th>{{ $t('term') }}</th>
-          <th>{{ $t('status') }}</th>
-          <th>{{ $t('cost') }}</th>
-        </tr>
+      <tr>
+        <th>{{ $t('order_№') }}</th>
+        <th>{{ $t('date') }}</th>
+        <th>{{ $t('address') }}</th>
+        <th>{{ $t('energy') }}</th>
+        <th>{{ $t('term') }}</th>
+        <th>{{ $t('status') }}</th>
+        <th>{{ $t('cost') }}</th>
+      </tr>
       </thead>
       <tbody>
       <template v-if="orders?.length > 0">
         <tr v-for="(order, index) in orders" :key="index">
-          <td :data-label="$t('order_№')">: {{ order.order_number }}</td>
-          <td :data-label="$t('date')">: {{ order.date }}</td>
-          <td :data-label="$t('address')">: {{ order.delegation_address }}</td>
-          <td :data-label="$t('energy')">: {{ order.energy_amount }}</td>
-          <td :data-label="$t('term')">: {{ order.duration }}</td>
-          <td :data-label="$t('status')">: {{ order.status }}</td>
-          <td :data-label="$t('cost')">: {{ order.required_trx_amount }}</td>
+          <td :data-label="$t('order_№')">{{ order.order_number }}</td>
+          <td :data-label="$t('date')">{{ order.date }}</td>
+          <td :data-label="$t('address')">{{ order.delegation_address }}</td>
+          <td :data-label="$t('energy')">{{ order.energy_amount }}</td>
+          <td :data-label="$t('term')">{{ order.duration }}</td>
+          <td :data-label="$t('status')">{{ order.status }}</td>
+          <td :data-label="$t('cost')">{{ order.required_trx_amount }}</td>
         </tr>
       </template>
-        <template v-else>
-          <tr>
-            <td colspan="7" style="text-align: center">{{ $t('no_data') }}</td>
-          </tr>
-        </template>
+      <template v-else>
+        <tr>
+          <td colspan="7" style="text-align: center">{{ $t('no_data') }}</td>
+        </tr>
+      </template>
       </tbody>
     </table>
 
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
       {{ $t('show_more') }}
     </button>
-    <Pagination v-if="false" :total-pages="totalPages" v-model:current-page="currentPage" />
+    <Pagination v-if="totalPages > 1" :total-pages="totalPages" v-model:current-page="currentPage"/>
 
   </div>
 </template>
@@ -79,7 +79,7 @@ export default {
           createEnergyService().getUserOrders().then((response) => {
             this.orders = response;
             console.log(response)
-            this.totalPages =  Math.ceil(response.count / 10);
+            this.totalPages = Math.ceil(response.count / 10);
           });
         }
       }
@@ -136,13 +136,14 @@ export default {
 
     &._back {
       svg {
-        transform: scale(-1,-1);
+        transform: scale(-1, -1);
       }
     }
   }
 
   &__items {
     display: flex;
+
     span {
       display: flex;
       justify-content: center;

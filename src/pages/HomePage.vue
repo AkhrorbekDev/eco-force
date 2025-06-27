@@ -4,9 +4,11 @@
 
       <div class="container">
         <div class="section-panels__row">
-          <PanelBalance ref="panelBalance"/>
-          <PanelStaking/>
-          <PanelEnergy @on:success="successEnergy"/>
+          <PanelBalance :is-open="active === 'balance'" @on:click="toggleTransition('balance')"
+                        ref="panelBalance"/>
+          <PanelStaking :is-open="active === 'staking'" @on:click="toggleTransition('staking')"/>
+          <PanelEnergy :is-open="active === 'energy'" @on:click="toggleTransition('energy')"
+                       @on:success="successEnergy"/>
         </div>
       </div>
 
@@ -99,13 +101,19 @@ export default {
         "tron_cost_per_hour": 0,
         "tron_cost_per_day": 0,
         "tron_cost_per_week": 0
-      }
+      },
+      active: ''
     }
   },
-  mounted() {
-    console.log(this)
-  },
   methods: {
+    toggleTransition(e) {
+      console.log('Toggle transition for:', e);
+      if (this.active === e) {
+        this.active = ''
+      } else {
+        this.active = e
+      }
+    },
     successEnergy(response) {
       this.getUserDetails()
     },

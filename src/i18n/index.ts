@@ -8,7 +8,7 @@ export enum Language {
     RU = 'ru-RU',
 }
 
-const defaultLanguage = Language.EN
+const defaultLanguage = Language.RU
 
 const i18n = createI18n({
     locale: defaultLanguage,

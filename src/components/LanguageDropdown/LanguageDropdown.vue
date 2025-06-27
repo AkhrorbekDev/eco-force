@@ -73,7 +73,6 @@ export default {
       this.toggleDropdown();
     },
     handleLanguageClick(language) {
-      console.log(this)
       this.selectLanguage(language);
     },
     openModal() {

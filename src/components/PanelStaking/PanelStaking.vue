@@ -1,6 +1,6 @@
 <template>
 
-  <div class="panel">
+  <div class="panel" @click.stop="$emit('on:click')">
 
     <div class="panel__head">
       <div class="panel__name">
@@ -16,16 +16,18 @@
       <span class="panel__amount">
         {{ userStore.user.total_staked_trx || 0 }}
       </span>
-    </div>
 
-    <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('stake') }}</button>
+      <div ref="btnDots" class="panel__dots d-desk-none">
+        <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
+      </div>
     </div>
+    <transition appear name="panel-buttons-transition">
+      <div v-if="windowWidth > 768 || isOpen" ref="controlBtns" class="panel__buttons">
+        <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
+        <button @click="openModal2" class="button button_green">{{ $t('stake') }}</button>
+      </div>
+    </transition>
 
-    <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
-      <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
-    </div>
 
   </div>
 
@@ -161,8 +163,12 @@ export default {
     BaseButton,
     TrxCounter,
     ModalWindow,
-    AddressTron2,
-    AmountTrx,
+  },
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false
+    }
   },
   name: 'PanelStaking',
   data() {
@@ -184,6 +190,8 @@ export default {
         qr_code: '',
         address: ''
       },
+      windowWidth: window.innerWidth,
+
     };
   },
   setup() {
@@ -221,12 +229,19 @@ export default {
   mounted() {
     this.onResizeBtnClose()
     window.addEventListener('resize', this.onResizeBtnClose);
+    window.addEventListener('resize', this.updateWindowWidth);
+
   },
   unmounted() {
     window.removeEventListener('resize', this.onResizeBtnClose);
     document.removeEventListener('click', this.clickOutside);
+    window.removeEventListener('resize', this.updateWindowWidth);
+
   },
   methods: {
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
     onResizeBtnClose() {
       document.removeEventListener('click', this.clickOutside);
       if (window.innerWidth < 768) {
@@ -362,7 +377,14 @@ export default {
       this.isModalVisible3 = false;
     },
     toggleButtonsClass() {
-      this.isButtonsActive = !this.isButtonsActive; // {{ $t('Переключаем состояние') }}
+      this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
+      console.log('Toggle buttons class:', this.isButtonsActive);
+      if (this.isButtonsActive) {
+        document.addEventListener('click', this.clickOutside);
+
+      } else {
+        document.removeEventListener('click', this.clickOutside);
+      }
     },
   },
 };
@@ -370,6 +392,24 @@ export default {
 
 <style scoped lang="scss">
 @import './PanelStaking.scss';
+
+.panel-buttons-transition-enter-active,
+.panel-buttons-transition-leave-active {
+  transition: height 0.3s, opacity 0.3s;
+  overflow: hidden;
+}
+
+.panel-buttons-transition-enter-from,
+.panel-buttons-transition-leave-to {
+  height: 0;
+  opacity: 0;
+}
+
+.panel-buttons-transition-enter-to,
+.panel-buttons-transition-leave-from {
+  height: 34px; // укажите нужную высоту блока с кнопками
+  opacity: 1;
+}
 
 .popup {
   display: flex;

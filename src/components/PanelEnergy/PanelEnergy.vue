@@ -1,6 +1,6 @@
 <template>
 
-  <div class="panel">
+  <div class="panel" @click.stop="$emit('on:click')">
 
     <div class="panel__head">
       <div class="panel__name">
@@ -17,16 +17,17 @@
                 {{ userStore.user.energy || 0 }}
 
       </span>
+      <div ref="btnDots" class="panel__dots d-desk-none">
+        <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
+      </div>
     </div>
+    <transition name="panel-buttons-transition">
+      <div v-if="windowWidth > 768 || isOpen" ref="controlBtns" class="panel__buttons">
+        <button @click="openModal" class="button button_bordered">{{ $t('sell') }}</button>
+        <button @click="openModal2" class="button button_green">{{ $t('get') }}</button>
+      </div>
+    </transition>
 
-    <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('sell') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('get') }}</button>
-    </div>
-
-    <div ref="btnDots" class="panel__dots d-desk-none" @click="toggleButtonsClass">
-      <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
-    </div>
 
   </div>
 
@@ -103,6 +104,12 @@ export default {
     ModalWindow,
     EnergyCounter,
   },
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false
+    }
+  },
   name: 'PanelEnergy',
   setup() {
     const userStore = useUserGlobal()
@@ -124,7 +131,9 @@ export default {
       sellEnergyAmount: 0,
       isModalVisible: false,
       isModalVisible2: false,
+      windowWidth: window.innerWidth,
       isButtonsActive: false, // Добавляем новое состояние для управления классом
+
     };
   },
   computed: {
@@ -134,13 +143,17 @@ export default {
   },
   mounted() {
     this.onResizeBtnClose()
-    window.addEventListener('resize', this.onResizeBtnClose);
+    window.addEventListener('resize', this.updateWindowWidth);
+
   },
   unmounted() {
     window.removeEventListener('resize', this.onResizeBtnClose);
     document.removeEventListener('click', this.clickOutside);
   },
   methods: {
+    updateWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
     onResizeBtnClose() {
       document.removeEventListener('click', this.clickOutside);
       if (window.innerWidth < 768) {
@@ -149,11 +162,11 @@ export default {
         document.removeEventListener('click', this.clickOutside);
       }
     },
-    clickOutside (e) {
+    clickOutside(e) {
       if (this.$refs.btnDots.contains(e.target)) {
         return
       }
-      if ((this.isButtonsActive && !this.$refs.controlBtns.contains(e.target)) ) {
+      if ((this.isButtonsActive && !this.$refs.controlBtns.contains(e.target))) {
         this.isButtonsActive = false
       }
     },
@@ -203,6 +216,12 @@ export default {
     },
     toggleButtonsClass() {
       this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
+      if (this.isButtonsActive) {
+        window.addEventListener('resize', this.onResizeBtnClose);
+
+      } else {
+        window.removeEventListener('resize', this.onResizeBtnClose);
+      }
     },
   },
 };
@@ -210,6 +229,24 @@ export default {
 
 <style scoped lang="scss">
 @import './PanelEnergy.scss';
+
+.panel-buttons-transition-enter-active,
+.panel-buttons-transition-leave-active {
+  transition: height 0.3s, opacity 0.3s;
+  overflow: hidden;
+}
+
+.panel-buttons-transition-enter-from,
+.panel-buttons-transition-leave-to {
+  height: 0;
+  opacity: 0;
+}
+
+.panel-buttons-transition-enter-to,
+.panel-buttons-transition-leave-from {
+  height: 34px; // укажите нужную высоту блока с кнопками
+  opacity: 1;
+}
 
 .popup-sale {
   width: 480px;

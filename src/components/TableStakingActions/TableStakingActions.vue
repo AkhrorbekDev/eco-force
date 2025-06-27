@@ -32,7 +32,7 @@
     <button class="table-wrapper__more button button_bordered py-12 br-8" @click="toggleTableWrapper">
       {{ $t('show_more') }}
     </button>
-    <Pagination v-if="actions.length > 0" :total-pages="totalPages" :current-page="currentPage"
+    <Pagination v-if="totalPages > 1" :total-pages="totalPages" :current-page="currentPage"
                 @update:current-page="getUserOrders({page: $event})"/>
 
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel" @click="toggleButtonsClass">
+  <div class="panel" @click.stop="$emit('on:click')">
 
     <div class="panel__head">
       <div class="panel__name">
@@ -11,28 +11,19 @@
       <span class="panel__amount">
         {{ userStore.user.trx_balance || 0 }}
       </span>
-    </div>
 
-    <div ref="controlBtns" class="panel__buttons" :class="{ '_active': isButtonsActive }">
-      <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
-      <button @click="openModal2" class="button button_green">{{ $t('deposit') }}</button>
-    </div>
-
-    <div ref="btnDots" class="panel__dots d-desk-none" >
-      <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
+      <div ref="btnDots" class="panel__dots d-desk-none">
+        <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
+      </div>
     </div>
 
     <transition name="panel-buttons-transition">
-      <div
-          v-show="isButtonsActive || windowWidth > 768"
-          ref="controlBtns"
-          class="panel__buttons"
-          :class="{ '_active': isButtonsActive, '_desktop': windowWidth > 768 }"
-      >
+      <div v-if="windowWidth > 768 || isOpen" ref="controlBtns" class="panel__buttons">
         <button @click="openModal" class="button button_bordered">{{ $t('withdraw') }}</button>
         <button @click="openModal2" class="button button_green">{{ $t('deposit') }}</button>
       </div>
     </transition>
+
   </div>
 
   <!-- Вывести -->
@@ -147,6 +138,12 @@ export default {
     ModalWindow,
     AddressTron2
   },
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: false
+    }
+  },
   name: 'PanelBalance',
   data() {
     return {
@@ -226,6 +223,7 @@ export default {
       }
     },
     clickOutside(e) {
+      console.log(this.$refs.btnDots.contains(e.target))
       if (this.$refs.btnDots.contains(e.target)) {
         return
       }
@@ -319,37 +317,41 @@ export default {
     },
     toggleButtonsClass() {
       this.isButtonsActive = !this.isButtonsActive; // Переключаем состояние
+      console.log('Toggle buttons class:', this.isButtonsActive);
+      if (this.isButtonsActive) {
+        document.addEventListener('click', this.clickOutside);
+
+      } else {
+        document.removeEventListener('click', this.clickOutside);
+      }
     },
   }
 }
-;
+
 </script>
 
 <style scoped lang="scss">
 @import './PanelBalanace.scss';
+
 .panel-buttons-transition-enter-active,
 .panel-buttons-transition-leave-active {
   transition: height 0.3s, opacity 0.3s;
   overflow: hidden;
 }
+
 .panel-buttons-transition-enter-from,
 .panel-buttons-transition-leave-to {
   height: 0;
   opacity: 0;
 }
+
 .panel-buttons-transition-enter-to,
 .panel-buttons-transition-leave-from {
-  height: 48px; // укажите нужную высоту блока с кнопками
+  height: 34px; // укажите нужную высоту блока с кнопками
   opacity: 1;
 }
-.panel__buttons {
-  position: absolute;
-  &._desktop {
-    position: static;
-    opacity: 1;
-    transform: none;
-  }
-}
+
+
 .popup {
   display: flex;
   flex-direction: column;

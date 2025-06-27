@@ -1,5 +1,5 @@
 <template>
-  <div  :class="['copy-text', 'd-grid', 'gap-8', customClass]">
+  <div :class="['copy-text', 'd-grid', 'gap-8', customClass]">
     <div class="copy-text__value">
       <input :value="link" readonly :placeholder="$t('enter_address')">
       <span class="copy-text__copy" @click="copyToClipboard">
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import {ref} from 'vue';
+import {useI18n} from 'vue-i18n';
 
 export default {
   props: {
@@ -35,7 +35,7 @@ export default {
     },
   },
   setup() { // Передаем props в setup
-    const { t } = useI18n();
+    const {t} = useI18n();
     const text = ref('https://ecoforce.com?invite=12345678');
     const showPopup = ref(false);
     const popupMessage = ref('');
@@ -49,7 +49,7 @@ export default {
           showPopupMessage(t('failed_to_copy'));
         }
       } else {
-        showPopupMessage(t('Поле ввода пустое'));
+        showPopupMessage(t('input_field_is_empty'));
       }
     };
 
