@@ -12,7 +12,7 @@
     </div>
 
     <div class="block__icon">
-      <img src="/images/users.svg" width="32" height="32" loading="lazy" :alt="$t('Icon Users')">
+      <img src="/images/users.svg" width="32" height="32" loading="lazy" >
     </div>
 
   </div>

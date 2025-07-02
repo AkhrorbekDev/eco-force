@@ -3,7 +3,7 @@
     <div class="copy-text__value">
       <input :value="link" readonly :placeholder="$t('enter_address')">
       <span class="copy-text__copy" @click="copyToClipboard">
-        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy" :alt="$t('Иконка копирования')">
+        <img src="/images/icon-copy.svg" width="16" height="16" loading="lazy">
       </span>
       <div v-if="showPopup" class="popup">
         {{ popupMessage }}

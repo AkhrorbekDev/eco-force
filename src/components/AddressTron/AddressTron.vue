@@ -3,8 +3,8 @@
     <div class="address-tron__row">
       <span>{{ $t('address') }} <b>TRON</b></span>
       <div class="address-tron__copy" @click="copyToClipboard">
-        <img class="d-none d-desk-block" src="/images/document-copy2.svg" loading="lazy" width="21" height="22" :alt="$t('Icon Docs')">
-        <img class="d-desk-none" src="/images/document-forward.svg" loading="lazy" width="20" height="20" :alt="$t('Icon Docs Forward')">
+        <img class="d-none d-desk-block" src="/images/document-copy2.svg" loading="lazy" width="21" height="22" >
+        <img class="d-desk-none" src="/images/document-forward.svg" loading="lazy" width="20" height="20">
         <!-- Добавлен попап -->
         <div v-if="showPopup" class="popup">
           {{ popupMessage }}

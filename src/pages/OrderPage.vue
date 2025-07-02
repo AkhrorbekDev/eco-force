@@ -15,7 +15,7 @@
         {{ $t('energy_purchase') }}: {{ energy }}
       </div>
 
-      <img class="page-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
+      <img class="page-order__img" src="/images/order.svg" width="162" height="160" loading="lazy">
 
       <AddressTron2 customClass="_big" />
 
@@ -26,7 +26,7 @@
       </div>
 
       <div class="page-order__block">
-        <img class="page-order__img-warning" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
+        <img class="page-order__img-warning" src="/images/warning.png" width="24" height="24" loading="lazy" >
         <p>
           {{ $t('transfer_amount_hint') }}
         </p>

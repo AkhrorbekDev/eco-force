@@ -17,7 +17,7 @@
         <div class="transaction-counter__button _plus" @click="increment">+</div>
       </div>
     </div>
-    <div v-if="error" class="transaction-counter__error">
+    <div v-if="isMultipleOf" class="transaction-counter__error">
       {{ $t('value_must_be_a_multiple_of') }} {{ step }}
     </div>
   </div>
@@ -29,6 +29,11 @@ export default {
     return {
       count: 1
     };
+  },
+  computed: {
+    isMultipleOf() {
+      return this.modelValue % this.count === 0;
+    }
   },
   methods: {
     increment() {
@@ -47,7 +52,7 @@ export default {
       this.count = event.target.value.replace(/\D/g, '');
       this.updateModelValue(this.count);
     },
-    updateModelValue(value) {
+    updateModelValue() {
       this.$emit('update:modelValue', this.count);
     }
   }

@@ -6,7 +6,7 @@
       <div class="header__row">
 
         <a class="header__logo" href="/">
-          <img src="/images/logo.svg" loading="lazy" width="40" height="40" :alt="$t('logo')">
+          <img src="/images/logo.svg" loading="lazy" width="40" height="40">
           EcoForce
         </a>
 

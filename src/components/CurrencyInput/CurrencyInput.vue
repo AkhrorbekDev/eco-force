@@ -1,15 +1,15 @@
 <template>
   <div class="currency-input">
     <input
-      type="text"
-      :value="modelValue"
-      @input="validateAmount"
-      :placeholder="$t('enter_amount')"
-      class="amount-input"
+        type="text"
+        :value="modelValue"
+        @input="validateAmount"
+        :placeholder="$t('enter_amount')"
+        class="amount-input"
     />
     <select v-model="selectedCurrency">
       <option v-for="currency in currencies" :key="currency" :value="currency">
-        {{ $t(currency) }}
+        {{ currency }}
       </option>
     </select>
   </div>

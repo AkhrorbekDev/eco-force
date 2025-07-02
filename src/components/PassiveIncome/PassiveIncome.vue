@@ -8,7 +8,7 @@
 
       <div class="items">
         <div v-for="(item, index) in items" :key="index" class="item">
-          <img :src="item.imageUrl" :alt="$t(item.altText)" class="image" width="88" height="88" loading="lazy"/>
+          <img :src="item.imageUrl" class="image" width="88" height="88" loading="lazy"/>
           <div class="item__text">
             {{ $t(item.text) }}
           </div>

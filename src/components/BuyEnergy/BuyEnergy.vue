@@ -56,7 +56,7 @@
       </button>
 
       <button class="button button_transparent w-100 py-mob-12 d-desk-none" >
-        {{ $t('Инструкция') }}
+        {{ $t('instruction') }}
       </button>
 
       <ModalWindow :isVisible="isModalVisible" @close="closeModal">
@@ -71,7 +71,7 @@
             {{ $t('Покупка энергии') }}: {{ energy }}
           </div>
 
-          <img class="popup-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" :alt="$t('QR Code Order')">
+          <img class="popup-order__img" src="/images/order.svg" width="162" height="160" loading="lazy" >
 
           <AddressTron2 customClass="_big" />
 
@@ -82,7 +82,7 @@
           </div>
 
           <div class="popup-order__block">
-            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy" :alt="$t('Warning')">
+            <img class="popup-order__img" src="/images/warning.png" width="24" height="24" loading="lazy"  >
             <p>
               {{ $t('Переводите именно эту сумму') }}. Если отправите больше или меньше, заказ не исполнится, деньги не возвращаются.
             </p>

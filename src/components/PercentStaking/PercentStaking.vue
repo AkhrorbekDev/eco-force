@@ -9,7 +9,7 @@
       {{ $t('desc18') }}
     </p>
 
-    <img class="percent-staking__img" src="/images/hand-with-monets.svg" loading="lazy" width="295" height="248" :alt="$t('Hand with monets')">
+    <img class="percent-staking__img" src="/images/hand-with-monets.svg" loading="lazy" width="295" height="248" >
 
   </div>
 

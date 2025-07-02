@@ -5,13 +5,13 @@
       <div
           @click="openModal2"
           class="mobile-menu__btn">
-        <img src="/images/m-icon1.svg" width="17" height="22" loading="lazy" :alt="$t('Icon Energy')">
+        <img src="/images/m-icon1.svg" width="17" height="22" loading="lazy">
         {{ $t('buy_energy') }}
       </div>
       <div
           @click="openModal3"
           class="mobile-menu__btn">
-        <img src="/images/m-icon3.svg" width="25" height="24" :alt="$t('Icon Staking')">
+        <img src="/images/m-icon3.svg" width="25" height="24">
         {{ $t('staking') }}
       </div>
       <div
@@ -61,8 +61,7 @@
         {{ $t('energy_purchase') }}: {{ energy }}
       </div>
 
-      <img class="popup-order4__img" src="/images/order.svg" width="162" height="160" loading="lazy"
-           :alt="$t('QR Code Order')">
+      <img class="popup-order4__img" src="/images/order.svg" width="162" height="160" loading="lazy">
 
       <AddressTron2 customClass="_big"/>
 
@@ -73,8 +72,7 @@
       </div>
 
       <div class="popup-order4__block">
-        <img class="popup-order4__img" src="/images/warning.png" width="24" height="24" loading="lazy"
-             :alt="$t('Warning')">
+        <img class="popup-order4__img" src="/images/warning.png" width="24" height="24" loading="lazy">
         <p>
           {{ $t('transfer_amount_hint') }}
         </p>

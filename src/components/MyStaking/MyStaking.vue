@@ -30,7 +30,7 @@
           <span>
             ~ {{ staking.daily_energy_earned }}
           </span>
-          <img src="/images/lightning.svg" :alt="$t('Icon Lightning')">
+          <img src="/images/lightning.svg" >
         </p>
       </div>
       <div class="my-staking__row">
@@ -41,7 +41,7 @@
           <span>
             {{ staking.total_accrued_energy }}
           </span>
-          <img src="/images/lightning.svg" :alt="$t('Icon Lightning')">
+          <img src="/images/lightning.svg" >
         </p>
       </div>
 

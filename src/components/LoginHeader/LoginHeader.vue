@@ -3,13 +3,13 @@
   <LogoutDropdown v-if="loggedIn"/>
 
   <div class="login-header" v-else @click="openModal">
-    <img src="/images/enter.svg" loading="lazy" width="18" height="20" :alt="$t('Enter Icon')">
+    <img src="/images/enter.svg" loading="lazy" width="18" height="20">
     {{ $t('log_in') }}
   </div>
 
   <ModalWindow :isVisible="isModalVisible" @close="closeModal">
     <div class="popup">
-      <img v-if="qrCode" :src="qrCode" width="162" height="160" :alt="$t('QR Code')">
+      <img v-if="qrCode" :src="qrCode" width="162" height="160" >
       <p>
         {{ $t('desc11') }} <a  :href="URL"
                                                                     target="_blank">

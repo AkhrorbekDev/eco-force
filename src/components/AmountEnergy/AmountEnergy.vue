@@ -19,7 +19,6 @@
             loading="lazy"
             width="24"
             height="24"
-            :alt="$t('Иконка калькулятора')"
         />
       </div>
     </div>
@@ -58,7 +57,7 @@
             <span class="popup__amount">
               {{ totalEnergyCost }}
             </span>
-            <img src="/images/lightning.svg" width="9" height="16" loading="lazy" :alt="$t('Иконка молнии')">
+            <img src="/images/lightning.svg" width="9" height="16" loading="lazy" >
           </div>
         </div>
 

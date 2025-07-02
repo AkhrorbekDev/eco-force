@@ -11,7 +11,6 @@
           src="/images/video-poster.png"
           width="792"
           height="444"
-          :alt="$t('Poster')"
           @click="playVideo"
           v-if="!isVideoPlaying"
         >

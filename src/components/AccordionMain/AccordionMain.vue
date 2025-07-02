@@ -8,7 +8,7 @@
         :key="index">
       <div class="accordion-header" @click="toggleAccordion(index)">
         <h3>{{ item.title }}</h3>
-        <img class="accordion-check" src="/images/check.svg" :alt="$t('Icon Check')">
+        <img class="accordion-check" src="/images/check.svg">
       </div>
       <div v-if="isOpen(index)" class="accordion-content">
         <p>{{ item.content }}</p>

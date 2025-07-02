@@ -4,7 +4,7 @@
     <div class="panel__head">
       <div class="panel__name">
         <span class="panel__icon">
-          <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" :alt="$t('Иконка пользователя')">
+          <img src="/images/p-icon1.svg" width="13" height="13" loading="lazy" >
         </span>
         {{ $t('balance') }} TRX:
       </div>
@@ -13,7 +13,7 @@
       </span>
 
       <div ref="btnDots" class="panel__dots d-desk-none">
-        <img src="/images/dots.svg" loading="lazy" width="4" height="14" :alt="$t('Иконка точек')">
+        <img src="/images/dots.svg" loading="lazy" width="4" height="14" >
       </div>
     </div>
 

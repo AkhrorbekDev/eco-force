@@ -50,7 +50,7 @@
 
           <a class="button-goto" href="/faq">
             {{ $t('FAQ') }}
-            <img src="/images/arrow-left.svg" width="24" height="24" loading="lazy" :alt="$t('Arrow Left')">
+            <img src="/images/arrow-left.svg" width="24" height="24" loading="lazy">
           </a>
 
         </div>

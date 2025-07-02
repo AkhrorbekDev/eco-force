@@ -6,7 +6,7 @@
       <div class="footer__row">
 
         <a class="footer__logo" href="/">
-          <img src="/images/logo-white.svg" loading="lazy" width="40" height="40" :alt="$t('logo')">
+          <img src="/images/logo-white.svg" loading="lazy" width="40" height="40" >
           EcoForce
         </a>
 

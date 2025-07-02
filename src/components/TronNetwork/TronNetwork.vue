@@ -13,7 +13,7 @@
 
         <div class="tron-network__name">
           <i class="tron-network__icon _1">
-            <img src="/images/n-icon1.svg" width="26" height="21" loading="lazy" :alt="$t('Icon TRX')">
+            <img src="/images/n-icon1.svg" width="26" height="21" loading="lazy" >
           </i>
           <span>
             {{ $t('desc37') }}
@@ -42,7 +42,7 @@
 
         <div class="tron-network__name">
           <i class="tron-network__icon _2">
-            <img src="/images/n-icon2.svg" width="25" height="25" loading="lazy" :alt="$t('Icon Lightning')">
+            <img src="/images/n-icon2.svg" width="25" height="25" loading="lazy" >
           </i>
           <span>
             {{ $t('desc38') }}
@@ -71,7 +71,7 @@
 
         <div class="tron-network__name">
           <i class="tron-network__icon _3">
-            <img src="/images/n-icon3.svg" width="25" height="25" loading="lazy" :alt="$t('Icon Wallet')">
+            <img src="/images/n-icon3.svg" width="25" height="25" loading="lazy" >
           </i>
           {{ $t('desc39') }}
           <p class="tron-network__value d-desk-none">
