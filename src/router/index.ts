@@ -10,37 +10,37 @@ import ApiPage from '@/pages/ApiPage.vue';
 import OrderPage from '@/pages/OrderPage.vue';
 
 const routes = [
-  { 
-    path: '/', 
+  {
+    path: '/',
     component: HomePage
   },
-  { 
-    path: '/homeAuth', 
+  {
+    path: '/homeAuth',
     component: HomeAuthPage
   },
-  { 
-    path: '/staking', 
+  {
+    path: '/staking',
     component: StakingPage
   },
-  { 
+  {
     path: '/referralProgram',
     component: ReferralProgramPage
   },
-  { 
+  {
     path: '/api',
     component: ApiPage
   },
-  { 
+  {
     path: '/faq',
     component: FaqPage
   },
   {
     path: '/about',
-    component: AboutPage 
+    component: AboutPage
   },
   {
     path: '/order',
-    component: OrderPage 
+    component: OrderPage
   }
 ]
 
@@ -48,5 +48,6 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
 
 export default router

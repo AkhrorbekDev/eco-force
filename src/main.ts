@@ -5,11 +5,12 @@ import {createPinia} from "pinia";
 import i18n from "./i18n";
 import Toast, {PluginOptions, POSITION} from "vue-toastification";
 // Import the CSS or use your own!
+import {createHead} from '@vueuse/head'
+
 import "vue-toastification/dist/index.css";
 
 const pinia = createPinia()
 const app = createApp(App)
-
 const options: PluginOptions = {
     position: POSITION.TOP_RIGHT,
     timeout: 2970,
@@ -37,7 +38,17 @@ const options: PluginOptions = {
         return toast;
     }
 };
+const head = createHead()
 
 app.use(Toast, options);
 app.use(i18n)
+app.use(head)
+router.afterEach((to) => {
+    const titleKey = to.meta.titleKey as string
+    if (titleKey) {
+        document.title = i18n.global.t(titleKey)
+    } else {
+        document.title = i18n.global.t('app.title')
+    }
+})
 app.use(pinia).use(router).mount('#app')
